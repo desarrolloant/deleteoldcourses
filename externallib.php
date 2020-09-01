@@ -288,8 +288,7 @@ class local_deleteoldcourses_external extends external_api {
     public static function remove_course_returns() {
         return new external_single_structure(
             array(
-                'success' => new \external_value(PARAM_BOOL, 'Success of transation'),
-                'record_id' => new \external_value(PARAM_INT, 'id of course delete object')
+                'success' => new \external_value(PARAM_BOOL, 'Success of transation')
             )
         );
     }
@@ -304,7 +303,7 @@ class local_deleteoldcourses_external extends external_api {
     public static function remove_course($courseid) {
         global $CFG, $DB, $USER;
 
-        $params = self::validate_parameters(self::add_course_parameters(), [
+        $params = self::validate_parameters(self::remove_course_parameters(), [
             'courseid' => $courseid
         ]);
         if(!$params) {
@@ -338,14 +337,14 @@ class local_deleteoldcourses_external extends external_api {
         
         if ($deleted) {
 
-            /*//Create event for sent course to be deleted
-            $event = \local_deleteoldcourses\event\course_sent_delete::create(array(
+            //Create event for remove course from delete list
+            $event = \local_deleteoldcourses\event\course_remove_delete::create(array(
                 'objectid' => $params['courseid'],
                 'context' => $context,
                 'other' => array(),
                 'relateduserid' => $USER->id,
             ));
-            $event->trigger();*/
+            $event->trigger();
 
 
             return array(

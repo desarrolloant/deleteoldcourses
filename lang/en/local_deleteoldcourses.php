@@ -47,3 +47,4 @@ $string['modal_delete_close_button'] = 'Close';
 $string['old_courses_list_viewed_name'] = 'Old courses list viewed';
 $string['course_delete_options_viewed'] = 'Alert for delete course viewed';
 $string['course_sent_delete'] = 'Course was sent to be deleted';
+$string['course_remove_delete'] = 'Course was removed from delete list';

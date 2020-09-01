@@ -82,7 +82,7 @@ define(
 			return alert;
 		}
 
-		var buildModal = function(gerCoursePromise){
+		var buildModal = function(gerCoursePromise, button){
 			ModalFactory.create({
 				type: ModalFactory.types.SAVE_CANCEL,
 				title: '',
@@ -116,7 +116,8 @@ define(
 									//Add buton confirm event
 									var root = modal.getRoot();
 						            root.on(ModalEvents.save, function() {
-						                addCoursesToList(course);
+						            	modal.hide();
+						                addCoursesToList(course, button);
 						                // Do something to delete item
 						            });
 								}else{
@@ -134,12 +135,12 @@ define(
 			$("button.add-course").click(function(){
 				var courseid = $(this).attr("course-id");
 				var gerCoursePromise = getCourse(courseid);
-				buildModal(gerCoursePromise);
+				buildModal(gerCoursePromise, this);
 			});
 		}
 
 
-		var addCoursesToList = function(course){
+		var addCoursesToList = function(course, button){
 			var request = {
 	            methodname: 'local_deleteoldcourses_add_course',
 	            args: {
@@ -153,16 +154,21 @@ define(
 	        promise.then(function(response){
 	        	if (response.success) {
 	        		$("button[course-id='"+course.id+"']").removeClass("btn-primary");
+	        		$("button[course-id='"+course.id+"']").removeClass("add-course");
 	        		$("button[course-id='"+course.id+"']").addClass("btn-danger");
+	        		$("button[course-id='"+course.id+"']").addClass("remove-course");
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
+
+	        		$(button).unbind();
+	        		removeCoursesFromList();
 	        	}else{
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
 	        	}
 	        })
 		}
 
-		var removeCoursesFromList = function(courseid){
-			$("button.add-course").click(function(){
+		var removeCoursesFromList = function(){
+			$("button.remove-course").click(function(){
 				var courseid = $(this).attr("course-id");
 
 				var request = {
@@ -176,8 +182,13 @@ define(
 		        promise.then(function(response){
 		        	if (response.success) {
 		        		$("button[course-id='"+courseid+"']").removeClass("btn-danger");
+		        		$("button[course-id='"+courseid+"']").removeClass("remove-course");
 		        		$("button[course-id='"+courseid+"']").addClass("btn-primary");
+		        		$("button[course-id='"+courseid+"']").addClass("add-course");
 		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
+
+		        		$(this).unbind();
+	        			openModal();
 		        	}else{
 		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
 		        	}
@@ -190,6 +201,7 @@ define(
 
 		var init = function(){
 			var openmodal = openModal();
+			var removeCourse = removeCoursesFromList();
 		}
 
 		return {
