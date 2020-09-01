@@ -106,13 +106,16 @@ define(
 										var warning = builWarning(strings[1], course.teachers);
 										body_content += warning;
 									}
+									modal.header.removeClass('hidden');
+									modal.footer.removeClass('hidden');
+									modal.setSaveButtonText(strings[3]);
+									
+									var btn_cancel = modal.getFooter().find(SELECTORS.CANCEL_BUTTON);
+									modal.asyncSet(strings[4], btn_cancel.text.bind(btn_cancel));
+
 									body_content += "<strong>"+strings[2]+"</strong>";
 									modal.setBody(body_content);
-									modal.setSaveButtonText(strings[3]);
-									var btn_cancel = modal.getFooter().find(SELECTORS.CANCEL_BUTTON);
-				       				modal.asyncSet(strings[4], btn_cancel.text.bind(btn_cancel));
-				       				modal.header.removeClass('hidden');
-									modal.footer.removeClass('hidden');
+				       				
 									//Add buton confirm event
 									var root = modal.getRoot();
 						            root.on(ModalEvents.save, function() {
