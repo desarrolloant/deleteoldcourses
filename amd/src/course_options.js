@@ -123,8 +123,10 @@ define(
 								var root = my_modal.getRoot();
 					            root.on(ModalEvents.save, function() {
 					            	my_modal.hide();
-					                addCoursesToList(course, button);
-					                // Do something to delete item
+					            	if (course) {
+					            		addCoursesToList(course, button);
+					            		course = null;
+					            	}
 					            });
 							}else{
 								my_modal.setTitle(strings[5]);
@@ -163,7 +165,7 @@ define(
 	        		$("button[course-id='"+course.id+"']").addClass("btn-danger");
 	        		$("button[course-id='"+course.id+"']").addClass("remove-course");
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
-
+	        		course = null;
 	        		$(button).unbind();
 	        		removeCoursesFromList();
 	        	}else{
