@@ -111,6 +111,7 @@ define(
 	        var promise = Ajax.call([request])[0];
 	        $("button[course-id='"+course.id+"']").html("<i class='icon fa fa-circle-o-notch fa-spin'></i>");
 	        promise.then(function(response){
+	        	my_modal.getRoot().unbind();
 	        	if (response.success) {
 	        		$("button[course-id='"+course.id+"']").removeClass("btn-primary");
 	        		$("button[course-id='"+course.id+"']").removeClass("add-course");
@@ -198,6 +199,7 @@ define(
 		        var promise = Ajax.call([request])[0];
 		        $("button[course-id='"+courseid+"']").html("<i class='icon fa fa-circle-o-notch fa-spin'></i>");
 		        promise.then(function(response){
+		        	my_modal.getRoot().unbind();
 		        	if (response.success) {
 		        		$("button[course-id='"+courseid+"']").removeClass("btn-danger");
 		        		$("button[course-id='"+courseid+"']").removeClass("remove-course");
@@ -205,7 +207,6 @@ define(
 		        		$("button[course-id='"+courseid+"']").addClass("add-course");
 		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
 
-		        		my_modal.getRoot().unbind();
 		        		button.unbind();
 	        			openModal();
 		        	}else{
