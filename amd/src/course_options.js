@@ -82,55 +82,57 @@ define(
 			return alert;
 		}
 
-		var buildModal = function(gerCoursePromise, button){
-			ModalFactory.create({
-				type: ModalFactory.types.SAVE_CANCEL,
-				title: '',
-				body: '',
-				large: true
-			}).done(function(modal) {
-				modal.show();
-				modal.header.addClass('hidden');
-				modal.footer.addClass('hidden');
-				//Execute add loader promise
-				LoadingIcon.addIconToContainer(modal.body).then(function(loadingIcon){
-					//Execute get course promise
-					gerCoursePromise.then(function(course) {
-							var get_strings_promise = getStrings();
-							//Execute get strings promise
-							get_strings_promise.then(function (strings) {
-								if (course.id) {
-									modal.setTitle(strings[0]+" <strong>"+course.shortname+"</strong>");
-									var body_content = "";
-									if (course.teachers.length > 0) {
-										var warning = builWarning(strings[1], course.teachers);
-										body_content += warning;
-									}
-									modal.header.removeClass('hidden');
-									modal.footer.removeClass('hidden');
-									modal.setSaveButtonText(strings[3]);
-									
-									var btn_cancel = modal.getFooter().find(SELECTORS.CANCEL_BUTTON);
-									modal.asyncSet(strings[4], btn_cancel.text.bind(btn_cancel));
+		var my_modal = null;
+		var create_modal_promise = ModalFactory.create({
+			type: ModalFactory.types.SAVE_CANCEL,
+			title: '',
+			body: '',
+			large: true
+		});
 
-									body_content += "<strong>"+strings[2]+"</strong>";
-									modal.setBody(body_content);
-				       				
-									//Add buton confirm event
-									var root = modal.getRoot();
-						            root.on(ModalEvents.save, function() {
-						            	modal.destroy();
-						                addCoursesToList(course, button);
-						                // Do something to delete item
-						            });
-								}else{
-									modal.setTitle(strings[5]);
-									modal.setBody("<button type='button' class='btn btn-secondary' data-action='cancel'>"+strings[6]+"</button>");
-									modal.header.removeClass('hidden');
+		var buildModal = function(gerCoursePromise, button){
+			my_modal.show();
+			my_modal.setBody("");
+			my_modal.header.addClass('hidden');
+			my_modal.footer.addClass('hidden');
+			//Execute add loader promise
+			LoadingIcon.addIconToContainer(my_modal.body).then(function(loadingIcon){
+				//Execute get course promise
+				gerCoursePromise.then(function(course) {
+						var get_strings_promise = getStrings();
+						//Execute get strings promise
+						get_strings_promise.then(function (strings) {
+							if (course.id) {
+								my_modal.setTitle(strings[0]+" <strong>"+course.shortname+"</strong>");
+								var body_content = "";
+								if (course.teachers.length > 0) {
+									var warning = builWarning(strings[1], course.teachers);
+									body_content += warning;
 								}
-							});
-					}).catch;
-				});
+								my_modal.header.removeClass('hidden');
+								my_modal.footer.removeClass('hidden');
+								my_modal.setSaveButtonText(strings[3]);
+
+								var btn_cancel = my_modal.getFooter().find(SELECTORS.CANCEL_BUTTON);
+								my_modal.asyncSet(strings[4], btn_cancel.text.bind(btn_cancel));
+
+								body_content += "<strong>"+strings[2]+"</strong>";
+								my_modal.setBody(body_content);
+			       				
+								//Add buton confirm event
+								var root = my_modal.getRoot();
+					            root.on(ModalEvents.save, function() {
+					            	my_modal.hide();
+					                addCoursesToList(course, button);
+					                // Do something to delete item
+					            });
+							}else{
+								my_modal.setTitle(strings[5]);
+								my_modal.setBody("<button type='button' class='btn btn-secondary' data-action='cancel'>"+strings[6]+"</button>");
+								my_modal.header.removeClass('hidden');
+							}
+						});
+				}).catch;
 			});
 		}
 
@@ -203,8 +205,12 @@ define(
 
 
 		var init = function(){
-			var openmodal = openModal();
-			var removeCourse = removeCoursesFromList();
+			create_modal_promise.then(function(modal){
+				my_modal = modal;
+				var openmodal = openModal();
+				var removeCourse = removeCoursesFromList();
+			});
+	
 		}
 
 		return {
