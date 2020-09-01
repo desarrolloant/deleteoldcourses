@@ -119,13 +119,17 @@ define(
 								body_content += "<strong>"+strings[2]+"</strong>";
 								my_modal.setBody(body_content);
 			       				
-								//Add buton confirm event
+								//Add buton confirm - cancel event
 								var root = my_modal.getRoot();
 					            root.on(ModalEvents.save, function() {
 					            	//Remove modal confirmation events
 					            	$(this).unbind();
 					            	//Add course to delete list
 					                addCoursesToList(course, button);
+					            });
+					            root.on(ModalEvents.cancel, function() {
+					            	//Remove modal confirmation events
+					            	$(this).unbind();
 					            });
 							}else{
 								my_modal.setTitle(strings[5]);
@@ -193,7 +197,7 @@ define(
 		        		$("button[course-id='"+courseid+"']").addClass("btn-primary");
 		        		$("button[course-id='"+courseid+"']").addClass("add-course");
 		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
-		        		
+
 		        		$(this).unbind();
 	        			openModal();
 		        	}else{
