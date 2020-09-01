@@ -21,17 +21,7 @@ define(
 	        LOADER_SPAN: 'span.loading-icon.icon-no-margin'
 	    };
 
-		var getCourse = function(courseid){
-			var request = {
-	            methodname: 'local_deleteoldcourses_get_course',
-	            args: {
-					courseid:courseid
-				}
-	        };
-	        var promise = Ajax.call([request])[0];
-	        return promise;
-		}
-
+	    /////////////Initial promises/////////////////
 		var getStrings = function (){
 
 			var strings = [
@@ -68,6 +58,32 @@ define(
 			return promise;
 		}
 
+		var getModal = function(){
+			return ModalFactory.create({
+				type: ModalFactory.types.SAVE_CANCEL,
+				title: '',
+				body: '',
+				large: true
+			});
+		}
+
+		var getCourse = function(courseid){
+			var request = {
+	            methodname: 'local_deleteoldcourses_get_course',
+	            args: {
+					courseid:courseid
+				}
+	        };
+	        var promise = Ajax.call([request])[0];
+	        return promise;
+		}
+
+		//Variables for initial promises
+		var my_modal = null;
+		var my_strings = null;
+		var create_modal_promise = getModal();
+		var get_strings_promise = getStrings();
+
 		var builWarning = function(message, teachers){
 			var alert = "<div class='alert alert-warning p-1'>";
 			alert += "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i> ";
@@ -82,75 +98,8 @@ define(
 			return alert;
 		}
 
-		var my_modal = null;
-		var create_modal_promise = ModalFactory.create({
-			type: ModalFactory.types.SAVE_CANCEL,
-			title: '',
-			body: '',
-			large: true
-		});
-
-		var buildModal = function(gerCoursePromise, button){
-			my_modal.show();
-			my_modal.setBody("");
-			my_modal.header.addClass('hidden');
-			my_modal.footer.addClass('hidden');
-			//Execute add loader promise
-			LoadingIcon.addIconToContainer(my_modal.body).then(function(loadingIcon){
-				//Execute get course promise
-				gerCoursePromise.then(function(course) {
-						var get_strings_promise = getStrings();
-						//Execute get strings promise
-						get_strings_promise.then(function (strings) {
-							if (course.id) {
-								my_modal.setTitle(strings[0]+" <strong>"+course.shortname+"</strong>");
-								var body_content = "";
-								if (course.teachers.length > 0) {
-									var warning = builWarning(strings[1], course.teachers);
-									body_content += warning;
-								}
-								my_modal.header.removeClass('hidden');
-								my_modal.footer.removeClass('hidden');
-								my_modal.setSaveButtonText(strings[3]);
-
-								var btn_cancel = my_modal.getFooter().find(SELECTORS.CANCEL_BUTTON);
-								my_modal.asyncSet(strings[4], btn_cancel.text.bind(btn_cancel));
-
-								body_content += "<strong>"+strings[2]+"</strong>";
-								my_modal.setBody(body_content);
-			       				
-								//Add buton confirm - cancel event
-								var root = my_modal.getRoot();
-					            root.on(ModalEvents.save, function() {
-					            	//Remove modal confirmation events
-					            	$(this).unbind();
-					            	//Add course to delete list
-					                addCoursesToList(course, button);
-					            });
-					            root.on(ModalEvents.cancel, function() {
-					            	//Remove modal confirmation events
-					            	$(this).unbind();
-					            });
-							}else{
-								my_modal.setTitle(strings[5]);
-								my_modal.setBody("<button type='button' class='btn btn-secondary' data-action='cancel'>"+strings[6]+"</button>");
-								my_modal.header.removeClass('hidden');
-							}
-						});
-				}).catch;
-			});
-		}
-
-		var openModal = function(){
-			$("button.add-course").click(function(){
-				var courseid = $(this).attr("course-id");
-				var gerCoursePromise = getCourse(courseid);
-				buildModal(gerCoursePromise, this);
-			});
-		}
-
-
 		var addCoursesToList = function(course, button){
+			$(button).attr("disabled", true);
 			var request = {
 	            methodname: 'local_deleteoldcourses_add_course',
 	            args: {
@@ -175,12 +124,70 @@ define(
 	        	}else{
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
 	        	}
+	        	$(button).attr("disabled", false);
 	        })
+		}
+
+		var buildModal = function(gerCoursePromise, button){
+			my_modal.show();
+			my_modal.setBody("");
+			my_modal.header.addClass('hidden');
+			my_modal.footer.addClass('hidden');
+			//Execute add loader promise
+			LoadingIcon.addIconToContainer(my_modal.body).then(function(loadingIcon){
+				//Execute get course promise
+				gerCoursePromise.then(function(course) {
+					if (course.id) {
+						my_modal.setTitle(my_strings[0]+" <strong>"+course.shortname+"</strong>");
+						var body_content = "";
+						if (course.teachers.length > 0) {
+							var warning = builWarning(my_strings[1], course.teachers);
+							body_content += warning;
+						}
+						my_modal.header.removeClass('hidden');
+						my_modal.footer.removeClass('hidden');
+						my_modal.setSaveButtonText(my_strings[3]);
+
+						var btn_cancel = my_modal.getFooter().find(SELECTORS.CANCEL_BUTTON);
+						my_modal.asyncSet(my_strings[4], btn_cancel.text.bind(btn_cancel));
+
+						body_content += "<strong>"+my_strings[2]+"</strong>";
+						my_modal.setBody(body_content);
+	       				
+						//Add buton confirm - cancel event
+						var root = my_modal.getRoot();
+			            root.on(ModalEvents.save, function() {
+			            	//Remove modal confirmation events
+			            	my_modal.getRoot().unbind();
+			            	//Add course to delete list
+			                addCoursesToList(course, button);
+			            });
+			            root.on(ModalEvents.cancel, function() {
+			            	//Remove modal confirmation events
+			            	my_modal.getRoot().unbind();
+			            });
+					}else{
+						my_modal.setTitle(my_strings[5]);
+						my_modal.setBody("<button type='button' class='btn btn-secondary' data-action='cancel'>"+my_strings[6]+"</button>");
+						my_modal.header.removeClass('hidden');
+					}
+				}).catch;
+			});
+		}
+
+		var openModal = function(){
+			$("button.add-course").click(function(){
+				var courseid = $(this).attr("course-id");
+				var gerCoursePromise = getCourse(courseid);
+				buildModal(gerCoursePromise, this);
+			});
 		}
 
 		var removeCoursesFromList = function(){
 			$("button.remove-course").click(function(){
-				var courseid = $(this).attr("course-id");
+				var button = $(this);
+				button.attr("disabled", true);
+				var courseid = button.attr("course-id");
 
 				var request = {
 		            methodname: 'local_deleteoldcourses_remove_course',
@@ -198,20 +205,27 @@ define(
 		        		$("button[course-id='"+courseid+"']").addClass("add-course");
 		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
 
-		        		$(this).unbind();
+		        		my_modal.getRoot().unbind();
+		        		button.unbind();
 	        			openModal();
 		        	}else{
 		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
 		        	}
+		        	button.attr("disabled", false);
 		        })
 		    });
 		}
 
 		var init = function(){
+			//Execute get modal promise
 			create_modal_promise.then(function(modal){
 				my_modal = modal;
-				var openmodal = openModal();
-				var removeCourse = removeCoursesFromList();
+				//Execute get strings promise
+				get_strings_promise.then(function(strings){
+					my_strings = strings;
+					var openmodal = openModal();
+					var removeCourse = removeCoursesFromList();
+				});
 			});
 	
 		}
