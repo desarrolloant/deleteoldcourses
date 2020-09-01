@@ -119,7 +119,7 @@ define(
 									//Add buton confirm event
 									var root = modal.getRoot();
 						            root.on(ModalEvents.save, function() {
-						            	modal.hide();
+						            	modal.destroy();
 						                addCoursesToList(course, button);
 						                // Do something to delete item
 						            });
