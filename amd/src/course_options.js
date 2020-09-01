@@ -122,11 +122,10 @@ define(
 								//Add buton confirm event
 								var root = my_modal.getRoot();
 					            root.on(ModalEvents.save, function() {
-					            	my_modal.hide();
-					            	if (course) {
-					            		addCoursesToList(course, button);
-					            		course = null;
-					            	}
+					            	//Remove modal confirmation events
+					            	$(this).unbind();
+					            	//Add course to delete list
+					                addCoursesToList(course, button);
 					            });
 							}else{
 								my_modal.setTitle(strings[5]);
@@ -165,9 +164,10 @@ define(
 	        		$("button[course-id='"+course.id+"']").addClass("btn-danger");
 	        		$("button[course-id='"+course.id+"']").addClass("remove-course");
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
-	        		course = null;
+
 	        		$(button).unbind();
 	        		removeCoursesFromList();
+
 	        	}else{
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
 	        	}
@@ -193,7 +193,7 @@ define(
 		        		$("button[course-id='"+courseid+"']").addClass("btn-primary");
 		        		$("button[course-id='"+courseid+"']").addClass("add-course");
 		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
-
+		        		
 		        		$(this).unbind();
 	        			openModal();
 		        	}else{
@@ -202,9 +202,6 @@ define(
 		        })
 		    });
 		}
-
-
-
 
 		var init = function(){
 			create_modal_promise.then(function(modal){
