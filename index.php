@@ -100,7 +100,7 @@ $perpageurl = clone($baseurl);
 echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
 
 //Load scripts
-echo $output->render_scripts('');
+$PAGE->requires->js_call_amd('local_deleteoldcourses/delete_old_courses', 'init', array());
 
 // Trigger deleteoldcourses viewed event.
 deleteoldcourses_viewed($PAGE->context, $USER->id);

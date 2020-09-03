@@ -130,16 +130,4 @@ class renderer extends plugin_renderer_base {
                 array(), 'showall');
         }
 	}
-
-    /**
-     * Html render page scripts.
-     *
-     * @param string $page Name of required page eg:page_list_courses.
-     * @return string html for display the page scripts.
-     */
-    public function render_scripts($page){
-        return $this->render_from_template('local_deleteoldcourses/course_options', []);
-    }
-
-
 }

@@ -27,8 +27,8 @@ $tasks = array(
     array(
         'classname' => 'local_deleteoldcourses\task\delete_courses_task',
         'blocking' => 0,
-        'minute' => '40',
-        'hour' => '*',
+        'minute' => '0',
+        'hour' => '2,4',
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'
