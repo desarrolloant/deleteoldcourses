@@ -192,8 +192,8 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
 
     echo $textToSend;
 
-    //$completeFilePath = "/home/admincampus/";
-    $completeFilePath = "/Users/diego/Documents/";
+    $completeFilePath = "/home/admincampus/";
+    //$completeFilePath = "/Users/diego/Documents/";
 
     if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
         $nameFile = 'log_delete_courses_0000.log';
