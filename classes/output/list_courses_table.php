@@ -50,6 +50,11 @@ class list_courses_table extends \table_sql implements renderable {
     protected $userid;
 
     /**
+     * @var int $ago The number of years for created ago
+     */
+    protected $ago;
+
+    /**
      * @var string $search The string being searched.
      */
     protected $search;
@@ -69,12 +74,14 @@ class list_courses_table extends \table_sql implements renderable {
      * @param int $userid
      * @param bool $selectall Has the user selected all users on the page?
      */
-    public function __construct($userid) {
+    public function __construct($userid, $ago) {
         global $CFG;
 
         parent::__construct('user-old-courses-' .'user-id');
 
         $this->userid = $userid;
+
+        $this->ago = $ago;
 
         // Define the headers and columns.
         $headers = [];
@@ -110,6 +117,7 @@ class list_courses_table extends \table_sql implements renderable {
 
         $this->no_sorting('u_username');
         $this->no_sorting('u_fullname');
+        $this->no_sorting('table_option');
 
         
         $this->set_attribute('id', 'courses');
@@ -220,7 +228,7 @@ class list_courses_table extends \table_sql implements renderable {
 
         $now = time();
 
-        $total = user_count_courses($this->userid, $now);
+        $total = user_count_courses($this->userid, $now, $this->ago);
 
         $this->pagesize($pagesize, $total);
 
@@ -229,7 +237,7 @@ class list_courses_table extends \table_sql implements renderable {
             $sort = 'ORDER BY ' . $sort;
         }
 
-        $rawdata = user_get_courses($this->userid, $sort, $this->get_page_start(), $this->get_page_size(), $now);
+        $rawdata = user_get_courses($this->userid, $sort, $this->get_page_start(), $this->get_page_size(), $now, $this->ago);
         $this->rawdata = [];
         foreach ($rawdata as $course) {
             $this->rawdata[$course->id] = $course;

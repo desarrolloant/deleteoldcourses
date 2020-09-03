@@ -29,20 +29,33 @@ global $CFG, $PAGE, $USER, $DB;
 
 define('DEFAULT_PAGE_SIZE', 15);
 define('SHOW_ALL_PAGE_SIZE', 5000);
+define('MAX_CREATED_AGO', 5);
+define('MIN_CREATED_AGO', 1);
 
-define('COURSE_ONE_YEAR_OLD', ' -1 year');
-define('COURSE_TWO_YEAR_OLD', ' -2 year');
-define('COURSE_THREE_YEAR_OLD', ' -3 year');
-define('COURSE_FOUR_YEAR_OLD', ' -4 year');
-define('COURSE_FIVE_YEAR_OLD', ' -5 year');
+//Course creation
+define('CREATED_MORE_THAT_1_YEAR_AGO', ' -1 year');
+define('CREATED_MORE_THAT_2_YEARS_AGO', ' -2 year');
+define('CREATED_MORE_THAT_3_YEARS_AGO', ' -3 year');
+define('CREATED_MORE_THAT_4_YEARS_AGO', ' -4 year');
+define('CREATED_MORE_THAT_5_YEARS_AGO', ' -5 year');
 
 $page         = optional_param('page', 0, PARAM_INT); // Which page to show.
 $perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
 $selectall    = optional_param('selectall', false, PARAM_BOOL); // When rendering checkboxes against users mark them all checked.
+$ago         = optional_param('ago', MIN_CREATED_AGO, PARAM_INT); // Created ago number of years.
+
+if ($ago < MIN_CREATED_AGO) {
+	$ago = MIN_CREATED_AGO;
+}
+
+if($ago > MAX_CREATED_AGO){
+	$ago = MAX_CREATED_AGO;
+}
 
 $PAGE->set_url('/local/deleteoldcourses/index.php', array(
         'page' => $page,
         'perpage' => $perpage,
+        'ago' => $ago,
         'selectall' => $selectall));
 
 // Report all PHP errors
@@ -63,8 +76,16 @@ echo $OUTPUT->heading(get_string('pluginname', 'local_deleteoldcourses'));
 //Get renderer of local_deleteoldcourses
 $output = $PAGE->get_renderer('local_deleteoldcourses');
 
-$baseurl = new moodle_url('/local/deleteoldcourses/index.php', array());
-$coursestable = new \local_deleteoldcourses\output\list_courses_table($USER->id);
+//Display date filter
+echo $output->render_date_filter($ago);
+
+$baseurl = new moodle_url('/local/deleteoldcourses/index.php', array(
+	'page' => $page,
+    'perpage' => $perpage,
+    'ago' => $ago
+));
+
+$coursestable = new \local_deleteoldcourses\output\list_courses_table($USER->id, $ago);
 $coursestable->define_baseurl($baseurl);
 $coursestablehtml = $output->render_courses_table($coursestable, $perpage);
 

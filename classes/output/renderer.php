@@ -48,6 +48,52 @@ class renderer extends plugin_renderer_base {
 		return $o;
 	}
 
+    /**
+     * Returns a formatted filter option.
+     *
+     * @param int $year The value for the filter option.
+     * @return array The formatted option with the ['filtertype:value' => 'label'] format.
+     */
+    protected function format_filter_option($year) {
+        $optionlabel = '';
+        $optionvalue = '';
+        switch ($year) {
+            case 2:
+                $optionlabel = get_string('more_than_2_years_ago', 'local_deleteoldcourses');
+                $optionvalue = '2';
+                break;
+            case 3:
+                $optionlabel = get_string('more_than_3_years_ago', 'local_deleteoldcourses');
+                $optionvalue = '3';
+                break;
+            case 4:
+                $optionlabel = get_string('more_than_4_years_ago', 'local_deleteoldcourses');
+                $optionvalue = '4';
+                break;
+            case 5:
+                $optionlabel = get_string('more_than_5_years_ago', 'local_deleteoldcourses');
+                $optionvalue = '5';
+                break;
+            default:
+                $optionlabel = get_string('more_than_1_year_ago', 'local_deleteoldcourses');
+                $optionvalue = '1';
+                break;
+        }
+        return [$optionvalue => $optionlabel];
+    }
+
+
+    public function render_date_filter($selectedoption=1){
+        $timeoptions = [];
+        for($i=1; $i<=5; $i++){
+            $timeoptions += $this->format_filter_option($i);
+        }
+
+        $indexpage = new \local_deleteoldcourses\output\date_filter($timeoptions, $selectedoption, null);
+        $context = $indexpage->export_for_template($this->output);
+        return $this->output->render_from_template('local_deleteoldcourses/date_filter', $context);
+    }
+
 	/**
      * Html to show old courses table of a teacher.
      *

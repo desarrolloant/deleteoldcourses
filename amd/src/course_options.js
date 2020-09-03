@@ -178,6 +178,7 @@ define(
 
 		var openModal = function(){
 			$("button.add-course").click(function(){
+				my_modal.getRoot().unbind();
 				var courseid = $(this).attr("course-id");
 				var gerCoursePromise = getCourse(courseid);
 				buildModal(gerCoursePromise, this);
@@ -186,6 +187,7 @@ define(
 
 		var removeCoursesFromList = function(){
 			$("button.remove-course").click(function(){
+				my_modal.getRoot().unbind();
 				var button = $(this);
 				button.attr("disabled", true);
 				var courseid = button.attr("course-id");

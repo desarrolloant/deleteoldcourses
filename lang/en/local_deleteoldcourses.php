@@ -32,6 +32,12 @@ $string['course_datecreation'] = 'Created Ago';
 $string['table_option'] = 'Option';
 $string['coursescount'] = 'Number of courses: ';
 
+//Date filter
+$string['more_than_1_year_ago'] = 'Created more than 1 year ago';
+$string['more_than_2_years_ago'] = 'Created more than 2 years ago';
+$string['more_than_3_years_ago'] = 'Created more than 3 years ago';
+$string['more_than_4_years_ago'] = 'Created more than 4 years ago';
+$string['more_than_5_years_ago'] = 'Created more than 5 years ago';
 
 //Modal delete strings
 $string['modal_delete_title'] = 'Delete the course';
@@ -42,9 +48,11 @@ $string['modal_delete_save_button'] = 'Yes, delete';
 $string['modal_delete_cancel_button'] = 'No, cancel';
 $string['modal_delete_close_button'] = 'Close';
 
-
 //Events strings
 $string['old_courses_list_viewed_name'] = 'Old courses list viewed';
 $string['course_delete_options_viewed'] = 'Alert for delete course viewed';
 $string['course_sent_delete'] = 'Course was sent to be deleted';
 $string['course_remove_delete'] = 'Course was removed from delete list';
+
+//Tasks
+$string['task_delete_course'] = 'Task for deleting courses';

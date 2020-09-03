@@ -32,6 +32,12 @@ $string['course_datecreation'] = 'Creado Hace';
 $string['table_option'] = 'Opción';
 $string['coursescount'] = 'Número de cursos: ';
 
+//Date filter
+$string['more_than_1_year_ago'] = 'Creados hace más de 1 año';
+$string['more_than_2_years_ago'] = 'Creados hace más de 2 años';
+$string['more_than_3_years_ago'] = 'Creados hace más de 3 años';
+$string['more_than_4_years_ago'] = 'Creados hace más de 4 años';
+$string['more_than_5_years_ago'] = 'Creados hace más de 5 años';
 
 //Modal delete strings
 $string['modal_delete_title'] = 'Eliminar el curso';
@@ -47,3 +53,6 @@ $string['old_courses_list_viewed_name'] = 'Listado de cursos viejos visto';
 $string['course_delete_options_viewed'] = 'Alerta para eliminar curso vista';
 $string['course_sent_delete'] = 'Curso enviado para ser eliminado';
 $string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
+
+//Tasks
+$string['task_delete_course'] = 'Tarea para eliminar cursos';

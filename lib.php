@@ -29,15 +29,37 @@ defined('MOODLE_INTERNAL') || die;
  */
 const EDITING_TEACHER_ROLE_ID = 3;
 
+function getSince($ago=1){
+  $since = CREATED_MORE_THAT_1_YEAR_AGO;
+  switch ($ago) {
+    case 2:
+      $since = CREATED_MORE_THAT_2_YEARS_AGO;
+      break;
+    case 3:
+      $since = CREATED_MORE_THAT_3_YEARS_AGO;
+      break;
+    case 4:
+      $since = CREATED_MORE_THAT_4_YEARS_AGO;
+      break;
+    case 5:
+      $since = CREATED_MORE_THAT_5_YEARS_AGO;
+      break;
+    default:
+      $since = CREATED_MORE_THAT_1_YEAR_AGO;
+      break;
+  }
+  return $since;
+}
+
 /**
  * Check if a user is teacher of a course
  *
  * @param int $userid ID of the user
  * @return int
  */
-function user_count_courses($userid, $now, $since = COURSE_ONE_YEAR_OLD){
+function user_count_courses($userid, $now, $ago = 1){
 	global $DB;
-  $since = strtotime(date("Y-m-d H:i:s", $now) .$since);
+  $since = strtotime(date("Y-m-d H:i:s", $now) .getSince($ago));
   $params = array();
   $sql = "SELECT COUNT(c.id)
             FROM {user} u
@@ -53,9 +75,9 @@ function user_count_courses($userid, $now, $since = COURSE_ONE_YEAR_OLD){
 
 
 
-function user_get_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $since = COURSE_ONE_YEAR_OLD){
+function user_get_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago = 1){
   global $DB;
-  $since = strtotime(date("Y-m-d H:i:s", $now) .$since);
+  $since = strtotime(date("Y-m-d H:i:s", $now) .getSince($ago));
 
   list($select, $from, $join, $params) = user_get_courses_sql(EDITING_TEACHER_ROLE_ID, $userid, $since);
   
@@ -118,4 +140,71 @@ function deleteoldcourses_viewed($context, $userid) {
     'relateduserid' => $userid,
   ));
   $event->trigger();
+}
+
+
+/**
+ * Lib for email messages.
+ * @author Iader E. Garcia Gomez <iader.garcia@correounivalle.edu.co>
+ * Version: 0.1
+ **/
+function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDelete, $coursesDeleted) {
+
+    $fromUser = core_user::get_user_by_username(
+                                        $usernameFrom,
+                                        'id, 
+                                        firstname, 
+                                        lastname, 
+                                        username, 
+                                        email, 
+                                        maildisplay, 
+                                        mailformat,
+                                        firstnamephonetic,
+                                        lastnamephonetic,
+                                        middlename,
+                                        alternatename'
+                                    );
+
+    $toUser = core_user::get_user_by_username(
+                                        $usernameTo,
+                                        'id, 
+                                        firstname, 
+                                        lastname, 
+                                        username, 
+                                        email, 
+                                        maildisplay, 
+                                        mailformat,
+                                        firstnamephonetic,
+                                        lastnamephonetic,
+                                        middlename,
+                                        alternatename'
+                                    );
+
+    
+    $subject = "Notificación sobre cursos pendientes por borrar en el Campus Virtual";
+
+    $textToSendHtml = "El módulo de eliminación de cursos ha detectado que el día de hoy quedan cursos pendientes por borrar.<br><br>";
+    $textToSendHtml .= "Cantidad de cursos pendientes: " . $coursesToDelete . "<br>";
+    $textToSendHtml .= "Cantidad de cursos borrados: ". $coursesDeleted ."<br><br>";
+    $textToSendHtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.";
+
+    $textToSend = html_to_text($textToSendHtml);
+
+    echo $textToSend;
+
+    //$completeFilePath = "/home/admincampus/";
+    $completeFilePath = "/Users/diego/Documents/";
+
+    if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
+        $nameFile = 'log_delete_courses_0000.log';
+    } elseif (intval(date('H')) >= 7) {
+        $nameFile = 'log_delete_courses_0400.log';
+    } else {
+        $nameFile = 'log_delete_courses_test.log';
+    }
+
+    $completeFilePath .= $nameFile;
+    echo $completeFilePath;
+
+    $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, $completeFilePath, $nameFile, true);
 }
