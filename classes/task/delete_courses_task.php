@@ -18,6 +18,8 @@ namespace local_deleteoldcourses\task;
 
 defined('MOODLE_INTERNAL') || die;
 
+ini_set('max_execution_time', 14400);
+
 require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
 
 /**
@@ -77,8 +79,11 @@ class delete_courses_task extends \core\task\scheduled_task {
         //Send email
         $coursesToDelete = $DB->count_records('deleteoldcourses');
 
-        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        // delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        // delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
+
+        delete_old_courses_send_email( '1510074-3743' , 'administrador', $coursesToDelete, $this->deleted_courses );
+
     }
 
     /**
@@ -89,7 +94,7 @@ class delete_courses_task extends \core\task\scheduled_task {
     protected function get_to_delete_list() {
         global $DB;
         // Get all the list.
-        $sql = "select id, courseid, shortname, fullname from {deleteoldcourses}";
+        $sql = "select * from {deleteoldcourses}";
         $list = $DB->get_records_sql($sql);
         return $list;
     }
@@ -124,9 +129,20 @@ class delete_courses_task extends \core\task\scheduled_task {
                     if (!delete_course($coursedb, false)) {
                         mtrace("Failed to delete course {$item->courseid}");
                     }else{
-                        $DB->delete_records('deleteoldcourses', array('id' => $item->id));
-                        mtrace("Course with id {$item->courseid} has been deleted");
-                        $this->deleted_courses++;
+                        $record = (object) array(
+                            'courseid' => $item->courseid,
+                            'shortname' => $item->shortname,
+                            'fullname' => $item->fullname,
+                            'userid' => $item->userid,
+                            'timesenttodelete' => $item->timecreated,
+                            'timecreated' => time()
+                        );
+                        if($DB->delete_records('deleteoldcourses', array('id' => $item->id))){
+                            mtrace("Course with id {$item->courseid} has been deleted");
+                            $this->deleted_courses++;
+                            
+                            $DB->insert_record('deleteoldcourses_deleted', $record);
+                        }
                     }
                 }
                 $endedat = date('H:i:s');

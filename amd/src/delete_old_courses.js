@@ -81,7 +81,6 @@ define(
 		//Variables for initial promises
 		var my_modal = null;
 		var my_strings = null;
-		var create_modal_promise = getModal();
 		var get_strings_promise = getStrings();
 
 		var builWarning = function(message, teachers){
@@ -111,7 +110,6 @@ define(
 	        var promise = Ajax.call([request])[0];
 	        $("button[course-id='"+course.id+"']").html("<i class='icon fa fa-circle-o-notch fa-spin'></i>");
 	        promise.then(function(response){
-	        	my_modal.getRoot().unbind();
 	        	if (response.success) {
 	        		$("button[course-id='"+course.id+"']").removeClass("btn-primary");
 	        		$("button[course-id='"+course.id+"']").removeClass("add-course");
@@ -119,8 +117,13 @@ define(
 	        		$("button[course-id='"+course.id+"']").addClass("remove-course");
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
 
+	        		//Remove add event
 	        		$(button).unbind();
-	        		removeCoursesFromList();
+
+	        		//Add remove event
+	        		$(button).click(function(){
+	        			removeCoursesFromList(this);
+	        		});
 
 	        	}else{
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
@@ -158,14 +161,11 @@ define(
 						//Add buton confirm - cancel event
 						var root = my_modal.getRoot();
 			            root.on(ModalEvents.save, function() {
-			            	//Remove modal confirmation events
-			            	my_modal.getRoot().unbind();
+			            	//Destroy modal
+			            	my_modal.destroy();
+
 			            	//Add course to delete list
 			                addCoursesToList(course, button);
-			            });
-			            root.on(ModalEvents.cancel, function() {
-			            	//Remove modal confirmation events
-			            	my_modal.getRoot().unbind();
 			            });
 					}else{
 						my_modal.setTitle(my_strings[5]);
@@ -176,60 +176,77 @@ define(
 			});
 		}
 
-		var openModal = function(){
-			$("button.add-course").click(function(){
-				my_modal.getRoot().unbind();
-				var courseid = $(this).attr("course-id");
-				var gerCoursePromise = getCourse(courseid);
-				buildModal(gerCoursePromise, this);
-			});
-		}
-
-		var removeCoursesFromList = function(){
-			$("button.remove-course").click(function(){
-				my_modal.getRoot().unbind();
-				var button = $(this);
-				button.attr("disabled", true);
-				var courseid = button.attr("course-id");
-
-				var request = {
-		            methodname: 'local_deleteoldcourses_remove_course',
-		            args: {
-						courseid:courseid
-					}
-		        };
-		        var promise = Ajax.call([request])[0];
-		        $("button[course-id='"+courseid+"']").html("<i class='icon fa fa-circle-o-notch fa-spin'></i>");
-		        promise.then(function(response){
-		        	my_modal.getRoot().unbind();
-		        	if (response.success) {
-		        		$("button[course-id='"+courseid+"']").removeClass("btn-danger");
-		        		$("button[course-id='"+courseid+"']").removeClass("remove-course");
-		        		$("button[course-id='"+courseid+"']").addClass("btn-primary");
-		        		$("button[course-id='"+courseid+"']").addClass("add-course");
-		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
-
-		        		button.unbind();
-	        			openModal();
-		        	}else{
-		        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
-		        	}
-		        	button.attr("disabled", false);
-		        })
-		    });
-		}
-
-		var init = function(){
+		var openModal = function(trigger){
+			$("div.modal.moodle-has-zindex").remove();
+			var create_modal_promise = getModal();
 			//Execute get modal promise
 			create_modal_promise.then(function(modal){
 				my_modal = modal;
-				//Execute get strings promise
-				get_strings_promise.then(function(strings){
-					my_strings = strings;
-					var openmodal = openModal();
-					var removeCourse = removeCoursesFromList();
-				});
+				my_modal.getRoot().on(ModalEvents.cancel, function() {
+	            	my_modal.destroy();
+	            });
+	            my_modal.getRoot().on(ModalEvents.hidden, function() {
+	            	my_modal.destroy();
+	            });
+				var courseid = $(trigger).attr("course-id");
+				var gerCoursePromise = getCourse(courseid);
+				buildModal(gerCoursePromise, trigger);
 			});
+		}
+
+		var removeCoursesFromList = function(trigger){
+			var button = $(trigger);
+			button.attr("disabled", true);
+			var courseid = button.attr("course-id");
+
+			var request = {
+	            methodname: 'local_deleteoldcourses_remove_course',
+	            args: {
+					courseid:courseid
+				}
+	        };
+	        var promise = Ajax.call([request])[0];
+	        $("button[course-id='"+courseid+"']").html("<i class='icon fa fa-circle-o-notch fa-spin'></i>");
+	        promise.then(function(response){
+	        	if (response.success) {
+	        		$("button[course-id='"+courseid+"']").removeClass("btn-danger");
+	        		$("button[course-id='"+courseid+"']").removeClass("remove-course");
+	        		$("button[course-id='"+courseid+"']").addClass("btn-primary");
+	        		$("button[course-id='"+courseid+"']").addClass("add-course");
+	        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
+
+	        		//Remove remove event
+	        		button.unbind();
+
+	        		//Add add event
+        			button.click(function(){
+        				openModal(this);
+        			});
+	        	}else{
+	        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
+	        	}
+	        	button.attr("disabled", false);
+	        })
+		}
+
+		var init = function(){
+			
+			//Execute get strings promise
+			get_strings_promise.then(function(strings){
+
+				//Start strings
+				my_strings = strings;
+
+				//Buttons start events
+				$("button.add-course").click(function(){
+					openModal(this);
+				});
+				$("button.remove-course").click(function(){
+					removeCoursesFromList(this);
+				});
+
+			});
+		
 	
 		}
 

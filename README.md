@@ -9,7 +9,7 @@ Requirements
 
 Installation
 ------------
-Copy the oldcoursesdelete folder into your /local directory.
+Copy the deleteoldcourses folder into your /local directory.
 
 Usage
 -----
@@ -26,3 +26,5 @@ Pendiente
 --------------
 Modificar para que se ejecute antes de las 7 am
 Complementar envío de logs
+Límite de memoria
+
