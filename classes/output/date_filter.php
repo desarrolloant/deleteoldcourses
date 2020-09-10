@@ -56,6 +56,7 @@ class date_filter implements renderable, templatable {
         if (!empty($baseurl)) {
             $this->baseurl = new moodle_url($baseurl);
         }
+
     }
 
     /**
@@ -70,10 +71,19 @@ class date_filter implements renderable, templatable {
         if (empty($this->baseurl)) {
             $this->baseurl = $PAGE->url;
         }
+        
         $data->action = $this->baseurl->out(false);
 
+        if ($this->baseurl->get_param('userid')) {
+            $data->userid = $this->baseurl->get_param('userid');
+        }
+
+        if ($this->baseurl->get_param('action')) {
+            $data->action_page = $this->baseurl->get_param('action');
+        }
+        
         if (!isset($this->filteroptions[$this->selectedoption])) {
-            $this->filteroptions[$this->selectedoption] = $option;
+            $this->filteroptions[$this->selectedoption] = 0;
         }
 
         $data->filteroptions = [];

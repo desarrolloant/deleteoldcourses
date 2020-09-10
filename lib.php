@@ -29,28 +29,6 @@ defined('MOODLE_INTERNAL') || die;
  */
 const EDITING_TEACHER_ROLE_ID = 3;
 
-function getSince($ago=1){
-  $since = CREATED_MORE_THAT_1_YEAR_AGO;
-  switch ($ago) {
-    case 2:
-      $since = CREATED_MORE_THAT_2_YEARS_AGO;
-      break;
-    case 3:
-      $since = CREATED_MORE_THAT_3_YEARS_AGO;
-      break;
-    case 4:
-      $since = CREATED_MORE_THAT_4_YEARS_AGO;
-      break;
-    case 5:
-      $since = CREATED_MORE_THAT_5_YEARS_AGO;
-      break;
-    default:
-      $since = CREATED_MORE_THAT_1_YEAR_AGO;
-      break;
-  }
-  return $since;
-}
-
 /**
  * Check if a user is teacher of a course
  *
@@ -59,7 +37,7 @@ function getSince($ago=1){
  */
 function user_count_courses($userid, $now, $ago = 1){
 	global $DB;
-  $since = strtotime(date("Y-m-d H:i:s", $now) .getSince($ago));
+  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
   $params = array();
   $sql = "SELECT COUNT(c.id)
             FROM {user} u
@@ -77,7 +55,7 @@ function user_count_courses($userid, $now, $ago = 1){
 
 function user_get_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago = 1){
   global $DB;
-  $since = strtotime(date("Y-m-d H:i:s", $now) .getSince($ago));
+  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
 
   list($select, $from, $join, $params) = user_get_courses_sql(EDITING_TEACHER_ROLE_ID, $userid, $since);
   
@@ -183,28 +161,127 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     
     $subject = "Notificación sobre cursos pendientes por borrar en el Campus Virtual";
 
-    $textToSendHtml = "El módulo de eliminación de cursos ha detectado que el día de hoy quedan cursos pendientes por borrar.<br><br>";
+    $textToSendHtml = '';
+    if ($coursesToDelete > 0) {
+      $textToSendHtml .= "El plugin de eliminación de cursos ha detectado que el día de hoy quedan cursos pendientes por borrar.<br><br>";
+    }else{
+      $textToSendHtml .= "El módulo de eliminación de cursos ha detectado que el día de hoy <strong>NO</strong> quedan cursos pendientes por borrar.<br><br>";
+    }
     $textToSendHtml .= "Cantidad de cursos pendientes: " . $coursesToDelete . "<br>";
     $textToSendHtml .= "Cantidad de cursos borrados: ". $coursesDeleted ."<br><br>";
-    $textToSendHtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.";
+    $textToSendHtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.<br>";
 
     $textToSend = html_to_text($textToSendHtml);
-
-    echo $textToSend;
-
-    $completeFilePath = "/home/admincampus/";
-    //$completeFilePath = "/Users/diego/Documents/";
-
-    if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
-        $nameFile = 'log_delete_courses_0000.log';
-    } elseif (intval(date('H')) >= 7) {
-        $nameFile = 'log_delete_courses_0400.log';
-    } else {
-        $nameFile = 'log_delete_courses_test.log';
-    }
-
-    $completeFilePath .= $nameFile;
-    echo $completeFilePath;
-
-    $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, $completeFilePath, $nameFile, true);
+    
+    $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, '', '', true);
 }
+
+/*******************************************************************************************
+************************************   Admin Functions  ************************************
+*******************************************************************************************/
+
+/**
+ * Count all deleted courses
+ *
+ * @param int $userid id of user who deleted a course
+ * @param int $now date now
+ * @param int $ago years deleted ago
+ */
+function count_deleted_courses($userid, $now, $ago = 0){
+  global $DB;
+  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' month');
+  $params = array();
+  $sql = "SELECT COUNT(cd.id)
+              FROM {deleteoldcourses_deleted} cd
+             WHERE cd.timecreated >=:since";
+  if ($userid>0) {
+    $sql = "SELECT COUNT(cd.id)
+              FROM {deleteoldcourses_deleted} cd
+             WHERE cd.userid=:userid AND cd.timecreated >=:since";
+  }
+
+  $params['userid'] = $userid;
+  $params['since'] = $since;
+  return $DB->count_records_sql($sql, $params);
+}
+
+function get_deleted_courses_sql($userid, $since){
+
+  $params = array();
+  $params['userid'] = $userid;
+  $params['since'] = $since;
+
+  $select = "SELECT 
+              cd.id, cd.shortname AS c_shortname, 
+              cd.fullname AS c_fullname, 
+              u.username AS u_username, 
+              CONCAT(u.firstname, ' ', u.lastname) AS u_fullname,
+              cd.timesenttodelete AS c_timesenttodelete,
+              cd.timecreated AS c_timedeleted,
+              cd.courseid, u.firstname, u.lastname, u.id AS userid";
+
+  $from = "FROM {deleteoldcourses_deleted} cd";
+
+  $join = "JOIN {user} u ON (cd.userid = u.id AND cd.timecreated >=:since)";
+  if ($userid>0) {
+    $join = "JOIN {user} u ON (cd.userid = u.id AND cd.userid = :userid AND cd.timecreated >=:since)";
+  }
+  
+
+  return array($select, $from, $join, $params);
+}
+
+
+function get_deleted_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago = 0){
+  global $DB;
+  
+  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' month');
+
+  list($select, $from, $join, $params) = get_deleted_courses_sql($userid, $since);
+  
+  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
+  return $courses;
+}
+
+
+/**
+ * Count all pending courses
+ *
+ * @return int number of pending courses
+ */
+function count_pending_courses(){
+  global $DB;
+  $sql = "SELECT COUNT(d.id)
+              FROM {deleteoldcourses} d";
+  return $DB->count_records_sql($sql);
+}
+
+function get_pending_courses_sql(){
+
+  $params = array();
+
+  $select = "SELECT 
+              d.id, d.shortname AS c_shortname, 
+              d.fullname AS c_fullname, 
+              u.username AS u_username, 
+              CONCAT(u.firstname, ' ', u.lastname) AS u_fullname,
+              d.timecreated AS c_timesenttodelete,
+              d.courseid, u.firstname, u.lastname, u.id AS userid";
+
+  $from = "FROM {deleteoldcourses} d";
+
+  $join = "JOIN {user} u ON (d.userid = u.id)";
+
+  return array($select, $from, $join, $params);
+}
+
+
+function get_pending_courses($sort, $limitfrom=0, $limitnum=0){
+  global $DB;
+  
+  list($select, $from, $join, $params) = get_pending_courses_sql();
+  
+  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
+  return $courses;
+}
+

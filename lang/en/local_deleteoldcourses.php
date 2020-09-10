@@ -23,7 +23,7 @@
  */
 
 $string['pluginname'] = 'Delete Old Courses';
-$string['deleteoldcourses:deleteoldcourses'] = 'Delete Old Courses';
+$string['deleteoldcourses:viewreport'] = 'Admin view reports';
 $string['user_fullname'] = 'Name';
 $string['user_username'] = 'Card Id';
 $string['course_shortname'] = 'Short Name';
@@ -34,10 +34,7 @@ $string['coursescount'] = 'Number of courses: ';
 
 //Date filter
 $string['more_than_1_year_ago'] = 'Created more than 1 year ago';
-$string['more_than_2_years_ago'] = 'Created more than 2 years ago';
-$string['more_than_3_years_ago'] = 'Created more than 3 years ago';
-$string['more_than_4_years_ago'] = 'Created more than 4 years ago';
-$string['more_than_5_years_ago'] = 'Created more than 5 years ago';
+$string['more_than_n_years_ago'] = 'Created more than {$a} years ago';
 
 //Modal delete strings
 $string['modal_delete_title'] = 'Delete the course';
@@ -56,3 +53,12 @@ $string['course_remove_delete'] = 'Course was removed from delete list';
 
 //Tasks
 $string['task_delete_course'] = 'Task for deleting courses';
+
+
+//Deleted table
+$string['sent_to_delete'] = 'Sent to delete';
+$string['course_timedeleted'] = 'Time at deleted';
+$string['more_than_1_month_ago'] = 'Deleted less than 1 month ago';
+$string['more_than_n_months_ago'] = 'Deleted less than {$a} months ago';
+$string['deleted_courses'] = 'Deleted Courses';
+$string['pending_courses'] = 'Pending Courses';

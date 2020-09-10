@@ -19,6 +19,8 @@ namespace local_deleteoldcourses\task;
 defined('MOODLE_INTERNAL') || die;
 
 ini_set('max_execution_time', 14400);
+raise_memory_limit(MEMORY_HUGE);
+set_time_limit(300);
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
 
@@ -82,7 +84,7 @@ class delete_courses_task extends \core\task\scheduled_task {
         // delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
         // delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
 
-        delete_old_courses_send_email( '1510074-3743' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        delete_old_courses_send_email( '1510074-3743' , 'administrador', $coursesToDelete, $this->deleted_courses);
 
     }
 

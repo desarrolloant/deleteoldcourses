@@ -23,7 +23,7 @@
  */
 
 $string['pluginname'] = 'Eliminar Cursos Antiguos';
-$string['deleteoldcourses:deleteoldcourses'] = 'Eliminar Cursos Antiguos';
+$string['deleteoldcourses:viewreport'] = 'Vista de reportes para admin';
 $string['user_fullname'] = 'Nombre';
 $string['user_username'] = 'Cédula';
 $string['course_shortname'] = 'Nombre Corto';
@@ -34,10 +34,7 @@ $string['coursescount'] = 'Número de cursos: ';
 
 //Date filter
 $string['more_than_1_year_ago'] = 'Creados hace más de 1 año';
-$string['more_than_2_years_ago'] = 'Creados hace más de 2 años';
-$string['more_than_3_years_ago'] = 'Creados hace más de 3 años';
-$string['more_than_4_years_ago'] = 'Creados hace más de 4 años';
-$string['more_than_5_years_ago'] = 'Creados hace más de 5 años';
+$string['more_than_n_years_ago'] = 'Creados hace más de {$a} años';
 
 //Modal delete strings
 $string['modal_delete_title'] = 'Eliminar el curso';
@@ -56,3 +53,11 @@ $string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
 
 //Tasks
 $string['task_delete_course'] = 'Tarea para eliminar cursos';
+
+//Deleted table
+$string['sent_to_delete'] = 'Enviado para eliminar';
+$string['course_timedeleted'] = 'Fecha de eliminación';
+$string['more_than_1_month_ago'] = 'Eliminados hace menos de 1 mes';
+$string['more_than_n_months_ago'] = 'Eliminados hace menos de {$a} meses';
+$string['deleted_courses'] = 'Cursos Eliminados';
+$string['pending_courses'] = 'Cursos Pendientes';

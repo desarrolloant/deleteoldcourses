@@ -15,17 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for deletecourses.
+ * Add page to admin menu.
  *
- * @package   course_deleteolds
+ * @package	local_deleteoldcourses
  * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 20200910100;
-$plugin->requires  = 2019052007.03;
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.0.0';
-$plugin->component = 'local_deleteoldcourses';
+if ($hassiteconfig) {
+    $pluginname = get_string('pluginname', 'local_deleteoldcourses');
+
+    $ADMIN->add('courses', new admin_externalpage('local_deleteoldcourses',
+            $pluginname,
+            new moodle_url('/local/deleteoldcourses/report.php'),
+            "local/deleteoldcourses:viewreport"));
+
+    $settings = new admin_settingpage('local_deleteoldcourses_settings', $pluginname);
+    $ADMIN->add('localplugins', $settings);
+
+    $configs = array();
+
+    $configs[] = new admin_setting_heading('local_deleteoldcourses', get_string('settings'), '');
+
+    // Put all settings into the settings page.
+    foreach ($configs as $config) {
+        $config->plugin = 'local_deleteoldcourses';
+        $settings->add($config);
+    }
+}
