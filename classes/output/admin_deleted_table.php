@@ -18,7 +18,8 @@
  * Renderers.
  *
  * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @since      Moodle 3.6.6
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +34,7 @@ defined('MOODLE_INTERNAL') || die;
 global $CFG;
 
 require_once($CFG->libdir . '/tablelib.php');
-require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
+require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
 /**
  * Class for the displaying the courses table.
@@ -72,6 +73,7 @@ class admin_deleted_table extends \table_sql implements renderable {
      * Sets up the table.
      *
      * @param int $userid
+     * @param int $ago now date
      * @param bool $selectall Has the user selected all users on the page?
      */
     public function __construct($userid, $ago) {
@@ -110,7 +112,7 @@ class admin_deleted_table extends \table_sql implements renderable {
         $this->define_headers($headers);
 
         // The name column is a header.
-        $this->define_header_column('c_fullname');
+        //$this->define_header_column('c_fullname');
 
         // Make this table sorted by last name by default.
         $this->sortable(true, 'c_timedeleted', SORT_DESC);

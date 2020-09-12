@@ -1,10 +1,33 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * JavaScript for the delete old courses plugin.
+ *
+ * @module    local_deleteoldcourses/delete_old_courses
+ * @package   local_deleteoldcourses
+ * @Author 	  Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 define(
 	[
 		'jquery',
 		'core/ajax',
 		'core/modal_factory',
 		'core/modal_events',
-		'core/loadingicon',
+		'local_deleteoldcourses/loadingicon',
 		'core/str'
 	], function(
 		$,
@@ -58,6 +81,12 @@ define(
 			return promise;
 		}
 
+		/**
+	     * Get the modal factory promise.
+	     *
+	     * @param .
+	     * @return {promise} Promise for create modal.
+	     */
 		var getModal = function(){
 			return ModalFactory.create({
 				type: ModalFactory.types.SAVE_CANCEL,
@@ -67,6 +96,12 @@ define(
 			});
 		}
 
+		/**
+	     * Get the course info promise.
+	     *
+	     * @param {int} courseid id of course to delete.
+	     * @return {promise} Promise for get course.
+	     */
 		var getCourse = function(courseid){
 			var request = {
 	            methodname: 'local_deleteoldcourses_get_course',
@@ -83,6 +118,13 @@ define(
 		var my_strings = null;
 		var get_strings_promise = getStrings();
 
+		/**
+	     * Create html text for show alert with other teachers.
+	     *
+	     * @param {string} message head message.
+	     * @param {string[]} teachers others teachers of a course.
+	     * @return {string} string for show html alert.
+	     */
 		var builWarning = function(message, teachers){
 			var alert = "<div class='alert alert-warning p-1'>";
 			alert += "<i class='fa fa-exclamation-triangle' aria-hidden='true'></i> ";
@@ -97,6 +139,13 @@ define(
 			return alert;
 		}
 
+		/**
+	     * Send course info by ajax to add deletion list.
+	     *
+	     * @param {jquery} course course object info.
+	     * @param {jquery} button pressed button add.
+	     * @return
+	     */
 		var addCoursesToList = function(course, button){
 			$(button).attr("disabled", true);
 			var request = {
@@ -132,6 +181,13 @@ define(
 	        })
 		}
 
+		/**
+	     * Prepare modal for delete a course.
+	     *
+	     * @param {promise} gerCoursePromise promise for get course.
+	     * @param {jquery} button pressed button add.
+	     * @return
+	     */
 		var buildModal = function(gerCoursePromise, button){
 			my_modal.show();
 			my_modal.setBody("");
@@ -176,6 +232,12 @@ define(
 			});
 		}
 
+		/**
+	     * Execute create modal promise and add its content.
+	     *
+	     * @param {jquery} button pressed button add.
+	     * @return
+	     */
 		var openModal = function(trigger){
 			$("div.modal.moodle-has-zindex").remove();
 			var create_modal_promise = getModal();
@@ -194,6 +256,12 @@ define(
 			});
 		}
 
+		/**
+	     * Remove a course added to deletion list by ajax.
+	     *
+	     * @param {jquery} button pressed button remove.
+	     * @return
+	     */
 		var removeCoursesFromList = function(trigger){
 			var button = $(trigger);
 			button.attr("disabled", true);
@@ -229,6 +297,11 @@ define(
 	        })
 		}
 
+		/**
+	     * Trigger the first load of the preview section and then listen for modifications
+	     *
+	     * @param.
+	     */
 		var init = function(){
 			
 			//Execute get strings promise

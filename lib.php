@@ -18,270 +18,99 @@
  * Version information for deletecourses.
  *
  * @package	local_deleteoldcourses
- * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @since   Moodle 3.6.6
+ * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
 defined('MOODLE_INTERNAL') || die;
 
-/**
- * Editingteacher roleid.
- */
-const EDITING_TEACHER_ROLE_ID = 3;
 
 /**
- * Check if a user is teacher of a course
+ * Fumble with Moodle's global navigation by leveraging Moodle's *_extend_navigation() hook.
+ * Show node in sidebar
  *
- * @param int $userid ID of the user
- * @return int
+ * @param global_navigation $navigation
  */
-function user_count_courses($userid, $now, $ago = 1){
-	global $DB;
-  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
-  $params = array();
-  $sql = "SELECT COUNT(c.id)
-            FROM {user} u
-            JOIN {role_assignments} ra ON (ra.userid = u.id AND ra.roleid = :roleid AND u.id = :userid)
-            JOIN {context} ct ON (ra.contextid = ct.id)
-            JOIN {course} c ON (ct.instanceid = c.id AND c.timecreated < :since)";
+function local_deleteoldcourses_extend_navigation(global_navigation $navigation) {
 
-  $params['roleid'] = EDITING_TEACHER_ROLE_ID;
-  $params['userid'] = $userid;
-  $params['since'] = $since;
-  return $DB->count_records_sql($sql, $params);
-}
+  global $PAGE, $USER;
 
-
-
-function user_get_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago = 1){
-  global $DB;
-  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
-
-  list($select, $from, $join, $params) = user_get_courses_sql(EDITING_TEACHER_ROLE_ID, $userid, $since);
-  
-  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
-  return $courses;
-}
-
-function user_get_courses_sql($roleid, $userid, $since){
-
-  $params = array();
-  $params['roleid'] = $roleid;
-  $params['userid'] = $userid;
-  $params['since'] = $since;
-
-  $select = "SELECT 
-              c.id, c.shortname AS c_shortname, 
-              c.fullname AS c_fullname, 
-              u.username AS u_username, 
-              CONCAT(u.firstname, ' ', u.lastname) AS u_fullname, 
-              c.timecreated AS c_timecreated";
-
-  $from = "FROM {user} u";
-
-  $join = "JOIN {role_assignments} ra ON (ra.userid = u.id AND ra.roleid = :roleid AND u.id = :userid)
-           JOIN {context} ct ON (ra.contextid = ct.id)
-           JOIN {course} c ON (ct.instanceid = c.id AND c.timecreated <= :since)";
-
-  return array($select, $from, $join, $params);
-}
-
-/**
- * Check if a course is the list for delete
- *
- * @param int $userid ID of the user
- * @return int
- */
-function course_in_delete_list($courseid){
-  global $DB;
-  //Get the editing teacher role
-  $record = $DB->get_record('deleteoldcourses', array('courseid' => $courseid));
-  if (!$record) {
-    return FALSE;
+  //check if this user is not student -> only for univalle users
+  $username = $USER->username;
+  if (strpos($username, '-') !== false) {
+    return;
   }
 
-  return TRUE;
-}
-
-
-/**
- * Trigger deleteolcourses viewed event,
- *
- * @param stdClass  $context page context object
- * @since Moodle 3.7
- */
-function deleteoldcourses_viewed($context, $userid) {
-  $event = \local_deleteoldcourses\event\old_courses_list_viewed::create(array(
-    'objectid' => $userid,
-    'context' => $context,
-    'other' => array(),
-    'relateduserid' => $userid,
-  ));
-  $event->trigger();
-}
-
-
-/**
- * Lib for email messages.
- * @author Iader E. Garcia Gomez <iader.garcia@correounivalle.edu.co>
- * Version: 0.1
- **/
-function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDelete, $coursesDeleted) {
-
-    $fromUser = core_user::get_user_by_username(
-                                        $usernameFrom,
-                                        'id, 
-                                        firstname, 
-                                        lastname, 
-                                        username, 
-                                        email, 
-                                        maildisplay, 
-                                        mailformat,
-                                        firstnamephonetic,
-                                        lastnamephonetic,
-                                        middlename,
-                                        alternatename'
-                                    );
-
-    $toUser = core_user::get_user_by_username(
-                                        $usernameTo,
-                                        'id, 
-                                        firstname, 
-                                        lastname, 
-                                        username, 
-                                        email, 
-                                        maildisplay, 
-                                        mailformat,
-                                        firstnamephonetic,
-                                        lastnamephonetic,
-                                        middlename,
-                                        alternatename'
-                                    );
-
-    
-    $subject = "Notificación sobre cursos pendientes por borrar en el Campus Virtual";
-
-    $textToSendHtml = '';
-    if ($coursesToDelete > 0) {
-      $textToSendHtml .= "El plugin de eliminación de cursos ha detectado que el día de hoy quedan cursos pendientes por borrar.<br><br>";
-    }else{
-      $textToSendHtml .= "El módulo de eliminación de cursos ha detectado que el día de hoy <strong>NO</strong> quedan cursos pendientes por borrar.<br><br>";
+  //Show only in dasboard page
+  if ($PAGE->has_set_url()) {
+    if (!$PAGE->url->compare(new moodle_url('/my/'), URL_MATCH_BASE)) {
+      return;
     }
-    $textToSendHtml .= "Cantidad de cursos pendientes: " . $coursesToDelete . "<br>";
-    $textToSendHtml .= "Cantidad de cursos borrados: ". $coursesDeleted ."<br><br>";
-    $textToSendHtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.<br>";
-
-    $textToSend = html_to_text($textToSendHtml);
-    
-    $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, '', '', true);
-}
-
-/*******************************************************************************************
-************************************   Admin Functions  ************************************
-*******************************************************************************************/
-
-/**
- * Count all deleted courses
- *
- * @param int $userid id of user who deleted a course
- * @param int $now date now
- * @param int $ago years deleted ago
- */
-function count_deleted_courses($userid, $now, $ago = 0){
-  global $DB;
-  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' month');
-  $params = array();
-  $sql = "SELECT COUNT(cd.id)
-              FROM {deleteoldcourses_deleted} cd
-             WHERE cd.timecreated >=:since";
-  if ($userid>0) {
-    $sql = "SELECT COUNT(cd.id)
-              FROM {deleteoldcourses_deleted} cd
-             WHERE cd.userid=:userid AND cd.timecreated >=:since";
-  }
-
-  $params['userid'] = $userid;
-  $params['since'] = $since;
-  return $DB->count_records_sql($sql, $params);
-}
-
-function get_deleted_courses_sql($userid, $since){
-
-  $params = array();
-  $params['userid'] = $userid;
-  $params['since'] = $since;
-
-  $select = "SELECT 
-              cd.id, cd.shortname AS c_shortname, 
-              cd.fullname AS c_fullname, 
-              u.username AS u_username, 
-              CONCAT(u.firstname, ' ', u.lastname) AS u_fullname,
-              cd.timesenttodelete AS c_timesenttodelete,
-              cd.timecreated AS c_timedeleted,
-              cd.courseid, u.firstname, u.lastname, u.id AS userid";
-
-  $from = "FROM {deleteoldcourses_deleted} cd";
-
-  $join = "JOIN {user} u ON (cd.userid = u.id AND cd.timecreated >=:since)";
-  if ($userid>0) {
-    $join = "JOIN {user} u ON (cd.userid = u.id AND cd.userid = :userid AND cd.timecreated >=:since)";
   }
   
+  $pluginname = get_string('pluginname', 'local_deleteoldcourses');
+  $action = new moodle_url('/local/deleteoldcourses/index.php', array());
+  $type = global_navigation::TYPE_CUSTOM;
+  $shorttext = 'deleteoldcourses';
+  $key='deleteoldcourses';
+  $icon = new pix_icon('i/trash', '');
 
-  return array($select, $from, $join, $params);
-}
+  $show_node = false;
+  $show_alert = false;
+  $total = 0;
 
+  if (has_capability('local/adminer:useadminer', context_system::instance())) {
+    $action = new moodle_url('/local/deleteoldcourses/report.php', array());
+    $show_node = true;
+  }else{
+    $now = time();
+    $total = user_count_courses($USER->id, $now);
+    $show_alert = true;
+  }
 
-function get_deleted_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago = 0){
-  global $DB;
-  
-  $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' month');
+  if ($total > 0) {
+    $show_node = true;
+  }
 
-  list($select, $from, $join, $params) = get_deleted_courses_sql($userid, $since);
-  
-  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
-  return $courses;
+  $node = navigation_node::create(
+    $pluginname,
+    $action,
+    $type,
+    $shorttext,
+    $key,
+    $icon 
+  );
+
+  if ($show_node) {
+    if ($show_alert) {
+      $PAGE->requires->js_call_amd('local_deleteoldcourses/show_alert', 'init', array(
+        'link' => $action->out(false),
+        'str_content' => get_string('alert_delete_content', 'local_deleteoldcourses'),
+        'str_link' => get_string('delete_courses', 'local_deleteoldcourses')
+      )); 
+    }
+    $deleteoldcourses = $navigation->add_node($node);
+    $deleteoldcourses->showinflatnavigation = true;
+  }
+
 }
 
 
 /**
- * Count all pending courses
- *
- * @return int number of pending courses
+ * Helper function to reset the icon system used as updatecallback function when saving some of the plugin's settings.
  */
-function count_pending_courses(){
-  global $DB;
-  $sql = "SELECT COUNT(d.id)
-              FROM {deleteoldcourses} d";
-  return $DB->count_records_sql($sql);
-}
-
-function get_pending_courses_sql(){
-
-  $params = array();
-
-  $select = "SELECT 
-              d.id, d.shortname AS c_shortname, 
-              d.fullname AS c_fullname, 
-              u.username AS u_username, 
-              CONCAT(u.firstname, ' ', u.lastname) AS u_fullname,
-              d.timecreated AS c_timesenttodelete,
-              d.courseid, u.firstname, u.lastname, u.id AS userid";
-
-  $from = "FROM {deleteoldcourses} d";
-
-  $join = "JOIN {user} u ON (d.userid = u.id)";
-
-  return array($select, $from, $join, $params);
-}
-
-
-function get_pending_courses($sort, $limitfrom=0, $limitnum=0){
-  global $DB;
-  
-  list($select, $from, $join, $params) = get_pending_courses_sql();
-  
-  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
-  return $courses;
+function local_deleteoldcourses_reset_fontawesome_icon_map() {
+    // Reset the icon system cache.
+    // There is the function \core\output\icon_system::reset_caches() which does seem to be only usable in unit tests.
+    // Thus, we clear the icon system cache brutally.
+    $instance = \core\output\icon_system::instance(\core\output\icon_system::FONTAWESOME);
+    $cache = \cache::make('core', 'fontawesomeiconmapping');
+    $mapkey = 'mapping_'.preg_replace('/[^a-zA-Z0-9_]/', '_', get_class($instance));
+    $cache->delete($mapkey);
+    // And rebuild it brutally.
+    $instance->get_icon_name_map();
 }
 

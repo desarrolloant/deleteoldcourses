@@ -62,3 +62,7 @@ $string['more_than_1_month_ago'] = 'Deleted less than 1 month ago';
 $string['more_than_n_months_ago'] = 'Deleted less than {$a} months ago';
 $string['deleted_courses'] = 'Deleted Courses';
 $string['pending_courses'] = 'Pending Courses';
+
+//Alert in dashborad
+$string['alert_delete_content'] = 'If you wish to delete any of your courses, please go to the section';
+$string['delete_courses'] = 'Delete Courses';

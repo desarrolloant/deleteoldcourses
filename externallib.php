@@ -14,14 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Version information for deletecourses.
- *
- * @package	local_deleteoldcourses
- * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/externallib.php");
@@ -31,9 +23,9 @@ require_once("$CFG->libdir/externallib.php");
  *
  * @package    local_deleteoldcourses
  * @category   external
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since Moodle 3.7
+ * @since      Moodle 3.6.6
  */
 
 /**
@@ -42,7 +34,7 @@ require_once("$CFG->libdir/externallib.php");
  * @throws invalid_parameter_exception
  * @param array $courses An array of courses to delete.
  * @return array An array of arrays
- * @since Moodle 3.7
+ * @since      Moodle 3.6.6
  */
 class local_deleteoldcourses_external extends external_api {
 
@@ -50,7 +42,7 @@ class local_deleteoldcourses_external extends external_api {
      * Describes the parameters for get_course.
      *
      * @return external_function_parameters
-     * @since Moodle 3.0
+     * @since  Moodle 3.6.6
      */
     public static function get_course_parameters() {
         return new \external_function_parameters(
@@ -64,7 +56,7 @@ class local_deleteoldcourses_external extends external_api {
      * Describes the get_course_returns return value.
      *
      * @return external_single_structure
-     * @since Moodle 3.0
+     * @since  Moodle 3.6.6
      */
     public static function get_course_returns() {
         return new external_single_structure(
@@ -89,9 +81,9 @@ class local_deleteoldcourses_external extends external_api {
     /**
      * Get course informatión
      *
-     * @param int $courseid the course id
+     * @param  int $courseid the course id
      * @return array course information and teachers
-     * @since Moodle 3.7.7
+     * @since  Moodle 3.6.6
      */
     public static function get_course($courseid) {
         global $CFG, $DB, $USER;
@@ -160,7 +152,7 @@ class local_deleteoldcourses_external extends external_api {
      * Describes the parameters for add_course.
      *
      * @return external_function_parameters
-     * @since Moodle 3.0
+     * @since  Moodle 3.6.6
      */
     public static function add_course_parameters() {
         return new \external_function_parameters(
@@ -176,7 +168,7 @@ class local_deleteoldcourses_external extends external_api {
      * Describes the add_course_returns return value.
      *
      * @return external_single_structure
-     * @since Moodle 3.0
+     * @since  Moodle 3.6.6
      */
     public static function add_course_returns() {
         return new external_single_structure(
@@ -193,9 +185,8 @@ class local_deleteoldcourses_external extends external_api {
      * @param int $courseid the course id
      * @param string $shortname the course shortname
      * @param string $fullname the course fullname
-     * @param int $courseid the course id
      * @return array course information confirm o reject
-     * @since Moodle 3.7.7
+     * @since  Moodle 3.6.6
      */
     public static function add_course($course, $shortname, $fullname) {
         global $CFG, $DB, $USER;
@@ -269,7 +260,7 @@ class local_deleteoldcourses_external extends external_api {
      * Describes the parameters for remove_course.
      *
      * @return external_function_parameters
-     * @since Moodle 3.0
+     * @since  Moodle 3.6.6
      */
     public static function remove_course_parameters() {
         return new \external_function_parameters(
@@ -283,7 +274,7 @@ class local_deleteoldcourses_external extends external_api {
      * Describes the remove_course_returns return value.
      *
      * @return external_single_structure
-     * @since Moodle 3.0
+     * @since  Moodle 3.6.6
      */
     public static function remove_course_returns() {
         return new external_single_structure(
@@ -298,7 +289,7 @@ class local_deleteoldcourses_external extends external_api {
      *
      * @param int $courseid the course id
      * @return array course information confirm o reject
-     * @since Moodle 3.7.7
+     * @since      Moodle 3.6.6
      */
     public static function remove_course($courseid) {
         global $CFG, $DB, $USER;

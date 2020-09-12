@@ -25,7 +25,7 @@
 global $CFG, $PAGE, $USER, $DB;
 
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
+require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
 define('DEFAULT_PAGE_SIZE', 15);
 define('SHOW_ALL_PAGE_SIZE', 5000);

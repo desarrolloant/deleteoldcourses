@@ -17,15 +17,15 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses
- * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @package	  local_deleteoldcourses
+ * @author    2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 global $CFG, $PAGE, $USER, $DB;
 
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
+require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 require_once($CFG->libdir . '/adminlib.php');
 
 define('DEFAULT_PAGE_SIZE', 15);
@@ -109,10 +109,6 @@ if ($action == 'deleted') {
 	//Display old courses table
 	echo $coursestablehtml;
 }
-
-
-
-
 
 //Print footer
 echo $OUTPUT->footer();

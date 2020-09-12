@@ -28,8 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Class containing the filter options data for rendering the date filter element for the old courses page.
  *
+ * @since      Moodle 3.6.6
  * @package    local_deleteoldcourses
- * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class date_filter implements renderable, templatable {

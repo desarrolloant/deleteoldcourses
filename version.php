@@ -17,15 +17,16 @@
 /**
  * Version information for deletecourses.
  *
- * @package   course_deleteolds
- * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @package   local_deleteoldcourse
+ * @since     Moodle 3.6.6
+ * @author    2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 20200910100;
-$plugin->requires  = 2019052007.03;
+$plugin->version   = 20200912100;
+$plugin->requires  = 2018120306.03;
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = 'v1.0.0';
 $plugin->component = 'local_deleteoldcourses';

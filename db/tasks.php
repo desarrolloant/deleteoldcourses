@@ -18,6 +18,7 @@
  * This file defines tasks performed by the deleteoldcourses.
  *
  * @package    local_deleteoldcourses
+ * @since      Moodle 3.6.6
  * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

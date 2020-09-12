@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
  * The local_deleteoldcourses viewed alert before delete course event class.
  *
  * @package   course_deleteolds
- * @since      Moodle 3.7.7
+ * @since      Moodle 3.6.6
  * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

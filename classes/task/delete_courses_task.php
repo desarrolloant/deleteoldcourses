@@ -22,13 +22,14 @@ ini_set('max_execution_time', 14400);
 raise_memory_limit(MEMORY_HUGE);
 set_time_limit(300);
 
-require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
+require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
 /**
  * Adhoc task for deleting courses.
  *
  * @package   local_deleteoldcourses
- * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @since     Moodle 3.6.6
+ * @author    2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class delete_courses_task extends \core\task\scheduled_task {

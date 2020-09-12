@@ -1,4 +1,4 @@
-Deleteoldcourses
+Delete old courses
 ==============
 
 This local deleteoldcourses allows teachers to delete old courses.
@@ -13,6 +13,8 @@ Copy the deleteoldcourses folder into your /local directory.
 
 Usage
 -----
+Admin ->   To use Delete Old Courses go to "Site administration" -> "Courses" -> "Delete Old Courses".
+Teacher -> Access for the link in Boost left sidebar o my dashboard alert
 
 Configuration
 -------------
@@ -25,6 +27,3 @@ Diego Fdo Ruiz (diego.fernando.ruiz@correounivalle.edu.co)
 Pendiente
 --------------
 Modificar para que se ejecute antes de las 7 am
-Complementar envío de logs
-Límite de memoria
-

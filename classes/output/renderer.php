@@ -18,6 +18,7 @@
  * Version information for deletecourses.
  *
  * @package	local_deleteoldcourses
+ * @since   Moodle 3.6.6
  * @author 	2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,7 +34,8 @@ use stdClass;
  * deleteoldcourses local renderer
  *
  * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @since      Moodle 3.6.6
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {

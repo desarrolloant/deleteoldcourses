@@ -15,9 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for deletecourses.
+ * Version information for deletecourses - used services.
  *
  * @package	local_deleteoldcourses
+ * @since   Moodle 3.6.6
  * @author 	2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
