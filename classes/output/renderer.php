@@ -18,6 +18,7 @@
  * Version information for deletecourses.
  *
  * @package	local_deleteoldcourses
+ * @since   Moodle 3.6.6
  * @author 	2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,15 +28,44 @@ namespace local_deleteoldcourses\output;
 defined('MOODLE_INTERNAL') || die;
 
 use plugin_renderer_base;
+use stdClass;
 
 /**
  * deleteoldcourses local renderer
  *
  * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @since      Moodle 3.6.6
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
+
+    /**
+     * Html to action buttons.
+     *
+     * @param string $action pending o deleted courses.
+     * @return string html for show total courses.
+     */
+    public function render_buttons($action){
+        $url_deleted = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'deleted'));
+        $url_pending = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'pending'));
+
+        $data = new stdClass();
+
+        $data->action_pending = false;
+        $data->action_deleted = false;
+        if ($action == 'pending') {
+            $data->action_pending = true;
+        }else if($action == 'deleted'){
+            $data->action_deleted = true;
+        }
+        $data->str_deleted = get_string('deleted_courses', 'local_deleteoldcourses');
+        $data->str_pending = get_string('pending_courses', 'local_deleteoldcourses');
+        $data->url_deleted = $url_deleted->out(false);
+        $data->url_pending = $url_pending->out(false);
+        return $this->render_from_template('local_deleteoldcourses/buttons', $data);
+    }
+
 
 	/**
      * Html to show number of courses.
@@ -47,6 +77,35 @@ class renderer extends plugin_renderer_base {
 		$o = \html_writer::tag('p', get_string('coursescount', 'local_deleteoldcourses').$number_of_courses);
 		return $o;
 	}
+
+    /**
+     * Returns a formatted filter option.
+     *
+     * @param int $year The value for the filter option.
+     * @return array The formatted option with the ['filtertype:value' => 'label'] format.
+     */
+    protected function format_filter_option($year) {
+        $optionvalue = $year;
+        if ($year == MIN_CREATED_AGO) {
+            $optionlabel = get_string('more_than_1_year_ago', 'local_deleteoldcourses');
+        }else{
+            $optionlabel = get_string('more_than_n_years_ago', 'local_deleteoldcourses', $year.'');
+        }
+        
+        return [$optionvalue => $optionlabel];
+    }
+
+
+    public function render_date_filter($selectedoption=MIN_CREATED_AGO, $baseusrl = null){
+        $timeoptions = [];
+        for($i=1; $i<=MAX_CREATED_AGO; $i++){
+            $timeoptions += $this->format_filter_option($i);
+        }
+
+        $indexpage = new \local_deleteoldcourses\output\date_filter($timeoptions, $selectedoption, $baseusrl);
+        $context = $indexpage->export_for_template($this->output);
+        return $this->output->render_from_template('local_deleteoldcourses/date_filter', $context);
+    }
 
 	/**
      * Html to show old courses table of a teacher.
@@ -85,15 +144,65 @@ class renderer extends plugin_renderer_base {
         }
 	}
 
+
     /**
-     * Html render page scripts.
+     * Html to show old deleted courses table.
      *
-     * @param string $page Name of required page eg:page_list_courses.
-     * @return string html for display the page scripts.
+     * @param admin_deleted_table $renderable The courses table.
+     * @param int $perpage Number of courses per page.
+     * @return string html for the old courses table.
      */
-    public function render_scripts($page){
-        return $this->render_from_template('local_deleteoldcourses/course_options', []);
+    public function render_deleted_table(admin_deleted_table $renderable, $perpage) {
+        ob_start();
+        $renderable->out($perpage, true);
+        $o = ob_get_contents();
+        ob_end_clean();
+        return $o;
     }
 
 
+    /**
+     * Returns a formatted filter option.
+     *
+     * @param int $month The value for the filter option.
+     * @return array The formatted option with the ['filtertype:value' => 'label'] format.
+     */
+    protected function format_deleted_filter_option($month) {
+        $optionvalue = $month;
+        if ($month == MIN_DELETED_AGO) {
+            $optionlabel = get_string('more_than_1_month_ago', 'local_deleteoldcourses');
+        }else{
+            $optionlabel = get_string('more_than_n_months_ago', 'local_deleteoldcourses', $month.'');
+        }
+        
+        return [$optionvalue => $optionlabel];
+    }
+
+
+    public function render_date_deleted_filter($selectedoption=MIN_DELETED_AGO, $baseusrl = null){
+        $timeoptions = [];
+        for($i=1; $i<=MAX_DELETED_AGO; $i++){
+            $timeoptions += $this->format_deleted_filter_option($i);
+        }
+
+        $indexpage = new \local_deleteoldcourses\output\date_filter($timeoptions, $selectedoption, $baseusrl);
+        $context = $indexpage->export_for_template($this->output);
+        return $this->output->render_from_template('local_deleteoldcourses/date_filter', $context);
+    }
+
+
+    /**
+     * Html to show old pending courses table.
+     *
+     * @param admin_deleted_table $renderable The courses table.
+     * @param int $perpage Number of courses per page.
+     * @return string html for the old courses table.
+     */
+    public function render_pending_table(admin_pending_table $renderable, $perpage) {
+        ob_start();
+        $renderable->out($perpage, true);
+        $o = ob_get_contents();
+        ob_end_clean();
+        return $o;
+    }
 }

@@ -15,18 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for deletecourses.
+ * This file defines tasks performed by the deleteoldcourses.
  *
- * @package   local_deleteoldcourse
- * @since     Moodle 3.6.6
- * @author    2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_deleteoldcourses
+ * @since      Moodle 3.6.6
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   = 20200912100;
-$plugin->requires  = 2018120306.03;
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.0.0';
-$plugin->component = 'local_deleteoldcourses';
+// List of tasks.
+$tasks = array(
+    array(
+        'classname' => 'local_deleteoldcourses\task\delete_courses_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '2,4',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    )
+);

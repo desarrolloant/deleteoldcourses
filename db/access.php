@@ -25,13 +25,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-    'local/deleteoldcourses:deleteoldcourses' => array(
+    'local/deleteoldcourses:viewreport' => array(
     	'riskbitmask' => RISK_DATALOSS,
-        'captype' => 'write',
+        'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
-        	'coursecreator' => CAP_ALLOW,
-        	'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         ),
     ),

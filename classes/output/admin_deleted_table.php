@@ -18,7 +18,8 @@
  * Renderers.
  *
  * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @since      Moodle 3.6.6
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,11 +40,10 @@ require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
  * Class for the displaying the courses table.
  *
  * @package    local_deleteoldcourses
- * @since      Moodle 3.6.6
- * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class list_courses_table extends \table_sql implements renderable {
+class admin_deleted_table extends \table_sql implements renderable {
 
     /**
      * @var int $userid The course id
@@ -73,6 +73,7 @@ class list_courses_table extends \table_sql implements renderable {
      * Sets up the table.
      *
      * @param int $userid
+     * @param int $ago now date
      * @param bool $selectall Has the user selected all users on the page?
      */
     public function __construct($userid, $ago) {
@@ -94,17 +95,17 @@ class list_courses_table extends \table_sql implements renderable {
         $headers[] = get_string('course_fullname', 'local_deleteoldcourses');
         $columns[] = 'c_fullname';
 
-        $headers[] = get_string('user_username', 'local_deleteoldcourses');
+        $headers[] = get_string('username', 'moodle');
         $columns[] = 'u_username';
 
         $headers[] = get_string('user_fullname', 'local_deleteoldcourses');
         $columns[] = 'u_fullname';
 
-        $headers[] = get_string('course_datecreation', 'local_deleteoldcourses');
-        $columns[] = 'c_timecreated';
+        $headers[] = get_string('sent_to_delete', 'local_deleteoldcourses');
+        $columns[] = 'c_timesenttodelete';
 
-        $headers[] = get_string('table_option', 'local_deleteoldcourses');
-        $columns[] = 'table_option';
+        $headers[] = get_string('course_timedeleted', 'local_deleteoldcourses');
+        $columns[] = 'c_timedeleted';
 
 
         $this->define_columns($columns);
@@ -114,19 +115,9 @@ class list_courses_table extends \table_sql implements renderable {
         //$this->define_header_column('c_fullname');
 
         // Make this table sorted by last name by default.
-        $this->sortable(true, 'c_shortname');
-
-        $this->no_sorting('u_username');
-        $this->no_sorting('u_fullname');
-        $this->no_sorting('table_option');
-
+        $this->sortable(true, 'c_timedeleted', SORT_DESC);
         
         $this->set_attribute('id', 'courses');
-
-        /*
-        // Set the variables we need to use later.
-        $this->search = $search;
-        $this->selectall = $selectall;*/
     }
 
     /**
@@ -159,9 +150,8 @@ class list_courses_table extends \table_sql implements renderable {
      * @return string
      */
     public function col_c_fullname($data) {
-        global $CFG;
-        $courselink = $CFG->wwwroot . "/course/view.php?id=" . $data->id;
-        return '<a href="'.$courselink.'" target="_blank">'.$data->c_fullname.'</a>';
+        $url = new \moodle_url('/course/view.php', array('id'=>$data->courseid)); 
+        return '<a href="'.$url->out(false).'" target="_blank">'.$data->c_fullname.'</a>';
     }
 
     /**
@@ -180,8 +170,9 @@ class list_courses_table extends \table_sql implements renderable {
      * @param \stdClass $data
      * @return string
      */
-    public function col_user_fullname($data) {
-        return $data->u_fullname;
+    public function col_u_fullname($data) {
+        $url = new \moodle_url('/user/profile.php', array('id'=>$data->userid)); 
+        return '<a href="'.$url->out(false).'" target="_blank">'.$data->u_fullname.'</a>';
     }
 
     /**
@@ -190,32 +181,28 @@ class list_courses_table extends \table_sql implements renderable {
      * @param \stdClass $data
      * @return string
      */
-    public function col_c_timecreated($data) {
-        if ($data->c_timecreated) {
-            return format_time(time() - $data->c_timecreated);
+    public function col_c_timesenttodelete($data) {
+        if ($data->c_timesenttodelete) {
+            $dateformat = get_string('strftimedatetime', 'core_langconfig');
+            //$dateformat = get_string('strftimedatetimeshort', 'core_langconfig');
+            return userdate($data->c_timesenttodelete, $dateformat);
         }
         return '-------';
     }
 
     /**
-     * Generate the option column.
+     * Generate the date column.
      *
      * @param \stdClass $data
      * @return string
      */
-    public function col_table_option($data) {
-        $class = 'btn btn-primary add-course';
-        $icon = '<i class="fa fa-trash" aria-hidden="true"></i>';
-        if (course_in_delete_list($data->id)) {
-            $class = 'btn btn-danger remove-course';
-            $icon = '<i class="fa fa-check" aria-hidden="true"></i>';
+    public function col_c_timedeleted($data) {
+        if ($data->c_timedeleted) {
+            $dateformat = get_string('strftimedatetime', 'core_langconfig');
+            //$dateformat = get_string('strftimedatetimeshort', 'core_langconfig');
+            return userdate($data->c_timedeleted, $dateformat);
         }
-        return '<button 
-                    class="'.$class.'" 
-                    course-id="'.$data->id.'" 
-                    action="delete">
-                    '.$icon.'
-                </button>';
+        return '-------';
     }
 
     /**
@@ -229,7 +216,7 @@ class list_courses_table extends \table_sql implements renderable {
 
         $now = time();
 
-        $total = user_count_courses($this->userid, $now, $this->ago);
+        $total = count_deleted_courses($this->userid, $now, $this->ago);
 
         $this->pagesize($pagesize, $total);
 
@@ -238,7 +225,7 @@ class list_courses_table extends \table_sql implements renderable {
             $sort = 'ORDER BY ' . $sort;
         }
 
-        $rawdata = user_get_courses($this->userid, $sort, $this->get_page_start(), $this->get_page_size(), $now, $this->ago);
+        $rawdata = get_deleted_courses($this->userid, $sort, $this->get_page_start(), $this->get_page_size(), $now, $this->ago);
         $this->rawdata = [];
         foreach ($rawdata as $course) {
             $this->rawdata[$course->id] = $course;

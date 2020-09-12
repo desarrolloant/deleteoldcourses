@@ -14,23 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Version information for deletecourses.
- *
- * @package   course_deleteolds
- * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_deleteoldcourses\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Privacy implementation for tool_deletecourses.
+ * Privacy implementation for tool_deleteoldcourses.
  *
  * @package   tool_deletecourses
- * @copyright 2018 Lafayette College ITS
+ * @since     Moodle 3.6.6
+ * @author    2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements

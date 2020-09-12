@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_delete_options_viewed extends \core\event\base {
+class course_remove_delete extends \core\event\base {
 
     /**
      * Init method.
@@ -37,7 +37,7 @@ class course_delete_options_viewed extends \core\event\base {
      * @return void
      */
     protected function init() {
-        $this->data['crud'] = 'r';
+        $this->data['crud'] = 'd';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'course';
     }
@@ -48,7 +48,7 @@ class course_delete_options_viewed extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('course_delete_options_viewed', 'local_deleteoldcourses');
+        return get_string('course_remove_delete', 'local_deleteoldcourses');
     }
 
     /**
@@ -57,7 +57,7 @@ class course_delete_options_viewed extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with id '$this->userid' has viewed confirmation before delete the course with id '$this->courseid'.";
+        return "The user with id '$this->userid' has removed the course with id '$this->courseid' from delete list.";
     }
 
     /**
