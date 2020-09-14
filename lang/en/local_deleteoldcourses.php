@@ -66,3 +66,5 @@ $string['pending_courses'] = 'Pending Courses';
 //Alert in dashborad
 $string['alert_delete_content'] = 'If you wish to delete any of your courses, please go to the section';
 $string['delete_courses'] = 'Delete Courses';
+$string['alert_delete_recent_courses_content'] = 'To delete courses created less than a year ago, please complete the following';
+$string['alert_delete_recent_courses_link'] = 'form';

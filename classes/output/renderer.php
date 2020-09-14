@@ -78,6 +78,20 @@ class renderer extends plugin_renderer_base {
 		return $o;
 	}
 
+
+    /**
+     * Html to show alert for delete courses created less that 1 year ago.
+     *
+     * @return string html for show alert.
+     */
+    public function render_alert_delete_courses_created_less_1_year(){
+        $data = new stdClass();
+        $data->content = get_string('alert_delete_recent_courses_content', 'local_deleteoldcourses');
+        $data->link = 'https://docs.google.com/forms/d/e/1FAIpQLScUqytuNLtZQQTYGY9KnXOzGnYFQ-gJasl1om1SbHTDJ6LQJg/viewform';
+        $data->link_text = get_string('alert_delete_recent_courses_link', 'local_deleteoldcourses');
+        return $this->render_from_template('local_deleteoldcourses/recent_courses_alert', $data);
+    }
+
     /**
      * Returns a formatted filter option.
      *
