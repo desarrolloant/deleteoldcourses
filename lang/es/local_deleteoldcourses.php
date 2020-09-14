@@ -65,3 +65,5 @@ $string['pending_courses'] = 'Cursos Pendientes';
 //Alert in dashborad
 $string['alert_delete_content'] = 'Si usted desea eliminar alguno de sus cursos, por favor dirijase a la sección';
 $string['delete_courses'] = 'Eliminar Cursos';
+$string['alert_delete_recent_courses_content'] = 'Para eliminar los cursos creados hace menos de un año, por favor diligenciar el siguiente';
+$string['alert_delete_recent_courses_link'] = 'formulario';

@@ -82,10 +82,9 @@ class delete_courses_task extends \core\task\scheduled_task {
         //Send email
         $coursesToDelete = $DB->count_records('deleteoldcourses');
 
-        // delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        // delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
-
-        delete_old_courses_send_email( '1510074-3743' , 'administrador', $coursesToDelete, $this->deleted_courses);
+        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
 
     }
 
@@ -114,10 +113,10 @@ class delete_courses_task extends \core\task\scheduled_task {
         $this->deleted_courses = 0;
         foreach ($list as $item) {
             // If time now is >= 2am then stop
-            if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
+            if (intval(date('H')) >= 2 && intval(date('H')) < 4) {
                 break;
             } elseif (intval(date('H')) >= 7) {
-                //break;
+                break;
             }
 
             $lockkey = "course{$item->courseid}";

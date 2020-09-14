@@ -75,6 +75,8 @@ $baseurl = new moodle_url('/local/deleteoldcourses/index.php', array(
     'ago' => $ago
 ));
 
+echo $output->render_alert_delete_courses_created_less_1_year();
+
 //Display date filter
 echo $output->render_date_filter($ago, $baseurl);
 
