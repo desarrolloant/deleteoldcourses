@@ -116,7 +116,7 @@ class delete_courses_task extends \core\task\scheduled_task {
             if (intval(date('H')) >= 2 && intval(date('H')) < 4) {
                 break;
             } elseif (intval(date('H')) >= 7) {
-                break;
+                //break;
             }
 
             $lockkey = "course{$item->courseid}";
