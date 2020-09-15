@@ -73,7 +73,9 @@ class delete_courses_task extends \core\task\scheduled_task {
 
         // Delete all courses in list.
         $this->delete_courses_in_list($list);
-        fix_course_sortorder();
+        if ($this->deleted_courses>0) {
+            fix_course_sortorder();
+        }
 
         $difftime = microtime_diff($starttime, microtime());
         mtrace("Cron took " . $difftime . " seconds to finish.");
