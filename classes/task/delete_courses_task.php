@@ -74,6 +74,9 @@ class delete_courses_task extends \core\task\scheduled_task {
         // Delete all courses in list.
         $this->delete_courses_in_list($list);
         if ($this->deleted_courses>0) {
+            $difftime = microtime_diff($starttime, microtime());
+            mtrace("Cron took " . $difftime . " seconds deleting {$this->deleted_courses} courses.");
+            mtrace("Fixing course sort order");
             fix_course_sortorder();
         }
 
@@ -87,7 +90,6 @@ class delete_courses_task extends \core\task\scheduled_task {
         delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
         delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
         delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
-
     }
 
     /**
@@ -118,7 +120,7 @@ class delete_courses_task extends \core\task\scheduled_task {
             if (intval(date('H')) >= 2 && intval(date('H')) < 4) {
                 break;
             } elseif (intval(date('H')) >= 7) {
-                break;
+                //break;
             }
 
             $lockkey = "course{$item->courseid}";
