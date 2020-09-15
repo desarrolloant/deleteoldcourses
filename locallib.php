@@ -203,8 +203,25 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     $textToSendHtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.<br>";
 
     $textToSend = html_to_text($textToSendHtml);
+
+    echo $textToSend;
+
+    $completeFilePath = "/home/admincampus/";
+    //$completeFilePath = "/Users/diego/Desktop/";
     
-    $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, '', '', true);
+    if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
+        $nameFile = 'deleteoldcourses0am.log';
+    } elseif (intval(date('H')) >= 7) {
+        $nameFile = 'deleteoldcourses4am.log';
+    } else {
+        $nameFile = 'deleteoldcoursestest.log';
+    }
+
+    $completeFilePath .= $nameFile;
+
+    echo $completeFilePath;
+    
+    $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, $completeFilePath, $nameFile, true);
 }
 
 /*******************************************************************************************
