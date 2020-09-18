@@ -89,7 +89,7 @@ class delete_courses_task extends \core\task\scheduled_task {
 
         delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
         delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1510074-3743' , 'administrador', $coursesToDelete, $this->deleted_courses);
+        delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
     }
 
     /**
