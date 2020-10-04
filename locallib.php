@@ -17,7 +17,7 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses - Local Library
+ * @package local_deleteoldcourses - Local Library
  * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -49,7 +49,7 @@ const EDITING_TEACHER_ROLE_ID = 3;
  * @return int
  */
 function user_count_courses($userid, $now, $ago = 1){
-	global $DB;
+  global $DB;
   $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
   $params = array();
   $sql = "SELECT COUNT(c.id)
@@ -361,4 +361,88 @@ function get_pending_courses($sort, $limitfrom=0, $limitnum=0){
   
   $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
   return $courses;
+}
+
+/**************************************************************************************
+****************************** Course deletion automation *****************************
+**************************************************************************************/
+
+/**
+ * get sql string for query queue of courses
+ *
+ * @return string for query
+ */
+function get_queue_courses_sql($courseid=0){
+  $date  = '2010-12-31 23:59';
+  $dt   = new DateTime($date);
+
+  $params              = array();
+  $params['courseid']  = $courseid;
+  $params['context']   = CONTEXT_COURSE;
+  $params['date']      = $dt->getTimestamp();
+
+  $select =  "SELECT f.contextid,
+              x.instanceid AS courseid, 
+              c.fullname AS fullname,
+              c.shortname AS shortname,
+              sum(f.filesize) AS size_in_bytes,
+              sum(case when (f.filesize > 0) then 1 else 0 end) AS number_of_files,
+              to_timestamp(c.timecreated) AS created_course";
+
+  $from   =  " FROM mdl_files f inner join mdl_context x
+              ON f.contextid = x.id
+              and x.contextlevel = :context
+              inner join mdl_course c
+              ON c.id = x.instanceid AND c.timecreated < :date"; // AND c.id=:courseid
+
+  $where  = "WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})";
+
+  $groupby=  " GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timecreated";
+
+  $orderby=  " ORDER BY sum(filesize) ASC";
+
+  return array($select, $from, $where, $groupby, $orderby, $params);
+}
+
+
+/**
+ * Queue the courses for time ago, number of activities
+ *
+ * @param int $quantity number of courses for add to queue
+ * @return None
+ */
+function queue_the_courses($courseid='11416'){
+
+  //global $DB, $CFG;
+  // require_once($CFG->dirroot . '/course/externallib.php');
+
+
+  // Now, test the function via the external API.
+  // $contents = core_course_external::get_course_contents(11416, array());
+  // $contents = external_api::clean_returnvalue(core_course_external::get_course_contents_returns(), $contents);
+  global $DB;
+
+  //Admin user
+  $user = $DB->get_record('user', array('username' => 'desadmin'));
+
+  $courses = array();
+  if ($courseid > 0) {
+    list($select, $from, $where, $groupby, $orderby, $params) = get_queue_courses_sql($courseid);
+    $rs = $DB->get_recordset_sql("$select $from $where $groupby $orderby", $params);
+    foreach ($rs as $row) {
+      $record = (object) array(
+          'courseid'    => $row->courseid,
+          'shortname'   => $row->shortname,
+          'fullname'    => $row->fullname,
+          'userid'      => $user->id,
+          'size'        => $row->size_in_bytes,
+          'timecreated' => time()
+      );
+      array_push($courses, $record);
+    }
+    $rs->close();
+
+    return $courses;
+  }
+
 }

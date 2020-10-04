@@ -136,12 +136,13 @@ class delete_courses_task extends \core\task\scheduled_task {
                         mtrace("Failed to delete course {$item->courseid}");
                     }else{
                         $record = (object) array(
-                            'courseid' => $item->courseid,
-                            'shortname' => $item->shortname,
-                            'fullname' => $item->fullname,
-                            'userid' => $item->userid,
-                            'timesenttodelete' => $item->timecreated,
-                            'timecreated' => time()
+                            'courseid'          => $item->courseid,
+                            'shortname'         => $item->shortname,
+                            'fullname'          => $item->fullname,
+                            'userid'            => $item->userid,
+                            'coursecreatedat'   => $item->coursecreatedat,
+                            'timesenttodelete'  => $item->timecreated,
+                            'timecreated'       => time()
                         );
                         if($DB->delete_records('deleteoldcourses', array('id' => $item->id))){
                             mtrace("Course with id {$item->courseid} has been deleted");
