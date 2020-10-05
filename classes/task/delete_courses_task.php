@@ -21,6 +21,8 @@ defined('MOODLE_INTERNAL') || die;
 ini_set('max_execution_time', 14400);
 raise_memory_limit(MEMORY_HUGE);
 set_time_limit(300);
+const COURSES_FOR_QUEUE = 10;
+const DATE_FOR_QUEUE = '2010-12-31 23:59';
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
@@ -63,16 +65,33 @@ class delete_courses_task extends \core\task\scheduled_task {
      */
     public function execute() {
         global $DB;
+
         $starttime = microtime();
 
-        // Finish if there are no rows for delete.
-        if (!$list = $this->get_to_delete_list()) {
-            mtrace("No rows found in list deleteoldcourses");
-            return;
+        //System load courses
+        $num_pending_courses = $DB->count_records('deleteoldcourses');
+
+        //Complete queue for deletetion list
+        $num_courses_for_queue = 0;
+        if ($num_pending_courses < COURSES_FOR_QUEUE) {
+            $num_courses_for_queue = COURSES_FOR_QUEUE - $num_pending_courses;
         }
 
+        $queue_started = date('H:i:s');
+        mtrace("Completing queue Started at: {$queue_started}");
+        //--------------------------------------------------------
+        if ($num_courses_for_queue > 0) {
+            queue_the_courses(DATE_FOR_QUEUE, $num_courses_for_queue);
+        }
+        //--------------------------------------------------------
+        $queue_finished = date('H:i:s');
+        mtrace("Queue completed at: {$queue_finished}");
+
+        //-----------------------------------------
+        //return;
+
         // Delete all courses in list.
-        $this->delete_courses_in_list($list);
+        $this->delete_courses_in_list();
         if ($this->deleted_courses>0) {
             $difftime = microtime_diff($starttime, microtime());
             mtrace("Cron took " . $difftime . " seconds deleting {$this->deleted_courses} courses.");
@@ -87,22 +106,9 @@ class delete_courses_task extends \core\task\scheduled_task {
         //Send email
         $coursesToDelete = $DB->count_records('deleteoldcourses');
 
-        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        //delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        //delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
         delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
-    }
-
-    /**
-     * Get all rows the list to be deleted.
-     *
-     * @return array
-     */
-    protected function get_to_delete_list() {
-        global $DB;
-        // Get all the list.
-        $sql = "select * from {deleteoldcourses}";
-        $list = $DB->get_records_sql($sql);
-        return $list;
     }
 
     /**
@@ -110,17 +116,43 @@ class delete_courses_task extends \core\task\scheduled_task {
      *
      * @param array $list The rows to be deleted.
      */
-    protected function delete_courses_in_list($list) {
+    protected function delete_courses_in_list() {
         global $DB;
+
+        // Day of week
+        $day = date('N');
+
+        $sql = "SELECT * FROM {deleteoldcourses} WHERE size >= 0 
+                ORDER BY size ASC
+                UNION
+                SELECT * FROM {deleteoldcourses} WHERE size = -1";
+
+        //If is Sat, Sun or Mon, change size to DESC
+        if ($day == 1 || $day == 6 || $day == 7) {
+            $sql = "SELECT * FROM {deleteoldcourses} WHERE size >= 0 
+                    ORDER BY size DESC
+                    UNION
+                    SELECT * FROM {deleteoldcourses} WHERE size = -1";
+        }
+
+        //Get queryset
+        $rs = $DB->get_recordset_sql($sql);
 
         $lockfactory = \core\lock\lock_config::get_lock_factory('local_deleteoldcourses_delete_course_task');
         $this->deleted_courses = 0;
-        foreach ($list as $item) {
-            // If time now is >= 2am then stop
-            if (intval(date('H')) >= 2 && intval(date('H')) < 4) {
+        foreach ($rs as $item) {
+            
+            // Run only between 1:00 and 5:00
+            if (intval(date('H')) < 1 && intval(date('H')) > 5) {
                 break;
-            } elseif (intval(date('H')) >= 7) {
-                break;
+            }
+
+            $size = $item->size;
+
+            //Size when the course was send for an user
+            if ($item->size == -1) {
+                $course_size = courseCalculateSize($item->courseid);
+                $size = $course_size->size;
             }
 
             $lockkey = "course{$item->courseid}";
@@ -140,6 +172,7 @@ class delete_courses_task extends \core\task\scheduled_task {
                             'shortname'         => $item->shortname,
                             'fullname'          => $item->fullname,
                             'userid'            => $item->userid,
+                            'size'              => $size,
                             'coursecreatedat'   => $item->coursecreatedat,
                             'timesenttodelete'  => $item->timecreated,
                             'timecreated'       => time()
@@ -159,5 +192,6 @@ class delete_courses_task extends \core\task\scheduled_task {
                 $lock->release();
             }
         }
+        $rs->close();
     }
 }

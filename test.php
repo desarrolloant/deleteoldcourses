@@ -27,5 +27,5 @@ global $CFG, $PAGE, $USER, $DB;
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 require_once($CFG->libdir . '/adminlib.php');
-$ttt = queue_the_courses();
+$ttt = queue_the_courses('2010-12-31 23:59');
 var_dump($ttt);

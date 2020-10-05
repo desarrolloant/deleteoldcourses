@@ -98,6 +98,11 @@ if ($action == 'deleted') {
 
 	//Display old courses table
 	echo $coursestablehtml;
+
+	//Display show all link
+	$perpageurl = clone($baseurl);
+	echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
+	
 }else if($action == 'pending'){
 	$coursestable = new \local_deleteoldcourses\output\admin_pending_table();
 	$coursestable->define_baseurl($baseurl);
@@ -108,6 +113,10 @@ if ($action == 'deleted') {
 
 	//Display old courses table
 	echo $coursestablehtml;
+
+	//Display show all link
+	$perpageurl = clone($baseurl);
+	echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
 }
 
 //Print footer

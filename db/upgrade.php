@@ -14,24 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * This file defines tasks performed by the deleteoldcourses.
- *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.6.6
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+defined('MOODLE_INTERNAL') || die();
 
-// List of tasks.
-$tasks = array(
-    array(
-        'classname' => 'local_deleteoldcourses\task\delete_courses_task',
-        'blocking' => 0,
-        'minute' => '0',
-        'hour' => '1',
-        'day' => '*',
-        'dayofweek' => '*',
-        'month' => '*'
-    )
-);
+require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
+
+function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
+    global $DB;
+
+    $dbman = $DB->get_manager();
+
+    return true;
+}

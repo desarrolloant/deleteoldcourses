@@ -15,23 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file defines tasks performed by the deleteoldcourses.
+ * Extra install steps
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.6.6
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_deleteoldcourses
+ * @copyright 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// List of tasks.
-$tasks = array(
-    array(
-        'classname' => 'local_deleteoldcourses\task\delete_courses_task',
-        'blocking' => 0,
-        'minute' => '0',
-        'hour' => '1',
-        'day' => '*',
-        'dayofweek' => '*',
-        'month' => '*'
-    )
-);
+function xmldb_local_deleteoldcourses_install() {
+    global $CFG;
+
+}
