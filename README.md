@@ -33,4 +33,5 @@ Check
 Quantity of courses constant
 Date
 Break at out 1 - 5
+Send mail to Claudia, Iader, Diego
 
