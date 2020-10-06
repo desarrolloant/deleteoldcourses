@@ -23,5 +23,27 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
 
     $dbman = $DB->get_manager();
 
+    if ($oldversion < 20201005100) {
+
+
+
+    	// Modify table: deleteoldcourses
+        $table_deleteoldcourses = new xmldb_table('deleteoldcourses');
+        $table_deleteoldcourses_deleted = new xmldb_table('deleteoldcourses_deleted');
+
+        // Adding fields to tables deleteoldcourses and deleteoldcourses_deleted
+        $size_field = $table->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
+        $coursecreatedat_field = $table->add_field('coursecreatedat', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '0');
+
+
+        $dbman->add_field($table_deleteoldcourses, $size_field); 
+        $dbman->add_field($table_deleteoldcourses, $coursecreatedat_field);
+
+        $dbman->add_field($table_deleteoldcourses_deleted, $size_field); 
+        $dbman->add_field($table_deleteoldcourses_deleted, $coursecreatedat_field); 
+
+        upgrade_plugin_savepoint(true, 20201005100, 'local', 'deleteoldcourses');
+    }
+
     return true;
 }
