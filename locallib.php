@@ -206,8 +206,8 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
 
     echo $textToSend;
 
-    //$completeFilePath = "/home/admincampus/";
-    $completeFilePath = "/Users/diego/Desktop/";
+    $completeFilePath = "/home/admincampus/";
+    //$completeFilePath = "/Users/diego/Desktop/";
     
     $nameFile = 'deleteoldcourses.log';
 
@@ -394,6 +394,13 @@ function get_queue_courses_sql($str_date){
 
   $orderby=  " ORDER BY sum(filesize) ASC";
 
+  // Day of week
+  $day = date('N');
+  //If is Sat, Sun or Mon, change size to DESC
+  if ($day == 1 || $day == 6 || $day == 7) {
+    $orderby=  " ORDER BY sum(filesize) DESC";
+  }
+
   return array($select, $from, $where, $groupby, $orderby, $params);
 }
 
@@ -444,6 +451,8 @@ function queue_the_courses($str_date, $quantity=0){
 function courseCalculateSize($courseid){
   global $DB;
 
+  $result = 0;
+
   $params = [];
   $params['courseid']   = $courseid;
   $params['context']    = CONTEXT_COURSE;
@@ -452,5 +461,11 @@ function courseCalculateSize($courseid){
           INNER JOIN {context} x ON (f.contextid = x.id AND x.contextlevel = :context)
           INNER JOIN {course} c ON (c.id = x.instanceid AND c.id = :courseid)";
 
-  return $DB->get_record_sql($sql, $params);
+  if($query = $DB->get_record_sql($sql, $params)){
+    if ($query->size != NULL) {
+      $result = $query->size;
+    }
+  }
+
+  return $result;
 }

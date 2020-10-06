@@ -27,3 +27,10 @@ php admin/tool/task/cli/schedule_task.php --execute='\local_deleteoldcourses\tas
 Author
 ------
 Diego Fdo Ruiz (diego.fernando.ruiz@correounivalle.edu.co)
+
+Check 
+-------
+Quantity of courses constant
+Date
+Break at out 1 - 5
+

@@ -21,7 +21,7 @@ defined('MOODLE_INTERNAL') || die;
 ini_set('max_execution_time', 14400);
 raise_memory_limit(MEMORY_HUGE);
 set_time_limit(300);
-const COURSES_FOR_QUEUE = 10;
+const COURSES_FOR_QUEUE = 150;
 const DATE_FOR_QUEUE = '2010-12-31 23:59';
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
@@ -119,21 +119,10 @@ class delete_courses_task extends \core\task\scheduled_task {
     protected function delete_courses_in_list() {
         global $DB;
 
-        // Day of week
-        $day = date('N');
-
-        $sql = "SELECT * FROM {deleteoldcourses} WHERE size >= 0 
-                ORDER BY size ASC
+        $sql = "SELECT * FROM {deleteoldcourses} WHERE size >= 0
                 UNION
-                SELECT * FROM {deleteoldcourses} WHERE size = -1";
-
-        //If is Sat, Sun or Mon, change size to DESC
-        if ($day == 1 || $day == 6 || $day == 7) {
-            $sql = "SELECT * FROM {deleteoldcourses} WHERE size >= 0 
-                    ORDER BY size DESC
-                    UNION
-                    SELECT * FROM {deleteoldcourses} WHERE size = -1";
-        }
+                SELECT * FROM {deleteoldcourses} WHERE size = -1
+                ORDER BY id ASC";
 
         //Get queryset
         $rs = $DB->get_recordset_sql($sql);
@@ -142,8 +131,8 @@ class delete_courses_task extends \core\task\scheduled_task {
         $this->deleted_courses = 0;
         foreach ($rs as $item) {
             
-            // Run only between 1:00 and 5:00
-            if (intval(date('H')) < 1 && intval(date('H')) > 5) {
+            // Run only between 1:00 and 4:00
+            if (intval(date('H')) < 1 || intval(date('H')) > 4) {
                 break;
             }
 
@@ -151,8 +140,7 @@ class delete_courses_task extends \core\task\scheduled_task {
 
             //Size when the course was send for an user
             if ($item->size == -1) {
-                $course_size = courseCalculateSize($item->courseid);
-                $size = $course_size->size;
+                $size = courseCalculateSize($item->courseid);
             }
 
             $lockkey = "course{$item->courseid}";
