@@ -20,6 +20,18 @@ Configuration
 -------------
 The local deleteoldcourses no options but does require, as mentioned above, that cron be running.
 
+Test
+------------
+php admin/tool/task/cli/schedule_task.php --execute='\local_deleteoldcourses\task\delete_courses_task' > /Users/diego/Desktop/deleteoldcourses.log
+
 Author
 ------
 Diego Fdo Ruiz (diego.fernando.ruiz@correounivalle.edu.co)
+
+Check 
+-------
+Quantity of courses constant
+Date
+Break at out 1 - 5
+Send mail to Claudia, Iader, Diego
+

@@ -154,6 +154,7 @@ define(
 					courseid:course.id,
 					shortname:course.shortname,
 					fullname:course.fullname,
+					coursecreatedat:course.coursecreatedat
 				}
 	        };
 	        var promise = Ajax.call([request])[0];

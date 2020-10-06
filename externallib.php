@@ -61,10 +61,11 @@ class local_deleteoldcourses_external extends external_api {
     public static function get_course_returns() {
         return new external_single_structure(
             array(
-                'id' => new \external_value(PARAM_INT, 'id of course'),
-                'fullname' => new \external_value(PARAM_TEXT, 'couse full name'),
-                'shortname' => new \external_value(PARAM_TEXT, 'couse short name'),
-                'teachers' => new \external_multiple_structure(
+                'id'                => new \external_value(PARAM_INT, 'id of course'),
+                'fullname'          => new \external_value(PARAM_TEXT, 'couse full name'),
+                'shortname'         => new \external_value(PARAM_TEXT, 'couse short name'),
+                'coursecreatedat'   => new \external_value(PARAM_INT, 'Date of course creation'),
+                'teachers'          => new \external_multiple_structure(
                     new \external_single_structure(
                         array(
                             'id' => new \external_value(PARAM_INT, 'teacher id'),
@@ -119,10 +120,11 @@ class local_deleteoldcourses_external extends external_api {
         //Confirm if is a teacher of this course
         if (!$isteacher) {
             return array(
-                'id' => NULL,
-                'fullname' => NULL,
-                'shortname' => NULL,
-                'teachers' => array()
+                'id'                => NULL,
+                'fullname'          => NULL,
+                'shortname'         => NULL,
+                'coursecreatedat'   => NULL,
+                'teachers'          => array()
             );
         }
 
@@ -138,10 +140,11 @@ class local_deleteoldcourses_external extends external_api {
             $event->trigger();
 
             return array(
-                'id' => $course->id,
-                'fullname' => $course->fullname,
-                'shortname' => $course->shortname,
-                'teachers' => $temp
+                'id'                => $course->id,
+                'fullname'          => $course->fullname,
+                'shortname'         => $course->shortname,
+                'coursecreatedat'   => $course->timecreated,
+                'teachers'          => $temp
             );
         }
     }
@@ -159,7 +162,8 @@ class local_deleteoldcourses_external extends external_api {
             [
                 'courseid' => new \external_value(PARAM_INT, 'Course id'),
                 'shortname' => new \external_value(PARAM_TEXT, 'Course short name'),
-                'fullname' => new \external_value(PARAM_TEXT, 'Course full name')
+                'fullname' => new \external_value(PARAM_TEXT, 'Course full name'),
+                'coursecreatedat' => new \external_value(PARAM_INT, 'Date of course creation'),
             ]
         );
     }
@@ -188,13 +192,14 @@ class local_deleteoldcourses_external extends external_api {
      * @return array course information confirm o reject
      * @since  Moodle 3.6.6
      */
-    public static function add_course($course, $shortname, $fullname) {
+    public static function add_course($course, $shortname, $fullname, $coursecreatedat) {
         global $CFG, $DB, $USER;
 
         $params = self::validate_parameters(self::add_course_parameters(), [
-            'courseid' => $course,
-            'shortname' => $shortname,
-            'fullname' => $fullname
+            'courseid'          => $course,
+            'shortname'         => $shortname,
+            'fullname'          => $fullname,
+            'coursecreatedat'   => $coursecreatedat
         ]);
         if(!$params) {
             throw new invalid_parameter_exception("Course not found");
@@ -216,11 +221,13 @@ class local_deleteoldcourses_external extends external_api {
         }
 
         $record = (object) array(
-            'courseid' => $params['courseid'],
-            'shortname' => $params['shortname'],
-            'fullname' => $params['fullname'],
-            'userid' => $USER->id,
-            'timecreated' => time()
+            'courseid'          => $params['courseid'],
+            'shortname'         => $params['shortname'],
+            'fullname'          => $params['fullname'],
+            'userid'            => $USER->id,
+            'size'              => -1,
+            'coursecreatedat'   => $params['coursecreatedat'],
+            'timecreated'       => time()
         );
 
         $record_id = NULL;

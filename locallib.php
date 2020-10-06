@@ -17,7 +17,7 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses - Local Library
+ * @package local_deleteoldcourses - Local Library
  * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -49,7 +49,7 @@ const EDITING_TEACHER_ROLE_ID = 3;
  * @return int
  */
 function user_count_courses($userid, $now, $ago = 1){
-	global $DB;
+  global $DB;
   $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
   $params = array();
   $sql = "SELECT COUNT(c.id)
@@ -82,7 +82,7 @@ function user_get_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago 
 
   list($select, $from, $join, $params) = user_get_courses_sql(EDITING_TEACHER_ROLE_ID, $userid, $since);
   
-  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
+  $courses = $DB->get_records_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
   return $courses;
 }
 
@@ -209,13 +209,7 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     $completeFilePath = "/home/admincampus/";
     //$completeFilePath = "/Users/diego/Desktop/";
     
-    if (intval(date('H')) >= 1 && intval(date('H')) < 4) {
-        $nameFile = 'deleteoldcourses0am.log';
-    } elseif (intval(date('H')) >= 7) {
-        $nameFile = 'deleteoldcourses4am.log';
-    } else {
-        $nameFile = 'deleteoldcoursestest.log';
-    }
+    $nameFile = 'deleteoldcourses.log';
 
     $completeFilePath .= $nameFile;
 
@@ -304,7 +298,7 @@ function get_deleted_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $a
 
   list($select, $from, $join, $params) = get_deleted_courses_sql($userid, $since);
   
-  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
+  $courses = $DB->get_records_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
   return $courses;
 }
 
@@ -359,6 +353,119 @@ function get_pending_courses($sort, $limitfrom=0, $limitnum=0){
   
   list($select, $from, $join, $params) = get_pending_courses_sql();
   
-  $courses = $DB->get_recordset_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
+  $courses = $DB->get_records_sql("$select $from $join $sort", $params, $limitfrom, $limitnum);
   return $courses;
+}
+
+/**************************************************************************************
+****************************** Course deletion automation *****************************
+**************************************************************************************/
+
+/**
+ * get sql string for query queue of courses
+ *
+ * @return string for query
+ */
+function get_queue_courses_sql($str_date){
+  $dt   = new DateTime($str_date);
+
+  $params              = array();
+  //$params['courseid']  = $courseid;
+  $params['context']   = CONTEXT_COURSE;
+  $params['date']      = $dt->getTimestamp();
+
+  $select =  "SELECT f.contextid,
+              x.instanceid AS courseid, 
+              c.fullname AS fullname,
+              c.shortname AS shortname,
+              sum(f.filesize) AS size_in_bytes,
+              sum(case when (f.filesize > 0) then 1 else 0 end) AS number_of_files,
+              c.timecreated";
+
+  $from   =  " FROM {files} f inner join {context} x
+              ON f.contextid = x.id
+              and x.contextlevel = :context
+              inner join {course} c
+              ON c.id = x.instanceid AND c.timecreated < :date"; // AND c.id=:courseid
+
+  $where  = "WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})";
+
+  $groupby=  " GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timecreated";
+
+  $orderby=  " ORDER BY sum(filesize) ASC";
+
+  // Day of week
+  $day = date('N');
+  //If is Sat, Sun or Mon, change size to DESC
+  if ($day == 1 || $day == 6 || $day == 7) {
+    $orderby=  " ORDER BY sum(filesize) DESC";
+  }
+
+  return array($select, $from, $where, $groupby, $orderby, $params);
+}
+
+
+/**
+ * Queue the courses for time ago, number of resources
+ *
+ * @param string $str_date max creation date for deletion course EG. '2010-12-31 23:59'
+ * @param int $quantity number of courses for add to queue
+ * @return None
+ */
+function queue_the_courses($str_date, $quantity=0){
+
+  if ($quantity <= 0) {
+    return;
+  }
+
+  //global $DB, $CFG;
+  // require_once($CFG->dirroot . '/course/externallib.php');
+
+
+  // Now, test the function via the external API.
+  // $contents = core_course_external::get_course_contents(11416, array());
+  // $contents = external_api::clean_returnvalue(core_course_external::get_course_contents_returns(), $contents);
+  global $DB;
+
+  //Admin user
+  $user = $DB->get_record('user', array('username' => 'desadmin'));
+
+  list($select, $from, $where, $groupby, $orderby, $params) = get_queue_courses_sql($str_date);
+  $rs = $DB->get_recordset_sql("$select $from $where $groupby $orderby", $params, 0, $quantity);
+  foreach ($rs as $row) {
+    $record = (object) array(
+        'courseid'          => $row->courseid,
+        'shortname'         => $row->shortname,
+        'fullname'          => $row->fullname,
+        'userid'            => $user->id,
+        'size'              => $row->size_in_bytes,
+        'coursecreatedat'   => $row->timecreated,
+        'timecreated'       => time()
+    );
+    //Add to deletion list
+    $DB->insert_record('deleteoldcourses', $record);
+  }
+  $rs->close();
+}
+
+function courseCalculateSize($courseid){
+  global $DB;
+
+  $result = 0;
+
+  $params = [];
+  $params['courseid']   = $courseid;
+  $params['context']    = CONTEXT_COURSE;
+  $sql = "SELECT sum(f.filesize) AS size
+          FROM {files} f 
+          INNER JOIN {context} x ON (f.contextid = x.id AND x.contextlevel = :context)
+          INNER JOIN {course} c ON (c.id = x.instanceid AND c.id = :courseid)";
+
+  if($query = $DB->get_record_sql($sql, $params)){
+    if ($query->size != NULL) {
+      $result = $query->size;
+    }
+  }
+
+  return $result;
 }
