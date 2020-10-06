@@ -25,20 +25,19 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
 
     if ($oldversion < 20201005100) {
 
-
-
-    	// Modify table: deleteoldcourses
+    	// Modify tables: deleteoldcourses and deleteoldcourses_deleted
         $table_deleteoldcourses = new xmldb_table('deleteoldcourses');
         $table_deleteoldcourses_deleted = new xmldb_table('deleteoldcourses_deleted');
 
-        // Adding fields to tables deleteoldcourses and deleteoldcourses_deleted
-        $size_field = $table->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
-        $coursecreatedat_field = $table->add_field('coursecreatedat', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '0');
-
-
+        // Adding fields to tables deleteoldcourses
+        $size_field = $table_deleteoldcourses->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
+        $coursecreatedat_field = $table_deleteoldcourses->add_field('coursecreatedat', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '0');
         $dbman->add_field($table_deleteoldcourses, $size_field); 
         $dbman->add_field($table_deleteoldcourses, $coursecreatedat_field);
 
+        // Adding fields to tables deleteoldcourses_deleted
+        $size_field = $table_deleteoldcourses_deleted->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
+        $coursecreatedat_field = $table_deleteoldcourses_deleted->add_field('coursecreatedat', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '0');
         $dbman->add_field($table_deleteoldcourses_deleted, $size_field); 
         $dbman->add_field($table_deleteoldcourses_deleted, $coursecreatedat_field); 
 
