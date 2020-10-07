@@ -414,6 +414,10 @@ function get_queue_courses_sql($str_date){
  */
 function queue_the_courses($str_date, $quantity=0){
 
+  if ($str_date == NULL || $str_date == '') {
+    return;
+  }
+
   if ($quantity <= 0) {
     return;
   }

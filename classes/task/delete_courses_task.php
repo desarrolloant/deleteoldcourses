@@ -21,8 +21,13 @@ defined('MOODLE_INTERNAL') || die;
 ini_set('max_execution_time', 14400);
 raise_memory_limit(MEMORY_HUGE);
 set_time_limit(300);
-const COURSES_FOR_QUEUE = 150;
+
+use DateTime;
+
+/*****************************************/
+const COURSES_FOR_QUEUE = 4;
 const DATE_FOR_QUEUE = '2010-12-31 23:59';
+/*****************************************/
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
@@ -133,7 +138,7 @@ class delete_courses_task extends \core\task\scheduled_task {
             
             // Run only between 1:00 and 4:00
             if (intval(date('H')) < 1 || intval(date('H')) > 4) {
-                break;
+                //break;
             }
 
             $size = $item->size;
@@ -141,6 +146,13 @@ class delete_courses_task extends \core\task\scheduled_task {
             //Size when the course was send for an user
             if ($item->size == -1) {
                 $size = courseCalculateSize($item->courseid);
+            }else{
+                //!!!!!!!!!!!!Confirm date!!!!!!!!!!!!!!!!
+                $dt   = new DateTime(DATE_FOR_QUEUE);
+                if ($item->coursecreatedat > $dt->getTimestamp()) {
+                    continue;
+                }
+                //!!!!!!!!!!!!Confirm date!!!!!!!!!!!!!!!!
             }
 
             $lockkey = "course{$item->courseid}";
