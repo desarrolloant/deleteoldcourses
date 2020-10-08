@@ -62,12 +62,12 @@ ini_set('display_errors', 'On');
 require_login();
 require_capability('local/deleteoldcourses:viewreport', context_system::instance());
 
-admin_externalpage_setup('local_deleteoldcourses', '', null);
+//admin_externalpage_setup('local_deleteoldcourses', '', null);
 
 $PAGE->set_pagelayout('admin');
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title($SITE->fullname . ': ' . get_string('pluginname', 'local_deleteoldcourses'));
-
+$PAGE->navbar->add(get_string('pluginname', 'local_deleteoldcourses'));
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_deleteoldcourses'));
 
