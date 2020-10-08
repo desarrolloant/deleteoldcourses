@@ -25,7 +25,7 @@ set_time_limit(300);
 use DateTime;
 
 /*****************************************/
-const COURSES_FOR_QUEUE = 150;
+const COURSES_FOR_QUEUE = 200;
 const DATE_FOR_QUEUE = '2010-12-31 23:59';
 /*****************************************/
 
