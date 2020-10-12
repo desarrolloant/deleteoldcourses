@@ -22,7 +22,7 @@ The local deleteoldcourses no options but does require, as mentioned above, that
 
 Test
 ------------
-php admin/tool/task/cli/schedule_task.php --execute='\local_deleteoldcourses\task\delete_courses_task' > /Users/diego/Desktop/deleteoldcourses.log
+php admin/tool/task/cli/schedule_task.php --execute='\local_deleteoldcourses\task\delete_courses_task' > /Users/diego/www/moodledata37/temp/backup/deleteoldcourses.log
 
 Author
 ------
@@ -33,5 +33,5 @@ Check
 Quantity of courses constant
 Date
 Break at out 1 - 5
-Send mail to Claudia, Iader, Diego
+Send mail to Claudia, Iader, Diego - verify email function
 

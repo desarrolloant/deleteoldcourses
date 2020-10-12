@@ -206,8 +206,8 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
 
     echo $textToSend;
 
-    $completeFilePath = "/home/admincampus/";
-    //$completeFilePath = "/Users/diego/Desktop/";
+    $completeFilePath = "/vhost/campus/moodledata/temp/backup/";
+    //$completeFilePath = "/Users/diego/www/moodledata37/temp/backup/";
     
     $nameFile = 'deleteoldcourses.log';
 
