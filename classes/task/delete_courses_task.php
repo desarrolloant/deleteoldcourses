@@ -25,7 +25,7 @@ set_time_limit(300);
 use DateTime;
 
 /*****************************************/
-const COURSES_FOR_QUEUE = 200;
+const COURSES_FOR_QUEUE = 500;
 const DATE_FOR_QUEUE = '2010-12-31 23:59';
 /*****************************************/
 
@@ -111,9 +111,9 @@ class delete_courses_task extends \core\task\scheduled_task {
         //Send email
         $coursesToDelete = $DB->count_records('deleteoldcourses');
 
-        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
+        //delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        //delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        //delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
     }
 
     /**
@@ -135,9 +135,17 @@ class delete_courses_task extends \core\task\scheduled_task {
         $lockfactory = \core\lock\lock_config::get_lock_factory('local_deleteoldcourses_delete_course_task');
         $this->deleted_courses = 0;
         foreach ($rs as $item) {
+
+            $hour       = intval(date('H'));
+            $day        = intval(date('N')); //6->sat, 7->sun
+            $minutes    = intval(date('i'));
             
-            // Run only between 1:00 and 4:00
-            if (intval(date('H')) < 1 || intval(date('H')) > 4) {
+            // Run only between 0:15 and 5:30
+            if ($hour > 6 && $day < 6 ) {
+                break;
+            }
+
+            if ( ($hour == 5 && $minutes > 30) && $day < 6) {
                 break;
             }
 
