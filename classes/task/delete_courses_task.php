@@ -127,10 +127,11 @@ class delete_courses_task extends \core\task\scheduled_task {
         $sql = "SELECT * FROM {deleteoldcourses} WHERE size >= 0
                 UNION
                 SELECT * FROM {deleteoldcourses} WHERE size = -1
-                ORDER BY size ASC, id ASC";
+                ORDER BY size ASC, id ASC
+                LIMIT 3";
 
         //Get queryset
-        $rs = $DB->get_recordset_sql($sql,0,2);
+        $rs = $DB->get_recordset_sql($sql);
 
         $lockfactory = \core\lock\lock_config::get_lock_factory('local_deleteoldcourses_delete_course_task');
         $this->deleted_courses = 0;
