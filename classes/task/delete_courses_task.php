@@ -127,8 +127,7 @@ class delete_courses_task extends \core\task\scheduled_task {
         $sql = "SELECT * FROM {deleteoldcourses} WHERE size >= 0
                 UNION
                 SELECT * FROM {deleteoldcourses} WHERE size = -1
-                ORDER BY size ASC, id ASC
-                LIMIT 3";
+                ORDER BY size ASC, id ASC";
 
         //Get queryset
         $rs = $DB->get_recordset_sql($sql);
@@ -142,12 +141,12 @@ class delete_courses_task extends \core\task\scheduled_task {
             $minutes    = intval(date('i'));
             
             // Run only between 0:15 and 5:30
-            if ($hour > 6 && $day > 1 && $day < 6 ) {
-                //break;
+            if ($hour > 6 && $day < 6 ) {
+                break;
             }
 
-            if ($hour == 5 && $minutes > 30 && $day > 1 && $day < 6) {
-                //break;
+            if ($hour == 5 && $minutes > 30 && $day < 6) {
+                break;
             }
 
             $size = $item->size;
