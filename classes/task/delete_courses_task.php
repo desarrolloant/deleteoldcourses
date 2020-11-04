@@ -25,7 +25,7 @@ set_time_limit(300);
 use DateTime;
 
 /*****************************************/
-const COURSES_FOR_QUEUE = 2;
+const COURSES_FOR_QUEUE = 500;
 const REGULAR_TIMECREATED = '2010-12-31 23:59';
 
 const NO_REGULAR_TIMECREATED = '2018-12-31 23:59';
@@ -114,9 +114,9 @@ class delete_courses_task extends \core\task\scheduled_task {
         //Send email
         $coursesToDelete = $DB->count_records('deleteoldcourses');
 
-        //delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        //delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        //delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
+        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
     }
 
     /**
@@ -145,11 +145,11 @@ class delete_courses_task extends \core\task\scheduled_task {
             
             // Run only between 0:15 and 5:30
             if ($hour > 7 && $day > 1 && $day < 6 ) {
-                //break;
+                break;
             }
 
             if ($hour == 6 && $minutes > 30 && $day > 1 && $day < 6) {
-                //break;
+                break;
             }
 
             //break;
