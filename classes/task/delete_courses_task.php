@@ -152,7 +152,7 @@ class delete_courses_task extends \core\task\scheduled_task {
                 //break;
             }
 
-            break;
+            //break;
 
             $size = $item->size;
 
