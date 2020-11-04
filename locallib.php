@@ -366,55 +366,89 @@ function get_pending_courses($sort, $limitfrom=0, $limitnum=0){
  *
  * @return string for query
  */
-function get_queue_courses_sql($str_date){
-  $dt   = new DateTime($str_date);
+function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified){
+  $regular_timecreated   = new DateTime($regular_timecreated);
+  $no_regular_timecreated   = new DateTime($no_regular_timecreated);
+  $no_regular_timemodified   = new DateTime($no_regular_timemodified);
 
   $params              = array();
-  //$params['courseid']  = $courseid;
-  $params['context']   = CONTEXT_COURSE;
-  $params['date']      = $dt->getTimestamp();
+  $params['context1']   = CONTEXT_COURSE;
+  $params['context2']   = CONTEXT_COURSE;
+  $params['regular_timecreated']      = $regular_timecreated->getTimestamp();
+  $params['no_regular_timecreated']      = $no_regular_timecreated->getTimestamp();
+  $params['no_regular_timemodified']      = $no_regular_timemodified->getTimestamp();
 
-  $select =  "SELECT f.contextid,
-              x.instanceid AS courseid, 
-              c.fullname AS fullname,
-              c.shortname AS shortname,
-              sum(f.filesize) AS size_in_bytes,
-              sum(case when (f.filesize > 0) then 1 else 0 end) AS number_of_files,
-              c.timecreated";
-
-  $from   =  " FROM {files} f inner join {context} x
-              ON f.contextid = x.id
-              and x.contextlevel = :context
-              inner join {course} c
-              ON c.id = x.instanceid AND c.timecreated < :date"; // AND c.id=:courseid
-
-  $where  = "WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})";
-
-  $groupby=  " GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timecreated";
-
-  $orderby=  " ORDER BY sum(filesize) ASC";
+  $orderby = "ASC";
 
   // Day of week
   $day = date('N');
   //If is Sat, Sun or Mon, change size to DESC
   if ($day == 1 || $day == 6 || $day == 7) {
-    $orderby=  " ORDER BY sum(filesize) DESC";
+    $orderby = "DESC";
   }
 
-  return array($select, $from, $where, $groupby, $orderby, $params);
+  $sql = '(SELECT 
+            f.contextid,
+            x.instanceid AS courseid, 
+            c.fullname AS fullname,
+            c.shortname AS shortname,
+            sum(f.filesize) AS size_in_bytes,
+            sum(case when (f.filesize > 0) then 1 else 0 end) AS number_of_files,
+            c.timemodified,
+            c.timecreated
+          FROM {files} f 
+          INNER JOIN {context} x  
+            ON f.contextid = x.id 
+            AND x.contextlevel = :context1
+          INNER JOIN {course} c 
+            ON c.id = x.instanceid 
+            AND c.category >= 30000
+            AND c.timecreated < :regular_timecreated
+          WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
+          GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timemodified, c.timecreated
+          ORDER BY sum(filesize) '.$orderby.')
+
+          UNION ALL
+
+          (SELECT 
+            f.contextid,
+            x.instanceid AS courseid, 
+            c.fullname AS fullname,
+            c.shortname AS shortname,
+            sum(f.filesize) AS size_in_bytes,
+            sum(case when (f.filesize > 0) then 1 else 0 end) AS number_of_files,
+            c.timemodified,
+            c.timecreated
+          FROM {files} f 
+          INNER JOIN {context} x  
+            ON f.contextid = x.id 
+            AND x.contextlevel = :context2
+          INNER JOIN {course} c 
+            ON c.id = x.instanceid 
+            AND c.category < 30000
+            AND c.timecreated < :no_regular_timecreated
+            AND c.timemodified < :no_regular_timemodified
+          WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
+          GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timemodified, c.timecreated 
+          ORDER BY sum(filesize) '.$orderby.')
+
+          ORDER BY size_in_bytes '.$orderby;
+  return array($sql, $params);
 }
 
 
 /**
  * Queue the courses for time ago, number of resources
  *
- * @param string $str_date max creation date for deletion course EG. '2010-12-31 23:59'
+ * @param string $regular_timecreated max creation date for deletion course EG. '2010-12-31 23:59'
+ * @param string $no_regular_timecreated max creation date for deletion course EG. '2010-12-31 23:59'
+ * @param string $no_regular_timemodified max creation date for deletion course EG. '2010-12-31 23:59'
  * @param int $quantity number of courses for add to queue
  * @return None
  */
-function queue_the_courses($str_date, $quantity=0){
+function queue_the_courses($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified, $quantity=0){
 
-  if ($str_date == NULL || $str_date == '') {
+  if ($regular_timecreated == NULL || $regular_timecreated == '' || $no_regular_timecreated == NULL || $no_regular_timecreated == '') {
     return;
   }
 
@@ -434,8 +468,8 @@ function queue_the_courses($str_date, $quantity=0){
   //Admin user
   $user = $DB->get_record('user', array('username' => 'desadmin'));
 
-  list($select, $from, $where, $groupby, $orderby, $params) = get_queue_courses_sql($str_date);
-  $rs = $DB->get_recordset_sql("$select $from $where $groupby $orderby", $params, 0, $quantity);
+  list($sql, $params) = get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified);
+  $rs = $DB->get_recordset_sql($sql, $params, 0, $quantity);
   foreach ($rs as $row) {
     $record = (object) array(
         'courseid'          => $row->courseid,
@@ -445,7 +479,7 @@ function queue_the_courses($str_date, $quantity=0){
         'size'              => $row->size_in_bytes,
         'coursecreatedat'   => $row->timecreated,
         'timecreated'       => time()
-    );
+    );var_dump($row->timemodified);
     //Add to deletion list
     $DB->insert_record('deleteoldcourses', $record);
   }

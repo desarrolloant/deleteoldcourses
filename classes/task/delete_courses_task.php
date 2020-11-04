@@ -25,8 +25,11 @@ set_time_limit(300);
 use DateTime;
 
 /*****************************************/
-const COURSES_FOR_QUEUE = 500;
-const DATE_FOR_QUEUE = '2010-12-31 23:59';
+const COURSES_FOR_QUEUE = 2;
+const REGULAR_TIMECREATED = '2010-12-31 23:59';
+
+const NO_REGULAR_TIMECREATED = '2018-12-31 23:59';
+const NO_REGULAR_TIMEMODIFIED = '2019-12-31 23:59';
 /*****************************************/
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
@@ -86,7 +89,7 @@ class delete_courses_task extends \core\task\scheduled_task {
         mtrace("Completing queue Started at: {$queue_started}");
         //--------------------------------------------------------
         if ($num_courses_for_queue > 0) {
-            queue_the_courses(DATE_FOR_QUEUE, $num_courses_for_queue);
+            queue_the_courses(REGULAR_TIMECREATED, NO_REGULAR_TIMECREATED, NO_REGULAR_TIMEMODIFIED, $num_courses_for_queue);
         }
         //--------------------------------------------------------
         $queue_finished = date('H:i:s');
@@ -111,9 +114,9 @@ class delete_courses_task extends \core\task\scheduled_task {
         //Send email
         $coursesToDelete = $DB->count_records('deleteoldcourses');
 
-        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
+        //delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        //delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
+        //delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
     }
 
     /**
@@ -141,26 +144,21 @@ class delete_courses_task extends \core\task\scheduled_task {
             $minutes    = intval(date('i'));
             
             // Run only between 0:15 and 5:30
-            if ($hour > 6 && $day < 6 ) {
-                break;
+            if ($hour > 7 && $day > 1 && $day < 6 ) {
+                //break;
             }
 
-            if ($hour == 5 && $minutes > 30 && $day < 6) {
-                break;
+            if ($hour == 6 && $minutes > 30 && $day > 1 && $day < 6) {
+                //break;
             }
+
+            break;
 
             $size = $item->size;
 
             //Size when the course was send for an user
             if ($item->size == -1) {
                 $size = courseCalculateSize($item->courseid);
-            }else{
-                //!!!!!!!!!!!!Confirm date!!!!!!!!!!!!!!!!
-                $dt   = new DateTime(DATE_FOR_QUEUE);
-                if ($item->coursecreatedat > $dt->getTimestamp()) {
-                    continue;
-                }
-                //!!!!!!!!!!!!Confirm date!!!!!!!!!!!!!!!!
             }
 
             $lockkey = "course{$item->courseid}";
