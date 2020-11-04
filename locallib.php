@@ -479,7 +479,7 @@ function queue_the_courses($regular_timecreated, $no_regular_timecreated, $no_re
         'size'              => $row->size_in_bytes,
         'coursecreatedat'   => $row->timecreated,
         'timecreated'       => time()
-    );var_dump($row->timemodified);
+    );
     //Add to deletion list
     $DB->insert_record('deleteoldcourses', $record);
   }
