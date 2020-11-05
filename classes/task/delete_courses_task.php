@@ -148,7 +148,7 @@ class delete_courses_task extends \core\task\scheduled_task {
                 break;
             }
 
-            if ($hour == 10 && $minutes > 30 && $day > 1 && $day < 6) {
+            if ($hour == 10 && $minutes > 1 && $day > 1 && $day < 6) {
                 break;
             }
 
