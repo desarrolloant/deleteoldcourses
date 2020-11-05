@@ -375,9 +375,10 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
   $params['context1']   = CONTEXT_COURSE;
   $params['context2']   = CONTEXT_COURSE;
   $params['regular_timecreated']      = $regular_timecreated->getTimestamp();
+  $params['regular_timeaccess']      = $no_regular_timemodified->getTimestamp();
   $params['no_regular_timecreated']      = $no_regular_timecreated->getTimestamp();
-  $params['no_regular_timemodified1']      = $no_regular_timemodified->getTimestamp();
-  $params['no_regular_timemodified2']      = $no_regular_timemodified->getTimestamp();
+  $params['no_regular_timemodified']      = $no_regular_timemodified->getTimestamp();
+  $params['no_regular_timeaccess']      = $no_regular_timemodified->getTimestamp();
 
   $orderby = "ASC";
 
@@ -405,6 +406,11 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             ON c.id = x.instanceid 
             AND c.category >= 30000
             AND c.timecreated < :regular_timecreated
+          INNER JOIN (
+            SELECT courseid, max(timeaccess) AS timeaccess
+            FROM   {user_lastaccess}
+            GROUP BY courseid
+          ) AS ul ON ul.courseid=c.id AND ul.timeaccess < :regular_timeaccess
           WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
           GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timemodified, c.timecreated
           ORDER BY sum(filesize) '.$orderby.')
@@ -428,12 +434,12 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             ON c.id = x.instanceid 
             AND c.category < 30000
             AND c.timecreated < :no_regular_timecreated
-            AND c.timemodified < :no_regular_timemodified1
+            AND c.timemodified < :no_regular_timemodified
           INNER JOIN (
-            SELECT course, max(added) AS added
-            FROM   {course_modules}
-            GROUP BY course
-          ) AS m ON m.course=c.id AND m.added < :no_regular_timemodified2
+            SELECT courseid, max(timeaccess) AS timeaccess
+            FROM   {user_lastaccess}
+            GROUP BY courseid
+          ) AS ul ON ul.courseid=c.id AND ul.timeaccess < :no_regular_timeaccess
           WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
           GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timemodified, c.timecreated 
           ORDER BY sum(filesize) '.$orderby.')
