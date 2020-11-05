@@ -29,7 +29,7 @@ const COURSES_FOR_QUEUE = 500;
 const REGULAR_TIMECREATED = '2010-12-31 23:59';
 
 const NO_REGULAR_TIMECREATED = '2018-12-31 23:59';
-const NO_REGULAR_TIMEMODIFIED = '2019-12-31 23:59';
+const NO_REGULAR_TIMEMODIFIED = '2019-10-31 23:59';
 /*****************************************/
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
