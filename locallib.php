@@ -376,7 +376,8 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
   $params['context2']   = CONTEXT_COURSE;
   $params['regular_timecreated']      = $regular_timecreated->getTimestamp();
   $params['no_regular_timecreated']      = $no_regular_timecreated->getTimestamp();
-  $params['no_regular_timemodified']      = $no_regular_timemodified->getTimestamp();
+  $params['no_regular_timemodified1']      = $no_regular_timemodified->getTimestamp();
+  $params['no_regular_timemodified2']      = $no_regular_timemodified->getTimestamp();
 
   $orderby = "ASC";
 
@@ -427,7 +428,12 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             ON c.id = x.instanceid 
             AND c.category < 30000
             AND c.timecreated < :no_regular_timecreated
-            AND c.timemodified < :no_regular_timemodified
+            AND c.timemodified < :no_regular_timemodified1
+          INNER JOIN (
+            SELECT course, max(added) AS added
+            FROM   {course_modules}
+            GROUP BY course
+          ) AS m ON m.course=c.id AND m.added < :no_regular_timemodified2
           WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
           GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timemodified, c.timecreated 
           ORDER BY sum(filesize) '.$orderby.')
