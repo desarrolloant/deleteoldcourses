@@ -394,6 +394,7 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             x.instanceid AS courseid, 
             c.fullname AS fullname,
             c.shortname AS shortname,
+            c.category,
             sum(f.filesize) AS size_in_bytes,
             sum(case when (f.filesize > 0) then 1 else 0 end) AS number_of_files,
             c.timemodified,
@@ -412,7 +413,7 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             GROUP BY courseid
           ) AS ul ON ul.courseid=c.id AND ul.timeaccess < :regular_timeaccess
           WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
-          GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timemodified, c.timecreated
+          GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.category, c.timemodified, c.timecreated
           ORDER BY sum(filesize) '.$orderby.')
 
           UNION ALL
@@ -422,6 +423,7 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             x.instanceid AS courseid, 
             c.fullname AS fullname,
             c.shortname AS shortname,
+            c.category,
             sum(f.filesize) AS size_in_bytes,
             sum(case when (f.filesize > 0) then 1 else 0 end) AS number_of_files,
             c.timemodified,
@@ -441,7 +443,7 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             GROUP BY courseid
           ) AS ul ON ul.courseid=c.id AND ul.timeaccess < :no_regular_timeaccess
           WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
-          GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.timemodified, c.timecreated 
+          GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.category, c.timemodified, c.timecreated 
           ORDER BY sum(filesize) '.$orderby.')
 
           ORDER BY size_in_bytes '.$orderby;
@@ -483,6 +485,14 @@ function queue_the_courses($regular_timecreated, $no_regular_timecreated, $no_re
   list($sql, $params) = get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified);
   $rs = $DB->get_recordset_sql($sql, $params, 0, $quantity);
   foreach ($rs as $row) {
+
+    //Get first category parent of this course category
+    $first_category_parent = recursiveParentCategory($row->category);
+    //Exclude regular courses on categories with id < 30000
+    if ($row->category < 30000 && $first_category_parent == 6) {
+      continue;
+    }
+
     $record = (object) array(
         'courseid'          => $row->courseid,
         'shortname'         => $row->shortname,
@@ -518,4 +528,15 @@ function courseCalculateSize($courseid){
   }
 
   return $result;
+}
+
+//Get first categoryid of parents tree 
+function recursiveParentCategory($categoryid){
+  global $DB;
+  $category = $DB->get_record('course_categories', array('id' => $categoryid));
+  if ($category->parent > 0) {
+    return recursiveParentCategory($category->parent);
+  }else{
+    return $category->id;
+  }
 }

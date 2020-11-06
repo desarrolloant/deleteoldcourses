@@ -18,9 +18,9 @@ namespace local_deleteoldcourses\task;
 
 defined('MOODLE_INTERNAL') || die;
 
-ini_set('max_execution_time', 14400);
-raise_memory_limit(MEMORY_HUGE);
-set_time_limit(300);
+//ini_set('max_execution_time', 14400);
+//raise_memory_limit(MEMORY_HUGE);
+//set_time_limit(300);
 
 use DateTime;
 
