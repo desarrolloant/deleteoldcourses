@@ -405,6 +405,7 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             AND x.contextlevel = :context1
           INNER JOIN {course} c 
             ON c.id = x.instanceid 
+            AND c.id > 1
             AND c.category >= 30000
             AND c.timecreated < :regular_timecreated
           INNER JOIN (
@@ -434,6 +435,7 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             AND x.contextlevel = :context2
           INNER JOIN {course} c 
             ON c.id = x.instanceid 
+            AND c.id > 1
             AND c.category < 30000
             AND c.timecreated < :no_regular_timecreated
             AND c.timemodified < :no_regular_timemodified
