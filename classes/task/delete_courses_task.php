@@ -169,34 +169,40 @@ class delete_courses_task extends \core\task\scheduled_task {
                 mtrace("Deleting course with id {$item->courseid} - {$item->shortname}-{$item->fullname}");
                 $startedat = date('H:i:s');
                 mtrace("Started at: {$startedat}");
-                if ($coursedb = $DB->get_record('course', array('id' => $item->courseid))) {
-                    if (!delete_course($coursedb, false)) {
-                        mtrace("Failed to delete course {$item->courseid}");
-                    }else{
-                        $record = (object) array(
-                            'courseid'          => $item->courseid,
-                            'shortname'         => $item->shortname,
-                            'fullname'          => $item->fullname,
-                            'userid'            => $item->userid,
-                            'size'              => $size,
-                            'coursecreatedat'   => $item->coursecreatedat,
-                            'timesenttodelete'  => $item->timecreated,
-                            'timecreated'       => time()
-                        );
-                        if($DB->delete_records('deleteoldcourses', array('id' => $item->id))){
-                            mtrace("Course with id {$item->courseid} has been deleted");
-                            $this->deleted_courses++;
-                            
-                            $DB->insert_record('deleteoldcourses_deleted', $record);
+
+                try {
+                    if ($coursedb = $DB->get_record('course', array('id' => $item->courseid))) {
+                        if (!delete_course($coursedb, false)) {
+                            mtrace("Failed to delete course {$item->courseid}");
+                        }else{
+                            $record = (object) array(
+                                'courseid'          => $item->courseid,
+                                'shortname'         => $item->shortname,
+                                'fullname'          => $item->fullname,
+                                'userid'            => $item->userid,
+                                'size'              => $size,
+                                'coursecreatedat'   => $item->coursecreatedat,
+                                'timesenttodelete'  => $item->timecreated,
+                                'timecreated'       => time()
+                            );
+                            if($DB->delete_records('deleteoldcourses', array('id' => $item->id))){
+                                mtrace("Course with id {$item->courseid} has been deleted");
+                                $this->deleted_courses++;
+                                
+                                $DB->insert_record('deleteoldcourses_deleted', $record);
+                            }
                         }
                     }
+                } catch (\Throwable $e) {
+                    mtrace("Exception error in deleting course with id {$item->courseid} ");
                 }
+
                 $endedat = date('H:i:s');
                 mtrace("Ended at: {$endedat}");
                 $memoryusage = display_size(memory_get_usage());
-                mtrace("Memory usage: {$memoryusage}");
-                $lock->release();
+                mtrace("Memory usage: {$memoryusage}");  
             }
+            $lock->release();
         }
         $rs->close();
     }
