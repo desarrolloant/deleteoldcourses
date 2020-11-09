@@ -45,12 +45,6 @@ require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 class delete_courses_task extends \core\task\scheduled_task {
 
     /**
-     * @var int $deleted_courses
-     */
-    protected $deleted_courses;
-
-
-    /**
      * Return the name of the component.
      *
      * @return string The name of the component.
@@ -75,6 +69,7 @@ class delete_courses_task extends \core\task\scheduled_task {
         global $DB;
 
         $starttime = microtime();
+        $starttasktime = time();
 
         //System load courses
         $num_pending_courses = $DB->count_records('deleteoldcourses');
@@ -100,23 +95,27 @@ class delete_courses_task extends \core\task\scheduled_task {
 
         // Delete all courses in list.
         $this->delete_courses_in_list();
-        if ($this->deleted_courses>0) {
+
+        // Deleted courses in this rutine
+        $deletedcourses = countDeletedCourses($starttasktime);
+
+        if ($deletedcourses>0) {
             $difftime = microtime_diff($starttime, microtime());
-            mtrace("Cron took " . $difftime . " seconds deleting {$this->deleted_courses} courses.");
+            mtrace("Cron took " . $difftime . " seconds deleting {$deletedcourses} courses.");
             mtrace("Fixing course sort order");
             fix_course_sortorder();
         }
 
         $difftime = microtime_diff($starttime, microtime());
         mtrace("Cron took " . $difftime . " seconds to finish.");
-        mtrace("Total deleted courses: {$this->deleted_courses}");
+        mtrace("Total deleted courses: {$deletedcourses}");
 
         //Send email
         $coursesToDelete = $DB->count_records('deleteoldcourses');
 
-        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $this->deleted_courses );
-        delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $this->deleted_courses);
+        delete_old_courses_send_email( '66996031' , 'administrador', $coursesToDelete, $deletedcourses );
+        delete_old_courses_send_email( '1144132883' , 'administrador', $coursesToDelete, $deletedcourses );
+        delete_old_courses_send_email( '1130589899' , 'administrador', $coursesToDelete, $deletedcourses);
     }
 
     /**
@@ -136,7 +135,6 @@ class delete_courses_task extends \core\task\scheduled_task {
         $rs = $DB->get_recordset_sql($sql);
 
         $lockfactory = \core\lock\lock_config::get_lock_factory('local_deleteoldcourses_delete_course_task');
-        $this->deleted_courses = 0;
         foreach ($rs as $item) {
 
             $hour       = intval(date('H'));
@@ -186,9 +184,7 @@ class delete_courses_task extends \core\task\scheduled_task {
                                 'timecreated'       => time()
                             );
                             if($DB->delete_records('deleteoldcourses', array('id' => $item->id))){
-                                mtrace("Course with id {$item->courseid} has been deleted");
-                                $this->deleted_courses++;
-                                
+                                mtrace("Course with id {$item->courseid} has been deleted");                                
                                 $DB->insert_record('deleteoldcourses_deleted', $record);
                             }
                         }
