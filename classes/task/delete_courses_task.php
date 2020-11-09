@@ -142,11 +142,11 @@ class delete_courses_task extends \core\task\scheduled_task {
             $minutes    = intval(date('i'));
             
             // Run only between 0:15 and 5:30
-            if ($hour > 10 && $day < 6 ) {
+            if ($hour > 14 && $day < 6 ) {
                 break;
             }
 
-            if ($hour == 10 && $minutes > 1 && $day < 6) {
+            if ($hour == 13 && $minutes > 30 && $day < 6) {
                 break;
             }
 
