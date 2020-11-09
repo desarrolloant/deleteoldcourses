@@ -542,3 +542,14 @@ function recursiveParentCategory($categoryid){
     return $category->id;
   }
 }
+
+function countDeletedCourses($starttime){
+  global $DB;
+  $params = [];
+  $params['starttime']   = $starttime;
+  $sql = "SELECT COUNT(*)
+          FROM {deleteoldcourses_deleted}
+          WHERE timecreated > :starttime";
+  $deletedcourses = $DB->count_records_sql($sql, $params);
+  return $deletedcourses;
+}

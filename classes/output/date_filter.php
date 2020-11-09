@@ -84,7 +84,7 @@ class date_filter implements renderable, templatable {
         }
         
         if (!isset($this->filteroptions[$this->selectedoption])) {
-            $this->filteroptions[$this->selectedoption] = 0;
+            $this->filteroptions[$this->selectedoption] = 4;
         }
 
         $data->filteroptions = [];

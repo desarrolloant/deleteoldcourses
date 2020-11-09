@@ -28,7 +28,7 @@ require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 require_once($CFG->libdir . '/adminlib.php');
 
-define('DEFAULT_PAGE_SIZE', 15);
+define('DEFAULT_PAGE_SIZE', 100);
 define('SHOW_ALL_PAGE_SIZE', 5000);
 define('MAX_DELETED_AGO', 60);
 define('MIN_DELETED_AGO', 1);
