@@ -183,7 +183,7 @@ class renderer extends plugin_renderer_base {
      */
     protected function format_deleted_filter_option($month) {
         $optionvalue = $month;
-        if ($month == MIN_DELETED_AGO) {
+        if ($month == MIN_DELETED_AGO && MIN_DELETED_AGO == 1) {
             $optionlabel = get_string('more_than_1_month_ago', 'local_deleteoldcourses');
         }else{
             $optionlabel = get_string('more_than_n_months_ago', 'local_deleteoldcourses', $month.'');

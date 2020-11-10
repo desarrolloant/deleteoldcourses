@@ -31,7 +31,7 @@ require_once($CFG->libdir . '/adminlib.php');
 define('DEFAULT_PAGE_SIZE', 100);
 define('SHOW_ALL_PAGE_SIZE', 5000);
 define('MAX_DELETED_AGO', 60);
-define('MIN_DELETED_AGO', 1);
+define('MIN_DELETED_AGO', 4);
 
 $page         = optional_param('page', 0, PARAM_INT); // Which page to show.
 $perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
