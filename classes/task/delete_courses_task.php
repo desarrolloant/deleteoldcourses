@@ -26,7 +26,7 @@ use DateTime;
 
 /*****************************************/
 const COURSES_FOR_QUEUE = 500;
-const REGULAR_TIMECREATED = '2011-12-31 23:59';
+const REGULAR_TIMECREATED = '2012-12-31 23:59';
 
 const NO_REGULAR_TIMECREATED = '2018-12-31 23:59';
 const NO_REGULAR_TIMEMODIFIED = '2019-10-31 23:59';
@@ -142,11 +142,11 @@ class delete_courses_task extends \core\task\scheduled_task {
             $minutes    = intval(date('i'));
             
             // Run only between 0:15 and 5:30
-            if ($hour > 14 && $day < 6 ) {
+            if ($hour > 14 && $day > 1 && $day < 6 ) {
                 break;
             }
 
-            if ($hour == 13 && $minutes > 30 && $day < 6) {
+            if ($hour == 13 && $minutes > 30  && $day > 1 && $day < 6) {
                 break;
             }
 
