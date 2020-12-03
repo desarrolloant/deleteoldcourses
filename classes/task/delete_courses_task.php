@@ -80,6 +80,7 @@ class delete_courses_task extends \core\task\scheduled_task {
             $num_courses_for_queue = COURSES_FOR_QUEUE - $num_pending_courses;
         }
 
+        /* Comentado el encolamiento automático de cursos
         $queue_started = date('H:i:s');
         mtrace("Completing queue Started at: {$queue_started}");
         //--------------------------------------------------------
@@ -89,6 +90,7 @@ class delete_courses_task extends \core\task\scheduled_task {
         //--------------------------------------------------------
         $queue_finished = date('H:i:s');
         mtrace("Queue completed at: {$queue_finished}");
+        */
 
         //-----------------------------------------
         //return;
