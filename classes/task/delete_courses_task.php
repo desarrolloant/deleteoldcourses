@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die;
 use DateTime;
 
 /*****************************************/
-const COURSES_FOR_QUEUE = 5;
+const COURSES_FOR_QUEUE = 1;
 const REGULAR_TIMECREATED = '2015-12-31 23:59';
 
 const NO_REGULAR_TIMECREATED = '2018-12-31 23:59';
