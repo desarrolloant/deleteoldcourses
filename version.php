@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 20201023100;
+$plugin->version   = 20210101100;
 $plugin->requires  = 2018120306.03;
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.0.0';
+$plugin->release   = 'v1.0.1';
 $plugin->component = 'local_deleteoldcourses';

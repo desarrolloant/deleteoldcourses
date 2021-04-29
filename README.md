@@ -35,3 +35,10 @@ Date
 Break at out 1 - 5
 Send mail to Claudia, Iader, Diego - verify email function
 
+Update april 2021
+=================
+locallib.php -> New criteria to choose courses April 22, 2021
+- Change select courses queryset to delete
+- Select courses with lastmodification < Campus Historia and created < 2018
+- 
+

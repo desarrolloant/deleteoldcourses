@@ -25,12 +25,17 @@ defined('MOODLE_INTERNAL') || die;
 use DateTime;
 
 /*****************************************/
-const COURSES_FOR_QUEUE = 500;
+const COURSES_FOR_QUEUE = 5;
 const REGULAR_TIMECREATED = '2015-12-31 23:59';
 
 const NO_REGULAR_TIMECREATED = '2018-12-31 23:59';
 const NO_REGULAR_TIMEMODIFIED = '2019-10-31 23:59';
 /*****************************************/
+
+/************ Criteria April 22, 2021 ***************/
+const COURSE_TIME_CREATED = '2018-12-31 23:59:59';
+const COURSE_LAST_MODIFICATION = '2020-06-31 23:59:59'; //Before Campus Historia Backup
+/****************************************************/
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
@@ -80,17 +85,21 @@ class delete_courses_task extends \core\task\scheduled_task {
             $num_courses_for_queue = COURSES_FOR_QUEUE - $num_pending_courses;
         }
 
-        /* Comentado el encolamiento automático de cursos
+        /* Comentado el encolamiento automático de cursos*/
         $queue_started = date('H:i:s');
         mtrace("Completing queue Started at: {$queue_started}");
         //--------------------------------------------------------
         if ($num_courses_for_queue > 0) {
-            queue_the_courses(REGULAR_TIMECREATED, NO_REGULAR_TIMECREATED, NO_REGULAR_TIMEMODIFIED, $num_courses_for_queue);
+            //------------------------ First Criteria -----------------------*/
+            //queue_the_courses_1(REGULAR_TIMECREATED, NO_REGULAR_TIMECREATED, NO_REGULAR_TIMEMODIFIED, $num_courses_for_queue);
+
+            //-------------------- Criteria April 22, 2021 ------------------*/ 
+            queue_the_courses_2(COURSE_TIME_CREATED, COURSE_LAST_MODIFICATION, $num_courses_for_queue);
         }
         //--------------------------------------------------------
         $queue_finished = date('H:i:s');
         mtrace("Queue completed at: {$queue_finished}");
-        */
+        
 
         //-----------------------------------------
         //return;
@@ -153,6 +162,7 @@ class delete_courses_task extends \core\task\scheduled_task {
             }
 
             //break;
+            //continue;
 
             $size = $item->size;
 
