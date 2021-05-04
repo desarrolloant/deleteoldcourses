@@ -44,7 +44,7 @@ $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title($SITE->fullname . ': ' . get_string('pluginname', 'local_deleteoldcourses'));
 $PAGE->navbar->add(get_string('pluginname', 'local_deleteoldcourses'));
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('pluginname', 'local_deleteoldcourses'));
+echo $OUTPUT->heading('Cursos a eliminar bajo el criterio abril 22, 2021');
 
 $output = $PAGE->get_renderer('local_deleteoldcourses');
 

@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die;
 use DateTime;
 
 /*****************************************/
-const COURSES_FOR_QUEUE = 1;
+const COURSES_FOR_QUEUE = 500;
 const REGULAR_TIMECREATED = '2015-12-31 23:59';
 
 const NO_REGULAR_TIMECREATED = '2018-12-31 23:59';
@@ -34,7 +34,7 @@ const NO_REGULAR_TIMEMODIFIED = '2019-10-31 23:59';
 
 /************ Criteria April 22, 2021 ***************/
 const COURSE_TIME_CREATED = '2018-12-31 23:59:59';
-const COURSE_LAST_MODIFICATION = '2020-06-31 23:59:59'; //Before Campus Historia Backup
+const COURSE_LAST_MODIFICATION = '2020-10-10 23:59:59'; //Before Campus Historia Backup
 /****************************************************/
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
@@ -94,7 +94,7 @@ class delete_courses_task extends \core\task\scheduled_task {
             //queue_the_courses_1(REGULAR_TIMECREATED, NO_REGULAR_TIMECREATED, NO_REGULAR_TIMEMODIFIED, $num_courses_for_queue);
 
             //-------------------- Criteria April 22, 2021 ------------------*/ 
-            queue_the_courses_2(COURSE_TIME_CREATED, COURSE_LAST_MODIFICATION, $num_courses_for_queue);
+            //queue_the_courses_2(COURSE_TIME_CREATED, COURSE_LAST_MODIFICATION, $num_courses_for_queue);
         }
         //--------------------------------------------------------
         $queue_finished = date('H:i:s');
@@ -154,10 +154,15 @@ class delete_courses_task extends \core\task\scheduled_task {
             
             // Run only between 0:15 and 5:30
             if ($hour > 14 && $day < 6 ) {
-                break;
+                //break;
             }
 
             if ($hour == 13 && $minutes > 30 && $day < 6) {
+                //break;
+            }
+
+            //Stop this task at 23:00
+            if ($hour >= 23) {
                 break;
             }
 

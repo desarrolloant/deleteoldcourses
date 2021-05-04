@@ -733,7 +733,7 @@ function queue_the_courses_2($timecreated, $timemodified, $quantity=0, $test=FAL
     //Exclude Cursos Abiertos
     if ($row->category == 109) { continue; }
     //Exclude Cursos de Extensión
-    if ($first_category_parent == 7) { continue; }
+    //if ($first_category_parent == 7) { continue; }-->
     //Exclude Cursos Virtuales y Mixtos (blended)
     if ($first_category_parent == 110) { continue; }
     //Exclude Categoría DEMO
@@ -741,11 +741,11 @@ function queue_the_courses_2($timecreated, $timemodified, $quantity=0, $test=FAL
     //Exclude Cursos Capacitación
     if ($row->category == 51) { continue; }
     //Exclude Medios Educativos-AMED
-    if ($first_category_parent == 43) { continue; }
+    //if ($first_category_parent == 43) { continue; } -->
     //Exclude Formación Docente en Integración Pedagógica de las TIC
-    if ($row->category == 89) { continue; }
+    //if ($row->category == 89) { continue; } -->
     //Exclude Elecciones Electrónicas
-    if ($row->category == 145) { continue; }
+    //if ($row->category == 145) { continue; } -->
     //Exclude Cursos Permanentes
     if ($row->category == 148) { continue; }
 
