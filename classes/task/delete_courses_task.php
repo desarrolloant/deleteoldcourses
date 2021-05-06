@@ -94,7 +94,7 @@ class delete_courses_task extends \core\task\scheduled_task {
             //queue_the_courses_1(REGULAR_TIMECREATED, NO_REGULAR_TIMECREATED, NO_REGULAR_TIMEMODIFIED, $num_courses_for_queue);
 
             //-------------------- Criteria April 22, 2021 ------------------*/ 
-            //queue_the_courses_2(COURSE_TIME_CREATED, COURSE_LAST_MODIFICATION, $num_courses_for_queue);
+            queue_the_courses_2(COURSE_TIME_CREATED, COURSE_LAST_MODIFICATION, $num_courses_for_queue);
         }
         //--------------------------------------------------------
         $queue_finished = date('H:i:s');
@@ -152,17 +152,13 @@ class delete_courses_task extends \core\task\scheduled_task {
             $day        = intval(date('N')); //6->sat, 7->sun
             $minutes    = intval(date('i'));
             
-            // Run only between 0:15 and 5:30
-            if ($hour > 14 && $day < 6 ) {
-                //break;
+            //Run only between 0:15 and 7:00
+            if ($hour > 7 && $day < 6 ) {
+                break;
             }
 
-            if ($hour == 13 && $minutes > 30 && $day < 6) {
-                //break;
-            }
-
-            //Stop this task at 23:00
-            if ($hour >= 23) {
+            //Run Sat, Sun between 0:15 and 23:00
+            if ($hour > 23 && $day == 6) {
                 break;
             }
 
