@@ -363,7 +363,7 @@ function get_pending_courses($sort, $limitfrom=0, $limitnum=0){
 
 /**
  * get sql string for query queue of courses
- *
+ * query for select courses by user last course access 
  * @return string for query
  */
 function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified){
@@ -452,7 +452,6 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
   return array($sql, $params);
 }
 
-
 /**
  * Queue the courses for time ago, number of resources
  *
@@ -462,7 +461,7 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
  * @param int $quantity number of courses for add to queue
  * @return None
  */
-function queue_the_courses($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified, $quantity=0){
+function queue_the_courses_1($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified, $quantity=0){
 
   if ($regular_timecreated == NULL || $regular_timecreated == '' || $no_regular_timecreated == NULL || $no_regular_timecreated == '') {
     return;
@@ -510,6 +509,293 @@ function queue_the_courses($regular_timecreated, $no_regular_timecreated, $no_re
   $rs->close();
 }
 
+/**************************************************************************************
+*************************** End Course deletion automation ****************************
+**************************************************************************************/
+
+/****************************************************************************
+************** New criteria to choose courses April 22, 2021 ****************
+****************************************************************************/
+
+/**
+ * check if a course was updated after date
+ * @param object $course
+ * @param string $timemodified
+ * @return boolean
+ */
+function course_was_updated($course, $timemodified){
+  global $DB;
+  $timemodified = new DateTime($timemodified);
+  $timemodified = $timemodified->getTimestamp();
+  $result = FALSE;
+
+  if (!$course) {
+    return TRUE;
+  }
+
+  if ($course) {
+    if ($timemodified < $course->timemodified) {
+      //echo $course->shortname.' - '.userdate($course->timemodified);
+      $result = TRUE;
+    }
+  }
+  return $result;
+}
+
+/**
+ * check if at least one section of a course was updated after date
+ * @param object $course
+ * @param string $timemodified
+ * @return boolean
+ */
+function course_sections_was_updated($course, $timemodified){
+  global $DB;
+  $timemodified = new DateTime($timemodified);
+  $timemodified = $timemodified->getTimestamp();
+  $result = FALSE;
+
+  if (!$course) {
+    return TRUE;
+  }
+
+  $course_sections = $DB->get_records_sql("SELECT cs.summary, cs.timemodified
+                                             FROM {course_sections} cs
+                                            WHERE cs.course = ?",
+                                      array($course->id));
+  if($course_sections) {
+    foreach($course_sections as $course_section) {
+      if ($timemodified < $course_section->timemodified) {
+        $result = TRUE;
+        //echo $course_section->summary.' - '.userdate($course_section->timemodified).'<br>';
+        break;
+      }
+    }
+  }
+  return $result;
+}
+
+/**
+ * check if at least one module of a course was updated after date
+ * @param object $course
+ * @param string $timemodified
+ * @return boolean
+ */
+function course_modules_was_updated($course, $timemodified){
+  global $DB;
+  $timemodified = new DateTime($timemodified);
+  $timemodified = $timemodified->getTimestamp();
+  $result = FALSE;
+
+  if (!$course) {
+    return TRUE;
+  }
+
+  $course_mods = $DB->get_records_sql("SELECT cm.instance, m.name as modname
+                                         FROM {modules} m, {course_modules} cm
+                                        WHERE cm.course = ? AND cm.module = m.id",
+                                      array($course->id));
+  if($course_mods) {
+    foreach($course_mods as $course_mod) {
+      $course_module_instance = $DB->get_record($course_mod->modname, array('id' =>$course_mod->instance ));
+      if ($timemodified < $course_module_instance->timemodified) {
+        $result = TRUE;
+        //echo $course_module_instance->name.' - '.userdate($course_module_instance->timemodified).'<br>';
+        break;
+      }
+    }
+  }
+  return $result;
+}
+
+/**
+ * check if at least one role was updated in this course after date
+ * @param object $course
+ * @param string $timemodified
+ * @return boolean
+ */
+function course_roles_was_updated($course, $timemodified){
+  global $DB;
+  $timemodified = new DateTime($timemodified);
+  $timemodified = $timemodified->getTimestamp();
+  $result = FALSE;
+
+  if (!$course) { return TRUE; }
+
+  $context = context_course::instance($course->id);
+
+  if (!$context) { return TRUE; }
+
+  $course_role_assignments = $DB->get_records_sql("SELECT ra.timemodified
+                                                     FROM {role_assignments} ra
+                                                     JOIN {user} u ON u.id=ra.userid
+                                                    WHERE ra.contextid = ?",
+                                                  array($context->id));
+  if ($course_role_assignments) {
+    foreach ($course_role_assignments as $role_assignment) {
+      if ($timemodified < $role_assignment->timemodified) {
+        $result = TRUE;
+        //echo userdate($role_assignment->timemodified).'<br>';
+        break;
+      }
+    }
+  }
+  return $result;
+}
+
+/**
+ * check if at least one role was updated in this course after date
+ * @param object $course
+ * @param string $timemodified
+ * @return boolean
+ */
+function course_user_enrolments_was_updated($course, $timemodified){
+  global $DB;
+  $timemodified = new DateTime($timemodified);
+  $timemodified = $timemodified->getTimestamp();
+  $result = FALSE;
+
+  if (!$course) { return TRUE; }
+
+  $course_user_enrolments = $DB->get_records_sql("SELECT ue.userid, ue.timecreated, ue.timemodified 
+                                                    FROM {user_enrolments} ue
+                                                    JOIN {enrol} e ON e.id = ue.enrolid
+                                                    WHERE e.courseid = ?",
+                                                  array($course->id));
+  
+  if ($course_user_enrolments) {
+    foreach ($course_user_enrolments as $user_enrolment) {
+      if ($timemodified < $user_enrolment->timemodified || $timemodified < $user_enrolment->timecreated) {
+        $result = TRUE;
+        //echo $user_enrolment->userid.' - '.userdate($user_enrolment->timemodified).' - '.userdate($user_enrolment->timemodified).'<br>';
+        break;
+      }
+    }
+  }
+  return $result;
+}
+
+/**
+ * Get sql query for get courses created before date
+ * 
+ * @param string $timecreated
+ * @return Array $sql, $params[]
+ */
+function get_courses_sql($timecreated, $order){
+  global $DB;
+  $timecreated = new DateTime($timecreated);
+  $timecreated = $timecreated->getTimestamp();
+
+  $params = array();
+  $params['timecreated'] = $timecreated;
+
+  $sql = '
+    SELECT c.id, c.shortname, c.fullname, c.category, c.timemodified, c.timecreated
+      FROM {course} c
+     WHERE c.id > 1 AND
+           c.timecreated < :timecreated AND 
+           c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
+  ORDER BY c.timecreated '.$order;
+
+  return array($sql, $params);
+}
+
+function queue_the_courses_2($timecreated, $timemodified, $quantity=0, $test=FALSE){
+  global $DB;
+
+  if ($timecreated == NULL || $timecreated == '' || $timemodified == NULL || $timemodified == '') {
+    return;
+  }
+
+  if ($quantity <= 0) {
+    return;
+  }
+
+  //Admin user
+  $user = $DB->get_record('user', array('username' => 'desadmin'));
+  $count = 0;
+  $order = 'ASC';
+  $limit_query = 5000;
+
+  //For test queries
+  if ($test) {
+    $limit_query = 25000;
+    $order = 'DESC';
+  }
+
+  list($sql, $params) = get_courses_sql($timecreated, $order);
+  $rs = $DB->get_recordset_sql($sql, $params, 0, $limit_query);
+  foreach ($rs as $row) {
+
+    //Get first category parent of this course category
+    $first_category_parent = recursiveParentCategory($row->category);
+    //Exclude regular courses on categories with id < 30000
+    if ($row->category < 30000 && $first_category_parent == 6) { continue; }
+    //Exclude Cursos Abiertos
+    if ($row->category == 109) { continue; }
+    //Exclude Cursos de Extensión
+    //if ($first_category_parent == 7) { continue; }-->
+    //Exclude Cursos Virtuales y Mixtos (blended)
+    if ($first_category_parent == 110) { continue; }
+    //Exclude Categoría DEMO
+    if ($row->category == 5) { continue; }
+    //Exclude Cursos Capacitación
+    if ($row->category == 51) { continue; }
+    //Exclude Medios Educativos-AMED
+    //if ($first_category_parent == 43) { continue; } -->
+    //Exclude Formación Docente en Integración Pedagógica de las TIC
+    //if ($row->category == 89) { continue; } -->
+    //Exclude Elecciones Electrónicas
+    //if ($row->category == 145) { continue; } -->
+    //Exclude Cursos Permanentes
+    if ($row->category == 148) { continue; }
+
+    $course_updated = course_was_updated($row, $timemodified);
+    $sections_updated = course_sections_was_updated($row, $timemodified);
+    $modules_updated = course_modules_was_updated($row, $timemodified);
+    $roles_updated = course_roles_was_updated($row, $timemodified);
+    $user_enrolments = course_user_enrolments_was_updated($row, $timemodified);
+
+    //If this course was updated after date 
+    if ($course_updated || $sections_updated || $modules_updated || $roles_updated || $user_enrolments) { 
+      continue; 
+    }
+
+    $count ++;
+
+    //Show test queries - Confirm creation date
+    if ($test) {
+      echo $count.' - '.$row->id.' - '.$row->fullname.' - '.userdate($row->timecreated).'<br>';
+      continue;
+    }
+
+    
+    //Add course to queue for delete
+    $record = (object) array(
+        'courseid'          => $row->id,
+        'shortname'         => $row->shortname,
+        'fullname'          => $row->fullname,
+        'userid'            => $user->id,
+        'size'              => courseCalculateSize($row->id),
+        'coursecreatedat'   => $row->timecreated,
+        'timecreated'       => time()
+    );
+    //Add to deletion list
+    $DB->insert_record('deleteoldcourses', $record);
+
+    //If is reach quantity break 
+    if ($count >= $quantity) { break; }
+  }
+  $rs->close();
+}
+
+
+/****************************************************************************
+************ End New criteria to choose courses April 22, 2021 **************
+****************************************************************************/
+
+/****************************************************************************
+******************************* Other Methods *******************************
+****************************************************************************/
 function courseCalculateSize($courseid){
   global $DB;
 
@@ -553,3 +839,7 @@ function countDeletedCourses($starttime){
   $deletedcourses = $DB->count_records_sql($sql, $params);
   return $deletedcourses;
 }
+
+/****************************************************************************
+**************************** End Other Methods ******************************
+****************************************************************************/
