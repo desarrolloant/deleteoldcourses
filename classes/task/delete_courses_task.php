@@ -157,9 +157,9 @@ class delete_courses_task extends \core\task\scheduled_task {
                 //break;
             }
 
-            //Run Sat, Sun between 0:15 and 23:00
-            if ($hour > 23 && $day == 6) {
-                //break;
+            //Stop on moodle update
+            if ($day == 7 || $day == 1 || $day == 2 || $day == 3) {
+                break;
             }
 
             if ($hour >= 23) {

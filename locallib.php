@@ -749,6 +749,9 @@ function queue_the_courses_2($timecreated, $timemodified, $quantity=0, $test=FAL
     //Exclude Cursos Permanentes
     if ($row->category == 148) { continue; }
 
+    //Exclude ases courses
+    if ($row->category == 81 || $row->category == 82 || $row->category == 83 || $row->category == 146) { continue; }
+
     $course_updated = course_was_updated($row, $timemodified);
     $sections_updated = course_sections_was_updated($row, $timemodified);
     $modules_updated = course_modules_was_updated($row, $timemodified);
