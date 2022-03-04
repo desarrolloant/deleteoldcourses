@@ -19,9 +19,12 @@
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.6.6
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @copyright  2020 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die;
 
 // List of tasks.
 $tasks = array(

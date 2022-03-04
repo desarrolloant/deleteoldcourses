@@ -90,7 +90,7 @@ class list_courses_table extends \table_sql implements renderable {
 
         $headers[] = get_string('course_shortname', 'local_deleteoldcourses');
         $columns[] = 'c_shortname';
-        
+
         $headers[] = get_string('course_fullname', 'local_deleteoldcourses');
         $columns[] = 'c_fullname';
 
@@ -106,12 +106,11 @@ class list_courses_table extends \table_sql implements renderable {
         $headers[] = get_string('table_option', 'local_deleteoldcourses');
         $columns[] = 'table_option';
 
-
         $this->define_columns($columns);
         $this->define_headers($headers);
 
         // The name column is a header.
-        //$this->define_header_column('c_fullname');
+        // $this->define_header_column('c_fullname');
 
         // Make this table sorted by last name by default.
         $this->sortable(true, 'c_shortname');
@@ -120,7 +119,6 @@ class list_courses_table extends \table_sql implements renderable {
         $this->no_sorting('u_fullname');
         $this->no_sorting('table_option');
 
-        
         $this->set_attribute('id', 'courses');
 
         /*
@@ -210,9 +208,9 @@ class list_courses_table extends \table_sql implements renderable {
             $class = 'btn btn-danger remove-course';
             $icon = '<i class="fa fa-check" aria-hidden="true"></i>';
         }
-        return '<button 
-                    class="'.$class.'" 
-                    course-id="'.$data->id.'" 
+        return '<button
+                    class="'.$class.'"
+                    course-id="'.$data->id.'"
                     action="delete">
                     '.$icon.'
                 </button>';
@@ -225,7 +223,7 @@ class list_courses_table extends \table_sql implements renderable {
      * @param bool $useinitialsbar do you want to use the initials bar.
      */
     public function query_db($pagesize, $useinitialsbar = true) {
-        //list($twhere, $tparams) = $this->get_sql_where();
+        // list($twhere, $tparams) = $this->get_sql_where();
 
         $now = time();
 

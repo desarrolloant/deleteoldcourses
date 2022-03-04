@@ -17,7 +17,7 @@
 /**
  * Add page to admin menu.
  *
- * @package	local_deleteoldcourses
+ * @package    local_deleteoldcourses
  * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @since   Moodle 3.6.6
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

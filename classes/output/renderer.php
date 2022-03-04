@@ -17,9 +17,9 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses
+ * @package local_deleteoldcourses
  * @since   Moodle 3.6.6
- * @author 	2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -46,7 +46,7 @@ class renderer extends plugin_renderer_base {
      * @param string $action pending o deleted courses.
      * @return string html for show total courses.
      */
-    public function render_buttons($action){
+    public function render_buttons($action) {
         $url_deleted = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'deleted'));
         $url_pending = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'pending'));
 
@@ -56,7 +56,7 @@ class renderer extends plugin_renderer_base {
         $data->action_deleted = false;
         if ($action == 'pending') {
             $data->action_pending = true;
-        }else if($action == 'deleted'){
+        } else if ($action == 'deleted') {
             $data->action_deleted = true;
         }
         $data->str_deleted = get_string('deleted_courses', 'local_deleteoldcourses');
@@ -66,17 +66,16 @@ class renderer extends plugin_renderer_base {
         return $this->render_from_template('local_deleteoldcourses/buttons', $data);
     }
 
-
-	/**
+    /**
      * Html to show number of courses.
      *
      * @param int $number_of_courses Total courses.
      * @return string html for show total courses.
      */
-	public function render_number_of_courses($number_of_courses){
-		$o = \html_writer::tag('p', get_string('coursescount', 'local_deleteoldcourses').$number_of_courses);
-		return $o;
-	}
+    public function render_number_of_courses($number_of_courses) {
+        $o = \html_writer::tag('p', get_string('coursescount', 'local_deleteoldcourses').$number_of_courses);
+        return $o;
+    }
 
 
     /**
@@ -84,7 +83,7 @@ class renderer extends plugin_renderer_base {
      *
      * @return string html for show alert.
      */
-    public function render_alert_delete_courses_created_less_1_year(){
+    public function render_alert_delete_courses_created_less_1_year() {
         $data = new stdClass();
         $data->content = get_string('alert_delete_recent_courses_content', 'local_deleteoldcourses');
         $data->link = 'https://docs.google.com/forms/d/e/1FAIpQLScUqytuNLtZQQTYGY9KnXOzGnYFQ-gJasl1om1SbHTDJ6LQJg/viewform';
@@ -102,17 +101,17 @@ class renderer extends plugin_renderer_base {
         $optionvalue = $year;
         if ($year == MIN_CREATED_AGO) {
             $optionlabel = get_string('more_than_1_year_ago', 'local_deleteoldcourses');
-        }else{
+        } else {
             $optionlabel = get_string('more_than_n_years_ago', 'local_deleteoldcourses', $year.'');
         }
-        
+
         return [$optionvalue => $optionlabel];
     }
 
 
-    public function render_date_filter($selectedoption=MIN_CREATED_AGO, $baseusrl = null){
+    public function render_date_filter($selectedoption=MIN_CREATED_AGO, $baseusrl = null) {
         $timeoptions = [];
-        for($i=1; $i<=MAX_CREATED_AGO; $i++){
+        for ($i = 1; $i <= MAX_CREATED_AGO; $i++) {
             $timeoptions += $this->format_filter_option($i);
         }
 
@@ -121,20 +120,20 @@ class renderer extends plugin_renderer_base {
         return $this->output->render_from_template('local_deleteoldcourses/date_filter', $context);
     }
 
-	/**
+    /**
      * Html to show old courses table of a teacher.
      *
      * @param list_courses_table $renderable The courses table.
      * @param int $perpage Number of courses per page.
      * @return string html for the old courses table.
      */
-	public function render_courses_table(list_courses_table $renderable, $perpage) {
-		ob_start();
+    public function render_courses_table(list_courses_table $renderable, $perpage) {
+        ob_start();
         $renderable->out($perpage, true);
         $o = ob_get_contents();
         ob_end_clean();
         return $o;
-	}
+    }
 
     /**
      * Html to show a all rows in old courses table.
@@ -145,18 +144,21 @@ class renderer extends plugin_renderer_base {
      * @param int $perpage Variable number of courses to show in a page.
      * @return string html for display the link of show all courses.
      */
-	public function render_courses_show_all_link(\moodle_url $perpageurl, $page_size, $number_of_courses, $perpage) {
-		$perpageurl->remove_params('perpage');
+    public function render_courses_show_all_link(\moodle_url $perpageurl, $page_size, $number_of_courses, $perpage) {
+        $perpageurl->remove_params('perpage');
         if ($perpage == SHOW_ALL_PAGE_SIZE && $number_of_courses > DEFAULT_PAGE_SIZE) {
             $perpageurl->param('perpage', DEFAULT_PAGE_SIZE);
-            return $this->container(\html_writer::link($perpageurl, get_string('showperpage', '', DEFAULT_PAGE_SIZE)), array(), 'showall');
+            return $this->container(\html_writer::link($perpageurl,
+                                    get_string('showperpage', '', DEFAULT_PAGE_SIZE)),
+                                    array(),
+                                    'showall');
 
         } else if ($page_size < $number_of_courses) {
             $perpageurl->param('perpage', SHOW_ALL_PAGE_SIZE);
             return $this->container(\html_writer::link($perpageurl, get_string('showall', '', $number_of_courses)),
-                array(), 'showall');
+            array(), 'showall');
         }
-	}
+    }
 
 
     /**
@@ -185,17 +187,17 @@ class renderer extends plugin_renderer_base {
         $optionvalue = $month;
         if ($month == MIN_DELETED_AGO && MIN_DELETED_AGO == 1) {
             $optionlabel = get_string('more_than_1_month_ago', 'local_deleteoldcourses');
-        }else{
+        } else {
             $optionlabel = get_string('more_than_n_months_ago', 'local_deleteoldcourses', $month.'');
         }
-        
+
         return [$optionvalue => $optionlabel];
     }
 
 
-    public function render_date_deleted_filter($selectedoption=MIN_DELETED_AGO, $baseusrl = null){
+    public function render_date_deleted_filter($selectedoption=MIN_DELETED_AGO, $baseusrl = null) {
         $timeoptions = [];
-        for($i=1; $i<=MAX_DELETED_AGO; $i++){
+        for ($i = 1; $i <= MAX_DELETED_AGO; $i++) {
             $timeoptions += $this->format_deleted_filter_option($i);
         }
 

@@ -17,10 +17,12 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses
+ * @package    local_deleteoldcourses
  * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 global $CFG, $PAGE, $USER, $DB;
 
@@ -38,11 +40,11 @@ $selectall    = optional_param('selectall', false, PARAM_BOOL); // When renderin
 $ago         = optional_param('ago', MIN_CREATED_AGO, PARAM_INT); // Created ago number of years.
 
 if ($ago < MIN_CREATED_AGO) {
-	$ago = MIN_CREATED_AGO;
+    $ago = MIN_CREATED_AGO;
 }
 
-if($ago > MAX_CREATED_AGO){
-	$ago = MAX_CREATED_AGO;
+if ($ago > MAX_CREATED_AGO) {
+    $ago = MAX_CREATED_AGO;
 }
 
 $PAGE->set_url('/local/deleteoldcourses/index.php', array(
@@ -51,7 +53,7 @@ $PAGE->set_url('/local/deleteoldcourses/index.php', array(
         'ago' => $ago,
         'selectall' => $selectall));
 
-// Report all PHP errors
+// Report all PHP errors.
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
@@ -66,41 +68,39 @@ $PAGE->navbar->add(get_string('pluginname', 'local_deleteoldcourses'));
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_deleteoldcourses'));
 
-//Get renderer of local_deleteoldcourses
+// Get renderer of local_deleteoldcourses.
 $output = $PAGE->get_renderer('local_deleteoldcourses');
 
 $baseurl = new moodle_url('/local/deleteoldcourses/index.php', array(
-	'page' => $page,
+    'page' => $page,
     'perpage' => $perpage,
     'ago' => $ago
 ));
 
 echo $output->render_alert_delete_courses_created_less_1_year();
 
-//Display date filter
+// Display date filter.
 echo $output->render_date_filter($ago, $baseurl);
 
 $coursestable = new \local_deleteoldcourses\output\list_courses_table($USER->id, $ago);
 $coursestable->define_baseurl($baseurl);
 $coursestablehtml = $output->render_courses_table($coursestable, $perpage);
 
-//Display number of courses
+// Display number of courses.
 echo $output->render_number_of_courses($coursestable->totalrows);
 
-//Display old courses table
+// Display old courses table.
 echo $coursestablehtml;
 
-//Display show all link
+// Display show all link.
 $perpageurl = clone($baseurl);
 echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
 
-//Load scripts
+// Load scripts.
 $PAGE->requires->js_call_amd('local_deleteoldcourses/delete_old_courses', 'init', array());
 
 // Trigger deleteoldcourses viewed event.
 deleteoldcourses_viewed($PAGE->context, $USER->id);
 
-//Print footer
+// Print footer.
 echo $OUTPUT->footer();
-
-

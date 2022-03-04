@@ -55,14 +55,13 @@ class admin_pending_table extends \table_sql implements renderable {
 
         parent::__construct('pending-courses');
 
-
         // Define the headers and columns.
         $headers = [];
         $columns = [];
 
         $headers[] = get_string('course_shortname', 'local_deleteoldcourses');
         $columns[] = 'c_shortname';
-        
+
         $headers[] = get_string('course_fullname', 'local_deleteoldcourses');
         $columns[] = 'c_fullname';
 
@@ -75,16 +74,15 @@ class admin_pending_table extends \table_sql implements renderable {
         $headers[] = get_string('sent_to_delete', 'local_deleteoldcourses');
         $columns[] = 'c_timesenttodelete';
 
-
         $this->define_columns($columns);
         $this->define_headers($headers);
 
         // The name column is a header.
-        //$this->define_header_column('c_fullname');
+        // $this->define_header_column('c_fullname');
 
         // Make this table sorted by last name by default.
         $this->sortable(true, 'c_timedeleted', SORT_DESC);
-        
+
         $this->set_attribute('id', 'courses');
     }
 
@@ -118,7 +116,7 @@ class admin_pending_table extends \table_sql implements renderable {
      * @return string
      */
     public function col_c_fullname($data) {
-        $url = new \moodle_url('/course/view.php', array('id'=>$data->courseid)); 
+        $url = new \moodle_url('/course/view.php', array('id' => $data->courseid));
         return '<a href="'.$url->out(false).'" target="_blank">'.$data->c_fullname.'</a>';
     }
 
@@ -139,7 +137,7 @@ class admin_pending_table extends \table_sql implements renderable {
      * @return string
      */
     public function col_u_fullname($data) {
-        $url = new \moodle_url('/user/profile.php', array('id'=>$data->userid)); 
+        $url = new \moodle_url('/user/profile.php', array('id' => $data->userid));
         return '<a href="'.$url->out(false).'" target="_blank">'.$data->u_fullname.'</a>';
     }
 
@@ -152,7 +150,7 @@ class admin_pending_table extends \table_sql implements renderable {
     public function col_c_timesenttodelete($data) {
         if ($data->c_timesenttodelete) {
             $dateformat = get_string('strftimedatetime', 'core_langconfig');
-            //$dateformat = get_string('strftimedatetimeshort', 'core_langconfig');
+            // $dateformat = get_string('strftimedatetimeshort', 'core_langconfig');
             return userdate($data->c_timesenttodelete, $dateformat);
         }
         return '-------';
@@ -166,8 +164,7 @@ class admin_pending_table extends \table_sql implements renderable {
      * @param bool $useinitialsbar do you want to use the initials bar.
      */
     public function query_db($pagesize, $useinitialsbar = true) {
-        //list($twhere, $tparams) = $this->get_sql_where();
-
+        // list($twhere, $tparams) = $this->get_sql_where();
 
         $total = count_pending_courses();
 
@@ -190,4 +187,3 @@ class admin_pending_table extends \table_sql implements renderable {
         }
     }
 }
-

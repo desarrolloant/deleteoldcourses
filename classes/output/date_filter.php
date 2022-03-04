@@ -72,7 +72,7 @@ class date_filter implements renderable, templatable {
         if (empty($this->baseurl)) {
             $this->baseurl = $PAGE->url;
         }
-        
+
         $data->action = $this->baseurl->out(false);
 
         if ($this->baseurl->get_param('userid')) {
@@ -82,7 +82,7 @@ class date_filter implements renderable, templatable {
         if ($this->baseurl->get_param('action')) {
             $data->action_page = $this->baseurl->get_param('action');
         }
-        
+
         if (!isset($this->filteroptions[$this->selectedoption])) {
             $this->filteroptions[$this->selectedoption] = 0;
         }

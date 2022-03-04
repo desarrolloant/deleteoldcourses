@@ -17,10 +17,12 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses
+ * @package    local_deleteoldcourses
  * @author 2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 global $CFG, $PAGE, $USER, $DB;
 
@@ -63,5 +65,4 @@ var_dump(course_user_enrolments_was_updated($course, COURSE_LAST_MODIFICATION));
 echo '<br>';
 echo get_courses_sql(COURSE_TIME_CREATED);
 echo '<br>';*/
-queue_the_courses_2(COURSE_TIME_CREATED, COURSE_LAST_MODIFICATION, 500, TRUE);
-
+add_courses_to_delete(COURSE_TIME_CREATED, COURSE_LAST_MODIFICATION, 500, true);

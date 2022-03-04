@@ -73,7 +73,7 @@ class local_deleteoldcourses_external extends external_api {
                             'url' => new \external_value(PARAM_TEXT, 'teacher profile url')
                         )
                     ),
-                    'The data to be show', VALUE_DEFAULT, []   
+                    'The data to be show', VALUE_DEFAULT, []
                 )
             )
         );
@@ -90,19 +90,19 @@ class local_deleteoldcourses_external extends external_api {
         global $CFG, $DB, $USER;
 
         $params = self::validate_parameters(self::get_course_parameters(), ['courseid' => $courseid]);
-        if(!$params) {
+        if (!$params) {
             throw new invalid_parameter_exception("Course not found");
         }
 
-        //Get the editing teacher role
+        // Get the editing teacher role.
         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
-        //Get the course context
+        // Get the course context.
         $context = get_context_instance(CONTEXT_COURSE, $params['courseid']);
-        //Get the course teachers
+        // Get the course teachers.
         $teachers = get_role_users($role->id, $context);
 
-        $isteacher = FALSE;
-        //Get teachers
+        $isteacher = false;
+        // Get teachers.
         $temp = [];
         foreach ($teachers as $teacher) {
             $url_user = $CFG->wwwroot . "/user/view.php?id=" . $teacher->id . "&course=" . $courseid;
@@ -112,25 +112,25 @@ class local_deleteoldcourses_external extends external_api {
                     'fullname' => fullname($teacher),
                     'url' => $url_user
                 ));
-            }else{
-                $isteacher = TRUE;
+            } else {
+                $isteacher = true;
             }
         }
 
-        //Confirm if is a teacher of this course
+        // Confirm if is a teacher of this course.
         if (!$isteacher) {
             return array(
-                'id'                => NULL,
-                'fullname'          => NULL,
-                'shortname'         => NULL,
-                'coursecreatedat'   => NULL,
+                'id'                => null,
+                'fullname'          => null,
+                'shortname'         => null,
+                'coursecreatedat'   => null,
                 'teachers'          => array()
             );
         }
 
-        if ($course = $DB->get_record('course', array('id' => $params['courseid']))){
+        if ($course = $DB->get_record('course', array('id' => $params['courseid']))) {
 
-            //Create event for show course alert options
+            // Create event for show course alert options.
             $event = \local_deleteoldcourses\event\course_delete_options_viewed::create(array(
                 'objectid' => $course->id,
                 'context' => $context,
@@ -149,7 +149,7 @@ class local_deleteoldcourses_external extends external_api {
         }
     }
 
-    //---------------------------Add course to deletetion list -------------------------------------
+    // Add course to deletetion list.
 
     /**
      * Describes the parameters for add_course.
@@ -201,22 +201,22 @@ class local_deleteoldcourses_external extends external_api {
             'fullname'          => $fullname,
             'coursecreatedat'   => $coursecreatedat
         ]);
-        if(!$params) {
+        if (!$params) {
             throw new invalid_parameter_exception("Course not found");
         }
 
-        //Get the editing teacher role
+        // Get the editing teacher role.
         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
-        //Get the course context
+        // Get the course context.
         $context = get_context_instance(CONTEXT_COURSE, $params['courseid']);
-        //Get the course teachers
+        // Get the course teachers.
         $teachers = get_role_users($role->id, $context);
 
-        //Confirm if this user is teacher of course
-        $isteacher = FALSE;
+        // Confirm if this user is teacher of course.
+        $isteacher = false;
         foreach ($teachers as $teacher) {
             if ($USER->id == $teacher->id) {
-                $isteacher = TRUE;
+                $isteacher = true;
             }
         }
 
@@ -230,15 +230,15 @@ class local_deleteoldcourses_external extends external_api {
             'timecreated'       => time()
         );
 
-        $record_id = NULL;
+        $record_id = null;
 
         if ($isteacher) {
             $record_id = $DB->insert_record('deleteoldcourses', $record);
         }
-        
+
         if ($record_id) {
 
-            //Create event for sent course to be deleted
+            // Create event for sent course to be deleted.
             $event = \local_deleteoldcourses\event\course_sent_delete::create(array(
                 'objectid' => $params['courseid'],
                 'context' => $context,
@@ -247,21 +247,19 @@ class local_deleteoldcourses_external extends external_api {
             ));
             $event->trigger();
 
-
             return array(
-                'success' => TRUE,
+                'success' => true,
                 'record_id' => $record_id
             );
         }
 
         return array(
-            'success' => FALSE,
+            'success' => false,
             'record_id' => 0
         );
     }
 
-
-    //---------------------------Remove course from list to delete -------------------------------------
+    // Remove course from list to delete.
 
     /**
      * Describes the parameters for remove_course.
@@ -304,22 +302,22 @@ class local_deleteoldcourses_external extends external_api {
         $params = self::validate_parameters(self::remove_course_parameters(), [
             'courseid' => $courseid
         ]);
-        if(!$params) {
+        if (!$params) {
             throw new invalid_parameter_exception("Course not found");
         }
 
-        //Get the editing teacher role
+        // Get the editing teacher role.
         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
-        //Get the course context
+        // Get the course context.
         $context = get_context_instance(CONTEXT_COURSE, $params['courseid']);
-        //Get the course teachers
+        // Get the course teachers.
         $teachers = get_role_users($role->id, $context);
 
-        //Confirm if this user is teacher of course
-        $isteacher = FALSE;
+        // Confirm if this user is teacher of course.
+        $isteacher = false;
         foreach ($teachers as $teacher) {
             if ($USER->id == $teacher->id) {
-                $isteacher = TRUE;
+                $isteacher = true;
             }
         }
 
@@ -327,15 +325,15 @@ class local_deleteoldcourses_external extends external_api {
             'courseid' => $params['courseid']
         );
 
-        $deleted = FALSE;
+        $deleted = false;
 
         if ($isteacher) {
-            $deleted = $DB->delete_records('deleteoldcourses', array('courseid'=>$params['courseid']));
+            $deleted = $DB->delete_records('deleteoldcourses', array('courseid' => $params['courseid']));
         }
-        
+
         if ($deleted) {
 
-            //Create event for remove course from delete list
+            // Create event for remove course from delete list.
             $event = \local_deleteoldcourses\event\course_remove_delete::create(array(
                 'objectid' => $params['courseid'],
                 'context' => $context,
@@ -344,16 +342,13 @@ class local_deleteoldcourses_external extends external_api {
             ));
             $event->trigger();
 
-
             return array(
-                'success' => TRUE
+                'success' => true
             );
         }
 
         return array(
-            'success' => FALSE
+            'success' => false
         );
     }
-
-
 }

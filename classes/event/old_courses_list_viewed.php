@@ -18,9 +18,6 @@ namespace local_deleteoldcourses\event;
 
 defined('MOODLE_INTERNAL') || die();
 
-
-
-
 /**
  * The local_deleteoldcourses viewed deleteoldcourses event class.
  *

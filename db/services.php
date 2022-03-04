@@ -17,29 +17,33 @@
 /**
  * Version information for deletecourses - used services.
  *
- * @package	local_deleteoldcourses
+ * @package    local_deleteoldcourses
  * @since   Moodle 3.6.6
- * @author 	2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $services = [
     'local_deleteoldcourses_ws' => [
-        'functions' => ['local_deleteoldcourses_get_course', 'local_deleteoldcourses_add_course', 'local_deleteoldcourses_remove_course'],
+        'functions' => ['local_deleteoldcourses_get_course',
+                        'local_deleteoldcourses_add_course',
+                        'local_deleteoldcourses_remove_course'],
         'requiredcapability' => '',
-        'restrictedusers' => 0,  
+        'restrictedusers' => 0,
         'enabled' => 1
     ]
 ];
 
 $functions = array (
     'local_deleteoldcourses_get_course' => array(
-	    'classname'   => 'local_deleteoldcourses_external',
-	    'methodname'  => 'get_course',
-	    'classpath'   => 'local/deleteoldcourses/externallib.php',
-	    'description' => 'Get a course by id.',
-	    'type'        => 'read',
-	    'ajax'          => true,
+        'classname'   => 'local_deleteoldcourses_external',
+        'methodname'  => 'get_course',
+        'classpath'   => 'local/deleteoldcourses/externallib.php',
+        'description' => 'Get a course by id.',
+        'type'        => 'read',
+        'ajax'          => true,
         'loginrequired' => true,
         'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE]
     ),

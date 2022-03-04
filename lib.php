@@ -17,11 +17,13 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses
+ * @package    local_deleteoldcourses
  * @since   Moodle 3.6.6
  * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
@@ -36,68 +38,67 @@ defined('MOODLE_INTERNAL') || die;
  */
 function local_deleteoldcourses_extend_navigation(global_navigation $navigation) {
 
-  global $PAGE, $USER;
+    global $PAGE, $USER;
 
-  //check if this user is not student -> only for univalle users
-  $username = $USER->username;
-  if (strpos($username, '-') !== false) {
-    return;
-  }
-
-  //Show only in dasboard page
-  if ($PAGE->has_set_url()) {
-    if (!$PAGE->url->compare(new moodle_url('/my/'), URL_MATCH_BASE)) {
-      return;
+    // Check if this user is not student -> only for univalle users.
+    $username = $USER->username;
+    if (strpos($username, '-') !== false) {
+        return;
     }
-  }
-  
-  $pluginname = get_string('pluginname', 'local_deleteoldcourses');
-  $action = new moodle_url('/local/deleteoldcourses/index.php', array());
-  $type = global_navigation::TYPE_CUSTOM;
-  $shorttext = 'deleteoldcourses';
-  $key='deleteoldcourses';
-  $icon = new pix_icon('i/trash', '');
 
-  $show_node = false;
-  $show_alert = false;
-  $total = 0;
+    // Show only in dasboard page.
+    if ($PAGE->has_set_url()) {
+        if (!$PAGE->url->compare(new moodle_url('/my/'), URL_MATCH_BASE)) {
+            return;
+        }
+    }
 
-  if (has_capability('local/deleteoldcourses:viewreport', context_system::instance())) {
-    $action = new moodle_url('/local/deleteoldcourses/report.php', array());
-    $show_node = true;
-  }else{
-    $now = time();
-    $total = user_count_courses($USER->id, $now);
-    $show_alert = true;
-  }
+    $pluginname = get_string('pluginname', 'local_deleteoldcourses');
+    $action = new moodle_url('/local/deleteoldcourses/index.php', array());
+    $type = global_navigation::TYPE_CUSTOM;
+    $shorttext = 'deleteoldcourses';
+    $key = 'deleteoldcourses';
+    $icon = new pix_icon('i/trash', '');
 
-  if ($total > 0) {
-    $show_node = true;
-  }
+    $show_node = false;
+    $show_alert = false;
+    $total = 0;
 
-  $node = navigation_node::create(
+    if (has_capability('local/deleteoldcourses:viewreport', context_system::instance())) {
+        $action = new moodle_url('/local/deleteoldcourses/report.php', array());
+        $show_node = true;
+    } else {
+        $now = time();
+        $total = user_count_courses($USER->id, $now);
+        $show_alert = true;
+    }
+
+    if ($total > 0) {
+        $show_node = true;
+    }
+
+    $node = navigation_node::create(
     $pluginname,
     $action,
     $type,
     $shorttext,
     $key,
-    $icon 
-  );
+    $icon
+    );
 
-  if ($show_node) {
-    if ($show_alert) {
-      $PAGE->requires->js_call_amd('local_deleteoldcourses/show_alert', 'init', array(
-        'link' => $action->out(false),
-        'str_content' => get_string('alert_delete_content', 'local_deleteoldcourses'),
-        'str_link' => get_string('delete_courses', 'local_deleteoldcourses')
-      )); 
+    if ($show_node) {
+        if ($show_alert) {
+            $PAGE->requires->js_call_amd('local_deleteoldcourses/show_alert', 'init', array(
+            'link' => $action->out(false),
+            'str_content' => get_string('alert_delete_content', 'local_deleteoldcourses'),
+            'str_link' => get_string('delete_courses', 'local_deleteoldcourses')
+            ));
+        }
+        $deleteoldcourses = $navigation->add_node($node);
+        $deleteoldcourses->showinflatnavigation = true;
     }
-    $deleteoldcourses = $navigation->add_node($node);
-    $deleteoldcourses->showinflatnavigation = true;
-  }
 
 }
-
 
 /**
  * Helper function to reset the icon system used as updatecallback function when saving some of the plugin's settings.
@@ -113,4 +114,3 @@ function local_deleteoldcourses_reset_fontawesome_icon_map() {
     // And rebuild it brutally.
     $instance->get_icon_name_map();
 }
-

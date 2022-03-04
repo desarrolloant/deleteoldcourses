@@ -17,10 +17,12 @@
 /**
  * Version information for deletecourses.
  *
- * @package	  local_deleteoldcourses
+ * @package      local_deleteoldcourses
  * @author    2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 
 global $CFG, $PAGE, $USER, $DB;
 
@@ -37,32 +39,32 @@ $page         = optional_param('page', 0, PARAM_INT); // Which page to show.
 $perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
 $userid       = optional_param('userid', 0, PARAM_INT);
 $ago          = optional_param('ago', MIN_DELETED_AGO, PARAM_INT); // Created ago number of years.
-$action       = optional_param('action', 'pending', PARAM_TEXT); // pending or deleted report.
+$action       = optional_param('action', 'pending', PARAM_TEXT); // Pending or deleted report.
 
 if ($ago < MIN_DELETED_AGO) {
-	$ago = MIN_DELETED_AGO;
+    $ago = MIN_DELETED_AGO;
 }
 
-if($ago > MAX_DELETED_AGO){
-	$ago = MAX_DELETED_AGO;
+if ($ago > MAX_DELETED_AGO) {
+    $ago = MAX_DELETED_AGO;
 }
 
 $PAGE->set_url('/local/deleteoldcourses/report.php', array(
-	'action' => $action,
-	'page' => $page,
+    'action' => $action,
+    'page' => $page,
     'perpage' => $perpage,
-	'userid' => $userid,
-	'ago' => $ago,
+    'userid' => $userid,
+    'ago' => $ago,
 ));
 
-// Report all PHP errors
+// Report all PHP errors.
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 require_login();
 require_capability('local/deleteoldcourses:viewreport', context_system::instance());
 
-//admin_externalpage_setup('local_deleteoldcourses', '', null);
+// admin_externalpage_setup('local_deleteoldcourses', '', null);
 
 $PAGE->set_pagelayout('admin');
 $PAGE->set_heading($SITE->fullname);
@@ -71,53 +73,53 @@ $PAGE->navbar->add(get_string('pluginname', 'local_deleteoldcourses'));
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_deleteoldcourses'));
 
-//Get renderer of local_deleteoldcourses
+// Get renderer of local_deleteoldcourses.
 $output = $PAGE->get_renderer('local_deleteoldcourses');
 
 $baseurl = new moodle_url('/local/deleteoldcourses/report.php', array(
-	'action' => $action,
-	'page' => $page,
+    'action' => $action,
+    'page' => $page,
     'perpage' => $perpage,
     'ago' => $ago,
     'userid' => $userid
 ));
 
-//Display action buttons
+// Display action buttons.
 echo $output->render_buttons($action);
 
 if ($action == 'deleted') {
-	//Display date filter
-	echo $output->render_date_deleted_filter($ago, $baseurl);
+    // Display date filter.
+    echo $output->render_date_deleted_filter($ago, $baseurl);
 
-	$coursestable = new \local_deleteoldcourses\output\admin_deleted_table($userid, $ago);
-	$coursestable->define_baseurl($baseurl);
-	$coursestablehtml = $output->render_deleted_table($coursestable, $perpage);
+    $coursestable = new \local_deleteoldcourses\output\admin_deleted_table($userid, $ago);
+    $coursestable->define_baseurl($baseurl);
+    $coursestablehtml = $output->render_deleted_table($coursestable, $perpage);
 
-	//Display number of courses
-	echo $output->render_number_of_courses($coursestable->totalrows);
+    // Display number of courses.
+    echo $output->render_number_of_courses($coursestable->totalrows);
 
-	//Display old courses table
-	echo $coursestablehtml;
+    // Display old courses table.
+    echo $coursestablehtml;
 
-	//Display show all link
-	$perpageurl = clone($baseurl);
-	echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
-	
-}else if($action == 'pending'){
-	$coursestable = new \local_deleteoldcourses\output\admin_pending_table();
-	$coursestable->define_baseurl($baseurl);
-	$coursestablehtml = $output->render_pending_table($coursestable, $perpage);
+    // Display show all link.
+    $perpageurl = clone($baseurl);
+    echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
 
-	//Display number of courses
-	echo $output->render_number_of_courses($coursestable->totalrows);
+} else if ($action == 'pending') {
+    $coursestable = new \local_deleteoldcourses\output\admin_pending_table();
+    $coursestable->define_baseurl($baseurl);
+    $coursestablehtml = $output->render_pending_table($coursestable, $perpage);
 
-	//Display old courses table
-	echo $coursestablehtml;
+    // Display number of courses.
+    echo $output->render_number_of_courses($coursestable->totalrows);
 
-	//Display show all link
-	$perpageurl = clone($baseurl);
-	echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
+    // Display old courses table.
+    echo $coursestablehtml;
+
+    // Display show all link.
+    $perpageurl = clone($baseurl);
+    echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
 }
 
-//Print footer
+// Print footer.
 echo $OUTPUT->footer();

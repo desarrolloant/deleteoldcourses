@@ -17,8 +17,8 @@
 /**
  * Version information for deletecourses.
  *
- * @package	local_deleteoldcourses
- * @author 	2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @package local_deleteoldcourses
+ * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
     'local/deleteoldcourses:viewreport' => array(
-    	'riskbitmask' => RISK_DATALOSS,
+        'riskbitmask' => RISK_DATALOSS,
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
