@@ -54,7 +54,6 @@ $string['course_remove_delete'] = 'Course was removed from delete list';
 // Tasks.
 $string['task_delete_course'] = 'Task for deleting courses';
 
-
 // Deleted table.
 $string['sent_to_delete'] = 'Sent to delete';
 $string['course_timedeleted'] = 'Time at deleted';
@@ -68,3 +67,21 @@ $string['alert_delete_content'] = 'If you wish to delete any of your courses, pl
 $string['delete_courses'] = 'Delete Courses';
 $string['alert_delete_recent_courses_content'] = 'To delete courses created less than a year ago, please complete the following';
 $string['alert_delete_recent_courses_link'] = 'form';
+
+// Settings.
+$string['manage'] = 'Configuración del plugin Eliminación de Cursos Antiguos';
+$string['courses'] = 'Cursos**';
+$string['criteriasettingsheading'] = 'Criterios para la eliminación de cursos';
+$string['criteriasettingsheading_desc'] = 'Criterios utilizados para consultar los cursos que serán eliminados automáticamente.';
+$string['daystartdate'] = 'Día';
+$string['daystartdate_desc'] = 'Día de la fecha de inicio utilizada como criterio para eliminar cursos';
+$string['monthstartdate'] = 'Month';
+$string['monthstartdate_desc'] = 'Mes de la fecha de inicio utilizada como criterio para eliminar cursos';
+$string['yearstartdate'] = 'Año';
+$string['yearstartdate_desc'] = 'Año de la fecha de inicio utilizada como criterio para eliminar cursos';
+$string['parameterssettingsheading'] = 'Parametros del proceso de borrado de cursos';
+$string['parameterssettingsheading_desc'] = 'Parametros del proceso de borrado de cursos';
+$string['sizecoursequeue'] = 'Size of queue';
+$string['sizecoursequeue_desc'] = 'Size of queue';
+
+// Date elements.

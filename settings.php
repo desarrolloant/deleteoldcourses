@@ -17,32 +17,101 @@
 /**
  * Add page to admin menu.
  *
- * @package    local_deleteoldcourses
+ * @package local_deleteoldcourses
  * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
  * @since   Moodle 3.6.6
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
+
+// Fecha de inicio de los cursos a borrar.
+// Fecha de modificacion de los cursos a borrar.
+// Tamanio de la cola de cursos a borrar.
 
 if ($hassiteconfig) {
-    $pluginname = get_string('pluginname', 'local_deleteoldcourses');
+    $ADMIN->add('localplugins',
+                new admin_category('local_deleteoldcourses_settings',
+                new lang_string('pluginname', 'local_deleteoldcourses')));
+    $settingspage = new admin_settingpage('managelocaldeleteoldcourses', new lang_string('manage', 'local_deleteoldcourses'));
 
-    $ADMIN->add('courses', new admin_externalpage('local_deleteoldcourses',
-            $pluginname,
-            new moodle_url('/local/deleteoldcourses/report.php'),
-            "local/deleteoldcourses:viewreport"));
+    if ($ADMIN->fulltree) {
 
-    $settings = new admin_settingpage('local_deleteoldcourses_settings', $pluginname);
-    $ADMIN->add('localplugins', $settings);
+        $daysofmonth = array();
 
-    $configs = array();
+        for ($i = 1; $i <= 31; $i++) {
+            array_push($daysofmonth, $i);
+        }
 
-    $configs[] = new admin_setting_heading('local_deleteoldcourses', get_string('settings'), '');
+        $monthsofyear = array(
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril'
+        );
 
-    // Put all settings into the settings page.
-    foreach ($configs as $config) {
-        $config->plugin = 'local_deleteoldcourses';
-        $settings->add($config);
+        $years = array();
+        for ($i = 2005; $i <= 2040; $i++) {
+            array_push($years, $i);
+        }
+
+        // Criteria to delete.
+        $settingspage->add(new admin_setting_heading(
+            'criteriasettingsheading',
+            new lang_string('criteriasettingsheading', 'local_deleteoldcourses'),
+            new lang_string('criteriasettingsheading_desc', 'local_deleteoldcourses')));
+
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/daystartdate',
+            new lang_string('daystartdate', 'local_deleteoldcourses'),
+            new lang_string('daystartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $daysofmonth
+        ));
+
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/monthstartdate',
+            new lang_string('monthstartdate', 'local_deleteoldcourses'),
+            new lang_string('monthstartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $monthsofyear
+        ));
+
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/yearstartdate',
+            new lang_string('yearstartdate', 'local_deleteoldcourses'),
+            new lang_string('yearstartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $years
+        ));
+
+        // Configuraciones de la hora, minutos y segundos.
+
+        // Configuraciones para la fecha de modificacion de los cursos.
+
+        // Parameters of the delete process.
+        $settingspage->add(new admin_setting_heading(
+            'parameterssettingsheading',
+            new lang_string('parameterssettingsheading', 'local_deleteoldcourses'),
+            new lang_string('parameterssettingsheading_desc', 'local_deleteoldcourses')));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_deleteoldcourses/sizecoursequeue',
+            new lang_string('sizecoursequeue', 'local_deleteoldcourses'),
+            new lang_string('sizecoursequeue_desc', 'local_deleteoldcourses'),
+            500,
+            PARAM_INT,
+            3
+        ));
     }
+
+    $ADMIN->add('localplugins', $settingspage);
+
+    $ADMIN->add('reports', new admin_category('deleteoldcourses', new lang_string('pluginname', 'local_deleteoldcourses')));
+
+    $ADMIN->add('deleteoldcourses',
+        new admin_externalpage('indexdeleteoldcourses', new lang_string('courses', 'local_deleteoldcourses'),
+            new moodle_url('/local/deleteoldcourses/index.php'), 'moodle/site:configview'
+        )
+    );
 }

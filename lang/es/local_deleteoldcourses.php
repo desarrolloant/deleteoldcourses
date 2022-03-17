@@ -67,3 +67,19 @@ $string['alert_delete_content'] = 'Si usted desea eliminar alguno de sus cursos,
 $string['delete_courses'] = 'Eliminar Cursos';
 $string['alert_delete_recent_courses_content'] = 'Para eliminar los cursos creados hace menos de un año, por favor diligenciar el siguiente';
 $string['alert_delete_recent_courses_link'] = 'formulario';
+
+// Settings.
+$string['manage'] = 'Settings for the Delete Old Courses Plugin';
+$string['courses'] = 'Eliminación de cursos antiguos';
+$string['criteriasettingsheading'] = 'Criterios para la eliminación de cursos';
+$string['criteriasettingsheading_desc'] = 'Criterios utilizados para consultar los cursos que serán eliminados automáticamente.';
+$string['daystartdate'] = 'Día';
+$string['daystartdate_desc'] = 'Día de la fecha de inicio utilizada como criterio para eliminar cursos';
+$string['monthstartdate'] = 'Mes';
+$string['monthstartdate_desc'] = 'Mes de la fecha de inicio utilizada como criterio para eliminar cursos';
+$string['yearstartdate'] = 'Año';
+$string['yearstartdate_desc'] = 'Año de la fecha de inicio utilizada como criterio para eliminar cursos';
+$string['sizecoursequeue'] = 'Size of queue';
+$string['sizecoursequeue_desc'] = 'Size of queue';
+
+// Date elements.

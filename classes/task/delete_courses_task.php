@@ -130,7 +130,7 @@ class delete_courses_task extends \core\task\scheduled_task {
         foreach ($rs as $item) {
 
             $hour       = intval(date('H'));
-            $day        = intval(date('N')); // 6->sat, 7->sun.
+            $day        = intval(date('N')); // 6 sat, 7 sun.
             $minutes    = intval(date('i'));
 
             // Run only between 0:15 and 7:00.
