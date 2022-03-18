@@ -92,11 +92,41 @@ class local_deleteoldcourses_lib_testcase extends advanced_testcase {
 
         $configgenerator->insert_config($config);
 
-        $timestamp = date_config_to_timestamp();
+        // Modification date 2022-01-05 00:20:20.
+        $config->name = 'year_last_modification_date';
+        $config->value = '2022';
 
-        //print_r("Fecha " . $timestamp);
+        $configgenerator->insert_config($config);
 
-        $this->assertSame($timestamp, 1122958799);
+        $config->name = 'month_last_modification_date';
+        $config->value = '01';
 
+        $configgenerator->insert_config($config);
+;
+        $config->name = 'day_last_modification_date';
+        $config->value = '05';
+
+        $configgenerator->insert_config($config);
+
+        $config->name = 'hour_last_modification_date';
+        $config->value = '00';
+
+        $configgenerator->insert_config($config);
+
+        $config->name = 'minutes_last_modification_date';
+        $config->value = '20';
+
+        $configgenerator->insert_config($config);
+
+        $config->name = 'seconds_last_modification_date';
+        $config->value = '20';
+
+        $configgenerator->insert_config($config);
+
+        $timecreated = date_config_to_timestamp('creation');
+        $timemodified = date_config_to_timestamp('last_modification');
+
+        $this->assertSame($timecreated, 1122958799);
+        $this->assertSame($timemodified, 1641360020);
     }
 }
