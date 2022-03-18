@@ -68,18 +68,28 @@ $string['delete_courses'] = 'Eliminar Cursos';
 $string['alert_delete_recent_courses_content'] = 'Para eliminar los cursos creados hace menos de un año, por favor diligenciar el siguiente';
 $string['alert_delete_recent_courses_link'] = 'formulario';
 
-// Settings.
-$string['manage'] = 'Settings for the Delete Old Courses Plugin';
+// Plugin settings.
+$string['manage'] = 'Configuración del plugin Eliminación de Cursos Antiguos';
 $string['courses'] = 'Eliminación de cursos antiguos';
-$string['criteriasettingsheading'] = 'Criterios para la eliminación de cursos';
-$string['criteriasettingsheading_desc'] = 'Criterios utilizados para consultar los cursos que serán eliminados automáticamente.';
-$string['daystartdate'] = 'Día';
-$string['daystartdate_desc'] = 'Día de la fecha de inicio utilizada como criterio para eliminar cursos';
-$string['monthstartdate'] = 'Mes';
-$string['monthstartdate_desc'] = 'Mes de la fecha de inicio utilizada como criterio para eliminar cursos';
-$string['yearstartdate'] = 'Año';
-$string['yearstartdate_desc'] = 'Año de la fecha de inicio utilizada como criterio para eliminar cursos';
-$string['sizecoursequeue'] = 'Size of queue';
-$string['sizecoursequeue_desc'] = 'Size of queue';
 
-// Date elements.
+// Date settings.
+$string['criteriasettingsheading'] = 'Criterios de fecha para la eliminación de cursos';
+$string['criteriasettingsheading_desc'] = 'Fecha desde la cual se seleccionan los cursos a eliminar';
+$string['yearstartdate'] = 'Año';
+$string['yearstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el año 2005 en adelante.';
+$string['monthstartdate'] = 'Mes';
+$string['monthstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el mes de Enero en adelante.';
+$string['daystartdate'] = 'Día';
+$string['daystartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el día 1 del mes en adelante.';
+$string['hourstartdate'] = 'Hora';
+$string['hourstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde la hora 00 del día en adelante.';
+$string['minutesstartdate'] = 'Minutos';
+$string['minutesstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el minuto 00 de la hora en adelante.';
+$string['secondsstartdate'] = 'Segundos';
+$string['secondsstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el segundo 00 del minuto en adelante.';
+
+// Multiple parameter settings.
+$string['parameterssettingsheading'] = 'Parametros del proceso de eliminación de cursos';
+$string['parameterssettingsheading_desc'] = 'Configuración de múltiples parametros para filtrar los cursos a eliminar';
+$string['coursequeuesize'] = 'Tamaño de la cola de cursos a eliminar';
+$string['coursequeuesize_desc'] = 'Ejemplo: los cursos son eliminados en una cola de tamaño máximo de 500 cursos por ejecución.';

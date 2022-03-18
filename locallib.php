@@ -813,6 +813,51 @@ function countDeletedCourses($starttime) {
     return $deletedcourses;
 }
 
+function getYears() {
+    $years = array();
+    $fromyear = 2005;
+    $toyear = 2040;
+    for ($i = $fromyear; $i <= $toyear; $i++) {
+        array_push($years, $i);
+    }
+    return $years;
+}
+
+function getMonthsOfTheYear() {
+    global $SESSION;
+    $monthsoftheyear = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+    if($SESSION->lang == 'en') {
+        $monthsoftheyear = array('January', 'February', 'March', 'April', 'May','June',
+                'July', 'August', 'September', 'October', 'November', 'December');
+    }
+    return $monthsoftheyear;
+}
+
+function getDaysOfTheMonth() {
+    $daysofthemonth = array();
+    for ($i = 1; $i <= 31; $i++) {
+        array_push($daysofthemonth, $i);
+    }
+    return $daysofthemonth;
+}
+
+function getHoursInADay() {
+    $hoursinaday = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
+    for ($i = 10; $i <= 24; $i++) {
+        array_push($hoursinaday, strval($i));
+    }
+    return $hoursinaday;
+}
+
+function getMinutesInAHour() {
+    $minutesinahour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
+    for ($i = 10; $i <= 59; $i++) {
+        array_push($minutesinahour, strval($i));
+    }
+    return $minutesinahour;
+}
+
 /****************************************************************************
 **************************** End Other Methods ******************************
 ****************************************************************************/

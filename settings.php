@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+
 // Fecha de inicio de los cursos a borrar.
 // Fecha de modificacion de los cursos a borrar.
 // Tamanio de la cola de cursos a borrar.
@@ -37,45 +39,17 @@ if ($hassiteconfig) {
 
     if ($ADMIN->fulltree) {
 
-        $daysofmonth = array();
-
-        for ($i = 1; $i <= 31; $i++) {
-            array_push($daysofmonth, $i);
-        }
-
-        $monthsofyear = array(
-            'Enero',
-            'Febrero',
-            'Marzo',
-            'Abril'
-        );
-
-        $years = array();
-        for ($i = 2005; $i <= 2040; $i++) {
-            array_push($years, $i);
-        }
+        $years = getYears();
+        $monthsoftheyear = getMonthsOfTheYear();
+        $daysofthemonth = getDaysOfTheMonth();
+        $hoursinaday = getHoursInADay();
+        $minutesinahour = getMinutesInAHour(); // Also used for the secondsstartdate option (seconds in a minute)
 
         // Criteria to delete.
         $settingspage->add(new admin_setting_heading(
             'criteriasettingsheading',
             new lang_string('criteriasettingsheading', 'local_deleteoldcourses'),
             new lang_string('criteriasettingsheading_desc', 'local_deleteoldcourses')));
-
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/daystartdate',
-            new lang_string('daystartdate', 'local_deleteoldcourses'),
-            new lang_string('daystartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $daysofmonth
-        ));
-
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/monthstartdate',
-            new lang_string('monthstartdate', 'local_deleteoldcourses'),
-            new lang_string('monthstartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $monthsofyear
-        ));
 
         $settingspage->add(new admin_setting_configselect(
             'local_deleteoldcourses/yearstartdate',
@@ -85,7 +59,45 @@ if ($hassiteconfig) {
             $years
         ));
 
-        // Configuraciones de la hora, minutos y segundos.
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/monthstartdate',
+            new lang_string('monthstartdate', 'local_deleteoldcourses'),
+            new lang_string('monthstartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $monthsoftheyear
+        ));
+
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/daystartdate',
+            new lang_string('daystartdate', 'local_deleteoldcourses'),
+            new lang_string('daystartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $daysofthemonth
+        ));
+
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/hourstartdate',
+            new lang_string('hourstartdate', 'local_deleteoldcourses'),
+            new lang_string('hourstartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $hoursinaday
+        ));
+
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/minutesstartdate',
+            new lang_string('minutesstartdate', 'local_deleteoldcourses'),
+            new lang_string('minutesstartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $minutesinahour
+        ));
+
+        $settingspage->add(new admin_setting_configselect(
+            'local_deleteoldcourses/secondsstartdate',
+            new lang_string('secondsstartdate', 'local_deleteoldcourses'),
+            new lang_string('secondsstartdate_desc', 'local_deleteoldcourses'),
+            0,
+            $minutesinahour
+        ));
 
         // Configuraciones para la fecha de modificacion de los cursos.
 
@@ -96,9 +108,9 @@ if ($hassiteconfig) {
             new lang_string('parameterssettingsheading_desc', 'local_deleteoldcourses')));
 
         $settingspage->add(new admin_setting_configtext(
-            'local_deleteoldcourses/sizecoursequeue',
-            new lang_string('sizecoursequeue', 'local_deleteoldcourses'),
-            new lang_string('sizecoursequeue_desc', 'local_deleteoldcourses'),
+            'local_deleteoldcourses/coursequeuesize',
+            new lang_string('coursequeuesize', 'local_deleteoldcourses'),
+            new lang_string('coursequeuesize_desc', 'local_deleteoldcourses'),
             500,
             PARAM_INT,
             3
