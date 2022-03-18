@@ -29,6 +29,8 @@ namespace local_deleteoldcourses;
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+
 /**
  * Course dispatcher class for Delete Old Courses
  *
@@ -46,6 +48,6 @@ class course_dispatcher {
     protected $categoriestoignore;
 
     public function __construct() {
-        $this->timecreatedcriteria = '';
+        $this->timecreatedcriteria = date_config_to_timestamp();
     }
 }
