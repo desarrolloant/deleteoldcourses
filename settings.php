@@ -45,56 +45,56 @@ if ($ADMIN->fulltree) {
     $hoursinaday = get_hours_in_day();
     $minutesinahour = get_minutes_in_hour(); // Also used for the secondsstartdate option (seconds in a minute).
 
-    // Criteria to courses start date.
+    // Criteria to courses creation date.
     $settingspage->add(new admin_setting_heading(
-        'local_deleteoldcourses/courses_start_date_criteria_heading',
-        new lang_string('courses_start_date_criteria_heading', 'local_deleteoldcourses'),
-        new lang_string('courses_start_date_criteria_heading_desc', 'local_deleteoldcourses')));
+        'courses_creation_date_criteria_heading',
+        new lang_string('courses_creation_date_criteria_heading', 'local_deleteoldcourses'),
+        new lang_string('courses_creation_date_criteria_heading_desc', 'local_deleteoldcourses')));
 
     $settingspage->add(new admin_setting_configselect(
-        'local_deleteoldcourses/year_start_date',
+        'year_creation_date',
         new lang_string('year', 'local_deleteoldcourses'),
-        new lang_string('year_start_date_desc', 'local_deleteoldcourses'),
+        new lang_string('year_creation_date_desc', 'local_deleteoldcourses'),
         0,
         $years
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'local_deleteoldcourses/month_start_date',
+        'month_creation_date',
         new lang_string('month', 'local_deleteoldcourses'),
-        new lang_string('month_start_date_desc', 'local_deleteoldcourses'),
+        new lang_string('month_creation_date_desc', 'local_deleteoldcourses'),
         0,
         $monthsoftheyear
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'local_deleteoldcourses/day_start_date',
+        'day_creation_date',
         new lang_string('day', 'local_deleteoldcourses'),
-        new lang_string('day_start_date_desc', 'local_deleteoldcourses'),
+        new lang_string('day_creation_date_desc', 'local_deleteoldcourses'),
         0,
         $daysofthemonth
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'local_deleteoldcourses/hour_start_date',
+        'hour_creation_date',
         new lang_string('hour', 'local_deleteoldcourses'),
-        new lang_string('hour_start_date_desc', 'local_deleteoldcourses'),
+        new lang_string('hour_creation_date_desc', 'local_deleteoldcourses'),
         0,
         $hoursinaday
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'local_deleteoldcourses/minutes_start_date',
+        'minutes_creation_date',
         new lang_string('minutes', 'local_deleteoldcourses'),
-        new lang_string('minutes_start_date_desc', 'local_deleteoldcourses'),
+        new lang_string('minutes_creation_date_desc', 'local_deleteoldcourses'),
         0,
         $minutesinahour
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'local_deleteoldcourses/seconds_start_date',
+        'seconds_creation_date',
         new lang_string('seconds', 'local_deleteoldcourses'),
-        new lang_string('seconds_start_date_desc', 'local_deleteoldcourses'),
+        new lang_string('seconds_creation_date_desc', 'local_deleteoldcourses'),
         0,
         $minutesinahour
     ));

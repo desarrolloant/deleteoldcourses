@@ -848,8 +848,18 @@ function get_months_of_the_year() {
     $strnovember = get_string('november', 'local_deleteoldcourses');
     $strdecember = get_string('december', 'local_deleteoldcourses');
 
-    $monthsoftheyear = array($strjanuary, $strfebruary, $strmarch, $strapril, $strmay, $strjune, $strjuly,
-                            $straugust, $strseptember, $stroctober, $strnovember, $strdecember);
+    $monthsoftheyear = array('01' => $strjanuary,
+                            '02' => $strfebruary,
+                            '03' => $strmarch,
+                            '04' => $strapril,
+                            '05' => $strmay,
+                            '06' => $strjune,
+                            '07' => $strjuly,
+                            '08' => $straugust,
+                            '09' => $strseptember,
+                            '10' => $stroctober,
+                            '11' => $strnovember,
+                            '12' => $strdecember);
 
     return $monthsoftheyear;
 }
@@ -891,6 +901,28 @@ function get_minutes_in_hour() {
         array_push($minutesinahour, strval($i));
     }
     return $minutesinahour;
+}
+
+/**
+ * date_to_timestamp
+ *
+ * @return string $creationdate
+ */
+function date_config_to_timestamp() {
+
+    $year = get_config('local_deleteoldcourses',  'year_creation_date');
+    $month = get_config('local_deleteoldcourses', 'month_creation_date');
+    $day = get_config('local_deleteoldcourses', 'day_creation_date');
+    $hour = get_config('local_deleteoldcourses', 'hour_creation_date');
+    $minutes = get_config('local_deleteoldcourses', 'minutes_creation_date');
+    $seconds = get_config('local_deleteoldcourses', 'seconds_creation_date');
+
+    $creationdate = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minutes . ":" . $seconds;
+    $creationdate = new DateTime($creationdate, new DateTimeZone('America/Bogota'));
+
+    $timecreated = $creationdate->getTimestamp();
+
+    return $timecreated;
 }
 
 /****************************************************************************

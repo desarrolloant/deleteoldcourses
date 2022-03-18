@@ -75,14 +75,14 @@ $string['criteriatab'] = 'Criterios';
 $string['criteriasettingsheading'] = 'Fechas para la eliminación de cursos';
 $string['criteriasettingsheading_desc'] = 'Fecha desde la cual se seleccionan los cursos a eliminar';
 
-$string['courses_start_date_criteria_heading'] = 'Criterio: fecha de inicio de los cursos';
-$string['courses_start_date_criteria_heading_desc'] = 'Descripción del criterio fecha de inicio';
-$string['year_start_date_desc'] = 'Ejemplo: se seleccionan cursos desde el año 2005 en adelante.';
-$string['month_start_date_desc'] = 'Ejemplo: se seleccionan cursos desde el mes de Enero en adelante.';
-$string['day_start_date_desc'] = 'Ejemplo: se seleccionan cursos desde el día 1 del mes en adelante.';
-$string['hourstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde la hora 00 del día en adelante.';
-$string['minutesstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el minuto 00 de la hora en adelante.';
-$string['secondsstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el segundo 00 del minuto en adelante.';
+$string['courses_creation_date_criteria_heading'] = 'Criterio: fecha de inicio de los cursos';
+$string['courses_creation_date_criteria_heading_desc'] = 'Descripción del criterio fecha de inicio';
+$string['year_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el año 2005 en adelante.';
+$string['month_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el mes de Enero en adelante.';
+$string['day_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el día 1 del mes en adelante.';
+$string['hour_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde la hora 00 del día en adelante.';
+$string['minutes_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el minuto 00 de la hora en adelante.';
+$string['seconds_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el segundo 00 del minuto en adelante.';
 
 $string['courses_last_modification_date_criteria_heading'] = 'Criterio: fecha de última modificación de los cursos';
 $string['courses_last_modification_date_criteria_heading_desc'] = 'Descripción del criterio última fecha de modificación';

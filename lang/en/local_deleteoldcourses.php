@@ -75,14 +75,14 @@ $string['criteriatab'] = 'Criterias';
 $string['criteriasettingsheading'] = 'Date criteria for courses deletion';
 $string['criteriasettingsheading_desc'] = 'Date from which the courses to be deleted are selected';
 
-$string['courses_start_date_criteria_heading'] = 'Criterio: fecha de inicio de los cursos';
-$string['courses_start_date_criteria_heading_desc'] = 'Descripción del criterio fecha de inicio';
-$string['year_start_date_desc'] = 'Example: courses are selected from the year of 2005 onwards.';
-$string['month_start_date_desc'] = 'Example: courses are selected from the month of January onwards.';
-$string['day_start_date_desc'] = 'Example: courses are selected from the 1st day of the month onwards.';
-$string['hour_start_date_desc'] = 'Example: courses are selected from the 00 hour of the day onwards.';
-$string['minutes_start_date_desc'] = 'Example: courses are selected from the 00 minutes of the hour onwards.';
-$string['seconds_start_date_desc'] = 'Example: courses are selected from the 00 seconds of the minute onwards.';
+$string['courses_creation_date_criteria_heading'] = 'Criterio: fecha de inicio de los cursos';
+$string['courses_creation_date_criteria_heading_desc'] = 'Descripción del criterio fecha de inicio';
+$string['year_creation_date_desc'] = 'Example: courses are selected from the year of 2005 onwards.';
+$string['month_creation_date_desc'] = 'Example: courses are selected from the month of January onwards.';
+$string['day_creation_date_desc'] = 'Example: courses are selected from the 1st day of the month onwards.';
+$string['hour_creation_date_desc'] = 'Example: courses are selected from the 00 hour of the day onwards.';
+$string['minutes_creation_date_desc'] = 'Example: courses are selected from the 00 minutes of the hour onwards.';
+$string['seconds_creation_date_desc'] = 'Example: courses are selected from the 00 seconds of the minute onwards.';
 
 $string['courses_last_modification_date_criteria_heading'] = 'Criterio: fecha de última modificación de los cursos';
 $string['courses_last_modification_date_criteria_heading_desc'] = 'Descripción del criterio última fecha de modificación';
