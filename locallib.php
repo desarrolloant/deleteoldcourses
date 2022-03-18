@@ -908,21 +908,21 @@ function get_minutes_in_hour() {
  *
  * @return string $creationdate
  */
-function date_config_to_timestamp() {
+function date_config_to_timestamp($datetype) {
 
-    $year = get_config('local_deleteoldcourses',  'year_creation_date');
-    $month = get_config('local_deleteoldcourses', 'month_creation_date');
-    $day = get_config('local_deleteoldcourses', 'day_creation_date');
-    $hour = get_config('local_deleteoldcourses', 'hour_creation_date');
-    $minutes = get_config('local_deleteoldcourses', 'minutes_creation_date');
-    $seconds = get_config('local_deleteoldcourses', 'seconds_creation_date');
+    $year = get_config('local_deleteoldcourses',  'year_' . $datetype . '_date');
+    $month = get_config('local_deleteoldcourses', 'month_' . $datetype . '_date');
+    $day = get_config('local_deleteoldcourses', 'day_' . $datetype . '_date');
+    $hour = get_config('local_deleteoldcourses', 'hour_' . $datetype . '_date');
+    $minutes = get_config('local_deleteoldcourses', 'minutes_' . $datetype . '_date');
+    $seconds = get_config('local_deleteoldcourses', 'seconds_' . $datetype . '_date');
 
-    $creationdate = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minutes . ":" . $seconds;
-    $creationdate = new DateTime($creationdate, new DateTimeZone('America/Bogota'));
+    $date = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minutes . ":" . $seconds;
+    $date = new DateTime($date, new DateTimeZone('America/Bogota'));
 
-    $timecreated = $creationdate->getTimestamp();
+    $timestamp = $date->getTimestamp();
 
-    return $timecreated;
+    return $timestamp;
 }
 
 /****************************************************************************
