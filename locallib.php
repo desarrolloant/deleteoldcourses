@@ -813,7 +813,12 @@ function countDeletedCourses($starttime) {
     return $deletedcourses;
 }
 
-function getYears() {
+/**
+ * Return years array
+ *
+ * @return array $years
+ */
+function get_years() {
     $years = array();
     $fromyear = 2005;
     $toyear = 2040;
@@ -823,18 +828,38 @@ function getYears() {
     return $years;
 }
 
-function getMonthsOfTheYear() {
-    global $SESSION;
-    $monthsoftheyear = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
-    if($SESSION->lang == 'en') {
-        $monthsoftheyear = array('January', 'February', 'March', 'April', 'May','June',
-                'July', 'August', 'September', 'October', 'November', 'December');
-    }
+/**
+ * Return a month array
+ *
+ * @return array $monthsoftheyear
+ */
+function get_months_of_the_year() {
+
+    $strjanuary = get_string('january', 'local_deleteoldcourses');
+    $strfebruary = get_string('february', 'local_deleteoldcourses');
+    $strmarch = get_string('march', 'local_deleteoldcourses');
+    $strapril = get_string('april', 'local_deleteoldcourses');
+    $strmay = get_string('may', 'local_deleteoldcourses');
+    $strjune = get_string('june', 'local_deleteoldcourses');
+    $strjuly = get_string('july', 'local_deleteoldcourses');
+    $straugust = get_string('august', 'local_deleteoldcourses');
+    $strseptember = get_string('september', 'local_deleteoldcourses');
+    $stroctober = get_string('october', 'local_deleteoldcourses');
+    $strnovember = get_string('november', 'local_deleteoldcourses');
+    $strdecember = get_string('december', 'local_deleteoldcourses');
+
+    $monthsoftheyear = array($strjanuary, $strfebruary, $strmarch, $strapril, $strmay, $strjune, $strjuly,
+                            $straugust, $strseptember, $stroctober, $strnovember, $strdecember);
+
     return $monthsoftheyear;
 }
 
-function getDaysOfTheMonth() {
+/**
+ * get_days_of__the_month
+ *
+ * @return array $daysofthemonth
+ */
+function get_days_of_the_month() {
     $daysofthemonth = array();
     for ($i = 1; $i <= 31; $i++) {
         array_push($daysofthemonth, $i);
@@ -842,15 +867,25 @@ function getDaysOfTheMonth() {
     return $daysofthemonth;
 }
 
-function getHoursInADay() {
+/**
+ * Return hours in a day
+ *
+ * @return array $hoursinaday
+ */
+function get_hours_in_day() {
     $hoursinaday = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-    for ($i = 10; $i <= 24; $i++) {
+    for ($i = 10; $i <= 23; $i++) {
         array_push($hoursinaday, strval($i));
     }
     return $hoursinaday;
 }
 
-function getMinutesInAHour() {
+/**
+ * Return minutes in a day
+ *
+ * @return array $minutesinahour
+ */
+function get_minutes_in_hour() {
     $minutesinahour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
     for ($i = 10; $i <= 59; $i++) {
         array_push($minutesinahour, strval($i));

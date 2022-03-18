@@ -69,27 +69,53 @@ $string['alert_delete_recent_courses_content'] = 'To delete courses created less
 $string['alert_delete_recent_courses_link'] = 'form';
 
 // Plugin settings.
-$string['manage'] = 'Settings of the Delete Old Courses Plugin';
+$string['manage'] = 'Delete Old Courses';
 $string['courses'] = 'cursos**';
-
-// Date settings.
+$string['criteriatab'] = 'Criterias';
 $string['criteriasettingsheading'] = 'Date criteria for courses deletion';
 $string['criteriasettingsheading_desc'] = 'Date from which the courses to be deleted are selected';
-$string['yearstartdate'] = 'Year';
-$string['yearstartdate_desc'] = 'Example: courses are selected from the year of 2005 onwards.';
-$string['monthstartdate'] = 'Month';
-$string['monthstartdate_desc'] = 'Example: courses are selected from the month of January onwards.';
-$string['daystartdate'] = 'Day';
-$string['daystartdate_desc'] = 'Example: courses are selected from the 1st day of the month onwards.';
-$string['hourstartdate'] = 'Hour';
-$string['hourstartdate_desc'] = 'Example: courses are selected from the 00 hour of the day onwards.';
-$string['minutesstartdate'] = 'Minutes';
-$string['minutesstartdate_desc'] = 'Example: courses are selected from the 00 minutes of the hour onwards.';
-$string['secondsstartdate'] = 'Seconds';
-$string['secondsstartdate_desc'] = 'Example: courses are selected from the 00 seconds of the minute onwards.';
+
+$string['courses_start_date_criteria_heading'] = 'Criterio: fecha de inicio de los cursos';
+$string['courses_start_date_criteria_heading_desc'] = 'Descripción del criterio fecha de inicio';
+$string['year_start_date_desc'] = 'Example: courses are selected from the year of 2005 onwards.';
+$string['month_start_date_desc'] = 'Example: courses are selected from the month of January onwards.';
+$string['day_start_date_desc'] = 'Example: courses are selected from the 1st day of the month onwards.';
+$string['hour_start_date_desc'] = 'Example: courses are selected from the 00 hour of the day onwards.';
+$string['minutes_start_date_desc'] = 'Example: courses are selected from the 00 minutes of the hour onwards.';
+$string['seconds_start_date_desc'] = 'Example: courses are selected from the 00 seconds of the minute onwards.';
+
+$string['courses_last_modification_date_criteria_heading'] = 'Criterio: fecha de última modificación de los cursos';
+$string['courses_last_modification_date_criteria_heading_desc'] = 'Descripción del criterio última fecha de modificación';
+$string['year_last_modification_date_desc'] = 'Ejemplo';
+$string['month_last_modification_date_desc'] = 'Ejemplo';
+$string['day_last_modification_date_desc'] = 'Ejemplo';
+$string['hour_last_modification_date_desc'] = 'Ejemplo';
+$string['minutes_last_modification_date_desc'] = 'Ejemplo';
+$string['seconds_last_modification_date_desc'] = 'Ejemplo';
 
 // Multiple parameter settings.
-$string['parameterssettingsheading'] = 'Parameters of the courses elimination process';
-$string['parameterssettingsheading_desc'] = 'Settings of multiple parameters to filter the courses to be deleted';
-$string['coursequeuesize'] = 'Queue size of courses to delete';
-$string['coursequeuesize_desc'] = 'Example: courses are deleted in a queue with a maximum size of 500 courses per execution.';
+$string['parameterstab'] = 'Parameters';
+$string['settings_parameters_heading'] = 'Parameters of the courses elimination process';
+$string['settings_parameters_heading_desc'] = 'Settings of multiple parameters to filter the courses to be deleted';
+$string['course_queue_size'] = 'Queue size of courses to delete';
+$string['course_queue_size_desc'] = 'Example: courses are deleted in a queue with a maximum size of 500 courses per execution.';
+
+// Date settings.
+$string['january'] = 'January';
+$string['february'] = 'February';
+$string['march'] = 'March';
+$string['april'] = 'April';
+$string['may'] = 'May';
+$string['june'] = 'June';
+$string['july'] = 'July';
+$string['august'] = 'August';
+$string['september'] = 'September';
+$string['october'] = 'October';
+$string['november'] = 'November';
+$string['december'] = 'December';
+$string['year'] = 'Year';
+$string['month'] = 'Month';
+$string['day'] = 'Day';
+$string['hour'] = 'Hour';
+$string['minutes'] = 'Minutes';
+$string['seconds'] = 'Seconds';

@@ -69,27 +69,49 @@ $string['alert_delete_recent_courses_content'] = 'Para eliminar los cursos cread
 $string['alert_delete_recent_courses_link'] = 'formulario';
 
 // Plugin settings.
-$string['manage'] = 'Configuración del plugin Eliminación de Cursos Antiguos';
+$string['manage'] = 'Eliminación de Cursos Antiguos';
 $string['courses'] = 'Eliminación de cursos antiguos';
-
-// Date settings.
-$string['criteriasettingsheading'] = 'Criterios de fecha para la eliminación de cursos';
+$string['criteriatab'] = 'Criterios';
+$string['criteriasettingsheading'] = 'Fechas para la eliminación de cursos';
 $string['criteriasettingsheading_desc'] = 'Fecha desde la cual se seleccionan los cursos a eliminar';
-$string['yearstartdate'] = 'Año';
-$string['yearstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el año 2005 en adelante.';
-$string['monthstartdate'] = 'Mes';
-$string['monthstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el mes de Enero en adelante.';
-$string['daystartdate'] = 'Día';
-$string['daystartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el día 1 del mes en adelante.';
-$string['hourstartdate'] = 'Hora';
+
+$string['courses_start_date_criteria_heading'] = 'Criterio: fecha de inicio de los cursos';
+$string['courses_start_date_criteria_heading_desc'] = 'Descripción del criterio fecha de inicio';
+$string['year_start_date_desc'] = 'Ejemplo: se seleccionan cursos desde el año 2005 en adelante.';
+$string['month_start_date_desc'] = 'Ejemplo: se seleccionan cursos desde el mes de Enero en adelante.';
+$string['day_start_date_desc'] = 'Ejemplo: se seleccionan cursos desde el día 1 del mes en adelante.';
 $string['hourstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde la hora 00 del día en adelante.';
-$string['minutesstartdate'] = 'Minutos';
 $string['minutesstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el minuto 00 de la hora en adelante.';
-$string['secondsstartdate'] = 'Segundos';
 $string['secondsstartdate_desc'] = 'Ejemplo: se seleccionan cursos desde el segundo 00 del minuto en adelante.';
 
+$string['courses_last_modification_date_criteria_heading'] = 'Criterio: fecha de última modificación de los cursos';
+$string['courses_last_modification_date_criteria_heading_desc'] = 'Descripción del criterio última fecha de modificación';
+$string['year_last_modification_date_desc'] = 'Ejemplo';
+
 // Multiple parameter settings.
-$string['parameterssettingsheading'] = 'Parametros del proceso de eliminación de cursos';
-$string['parameterssettingsheading_desc'] = 'Configuración de múltiples parametros para filtrar los cursos a eliminar';
-$string['coursequeuesize'] = 'Tamaño de la cola de cursos a eliminar';
-$string['coursequeuesize_desc'] = 'Ejemplo: los cursos son eliminados en una cola de tamaño máximo de 500 cursos por ejecución.';
+$string['parameterstab'] = 'Parámetros';
+$string['settings_parameters_heading'] = 'Parámetros del proceso de eliminación de cursos';
+$string['settings_parameters_heading_desc'] = 'Configuración de múltiples parametros para filtrar los cursos a eliminar';
+$string['course_queue_size'] = 'Tamaño de la cola de cursos a eliminar';
+$string['course_queue_size_desc'] = 'Ejemplo: los cursos son eliminados en una cola de tamaño máximo de 500 cursos por ejecución.';
+
+// Date settings.
+$string['january'] = 'Enero';
+$string['february'] = 'Febrero';
+$string['march'] = 'Marzo';
+$string['april'] = 'Abril';
+$string['may'] = 'Mayo';
+$string['june'] = 'Junio';
+$string['july'] = 'Julio';
+$string['august'] = 'Agosto';
+$string['september'] = 'Septiembre';
+$string['october'] = 'Octubre';
+$string['november'] = 'Noviembre';
+$string['december'] = 'Diciembre';
+$string['year'] = 'Año';
+$string['month'] = 'Mes';
+$string['day'] = 'Día';
+$string['hour'] = 'Hora';
+$string['minutes'] = 'Minutos';
+$string['seconds'] = 'Segundos';
+

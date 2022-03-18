@@ -27,103 +27,157 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 
-// Fecha de inicio de los cursos a borrar.
-// Fecha de modificacion de los cursos a borrar.
-// Tamanio de la cola de cursos a borrar.
+$ADMIN->add('localplugins',
+        new admin_category('localdeleteoldcoursessettings',
+        new lang_string('pluginname', 'local_deleteoldcourses')));
 
-if ($hassiteconfig) {
-    $ADMIN->add('localplugins',
-                new admin_category('local_deleteoldcourses_settings',
-                new lang_string('pluginname', 'local_deleteoldcourses')));
-    $settingspage = new admin_settingpage('managelocaldeleteoldcourses', new lang_string('manage', 'local_deleteoldcourses'));
+// Boost provides a nice setting page which splits settings onto separate tabs. We want to use it here.
+$settings = new theme_boost_admin_settingspage_tabs('managelocaldeleteoldcourses',
+                                                    get_string('manage', 'local_deleteoldcourses'));
 
-    if ($ADMIN->fulltree) {
+if ($ADMIN->fulltree) {
 
-        $years = getYears();
-        $monthsoftheyear = getMonthsOfTheYear();
-        $daysofthemonth = getDaysOfTheMonth();
-        $hoursinaday = getHoursInADay();
-        $minutesinahour = getMinutesInAHour(); // Also used for the secondsstartdate option (seconds in a minute)
+    $settingspage = new admin_settingpage('deletioncriterias', new lang_string('criteriatab', 'local_deleteoldcourses'));
 
-        // Criteria to delete.
-        $settingspage->add(new admin_setting_heading(
-            'criteriasettingsheading',
-            new lang_string('criteriasettingsheading', 'local_deleteoldcourses'),
-            new lang_string('criteriasettingsheading_desc', 'local_deleteoldcourses')));
+    $years = get_years();
+    $monthsoftheyear = get_months_of_the_year();
+    $daysofthemonth = get_days_of_the_month();
+    $hoursinaday = get_hours_in_day();
+    $minutesinahour = get_minutes_in_hour(); // Also used for the secondsstartdate option (seconds in a minute).
 
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/yearstartdate',
-            new lang_string('yearstartdate', 'local_deleteoldcourses'),
-            new lang_string('yearstartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $years
-        ));
+    // Criteria to courses start date.
+    $settingspage->add(new admin_setting_heading(
+        'local_deleteoldcourses/courses_start_date_criteria_heading',
+        new lang_string('courses_start_date_criteria_heading', 'local_deleteoldcourses'),
+        new lang_string('courses_start_date_criteria_heading_desc', 'local_deleteoldcourses')));
 
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/monthstartdate',
-            new lang_string('monthstartdate', 'local_deleteoldcourses'),
-            new lang_string('monthstartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $monthsoftheyear
-        ));
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/year_start_date',
+        new lang_string('year', 'local_deleteoldcourses'),
+        new lang_string('year_start_date_desc', 'local_deleteoldcourses'),
+        0,
+        $years
+    ));
 
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/daystartdate',
-            new lang_string('daystartdate', 'local_deleteoldcourses'),
-            new lang_string('daystartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $daysofthemonth
-        ));
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/month_start_date',
+        new lang_string('month', 'local_deleteoldcourses'),
+        new lang_string('month_start_date_desc', 'local_deleteoldcourses'),
+        0,
+        $monthsoftheyear
+    ));
 
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/hourstartdate',
-            new lang_string('hourstartdate', 'local_deleteoldcourses'),
-            new lang_string('hourstartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $hoursinaday
-        ));
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/day_start_date',
+        new lang_string('day', 'local_deleteoldcourses'),
+        new lang_string('day_start_date_desc', 'local_deleteoldcourses'),
+        0,
+        $daysofthemonth
+    ));
 
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/minutesstartdate',
-            new lang_string('minutesstartdate', 'local_deleteoldcourses'),
-            new lang_string('minutesstartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $minutesinahour
-        ));
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/hour_start_date',
+        new lang_string('hour', 'local_deleteoldcourses'),
+        new lang_string('hour_start_date_desc', 'local_deleteoldcourses'),
+        0,
+        $hoursinaday
+    ));
 
-        $settingspage->add(new admin_setting_configselect(
-            'local_deleteoldcourses/secondsstartdate',
-            new lang_string('secondsstartdate', 'local_deleteoldcourses'),
-            new lang_string('secondsstartdate_desc', 'local_deleteoldcourses'),
-            0,
-            $minutesinahour
-        ));
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/minutes_start_date',
+        new lang_string('minutes', 'local_deleteoldcourses'),
+        new lang_string('minutes_start_date_desc', 'local_deleteoldcourses'),
+        0,
+        $minutesinahour
+    ));
 
-        // Configuraciones para la fecha de modificacion de los cursos.
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/seconds_start_date',
+        new lang_string('seconds', 'local_deleteoldcourses'),
+        new lang_string('seconds_start_date_desc', 'local_deleteoldcourses'),
+        0,
+        $minutesinahour
+    ));
 
-        // Parameters of the delete process.
-        $settingspage->add(new admin_setting_heading(
-            'parameterssettingsheading',
-            new lang_string('parameterssettingsheading', 'local_deleteoldcourses'),
-            new lang_string('parameterssettingsheading_desc', 'local_deleteoldcourses')));
+    // Criteria to courses modify date.
+    $settingspage->add(new admin_setting_heading(
+        'local_deleteoldcourses/courses_last_modification_date_criteria_heading',
+        new lang_string('courses_last_modification_date_criteria_heading', 'local_deleteoldcourses'),
+        new lang_string('courses_last_modification_date_criteria_heading_desc', 'local_deleteoldcourses')));
 
-        $settingspage->add(new admin_setting_configtext(
-            'local_deleteoldcourses/coursequeuesize',
-            new lang_string('coursequeuesize', 'local_deleteoldcourses'),
-            new lang_string('coursequeuesize_desc', 'local_deleteoldcourses'),
-            500,
-            PARAM_INT,
-            3
-        ));
-    }
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/year_last_modification_date',
+        new lang_string('year', 'local_deleteoldcourses'),
+        new lang_string('year_last_modification_date_desc', 'local_deleteoldcourses'),
+        0,
+        $years
+    ));
 
-    $ADMIN->add('localplugins', $settingspage);
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/month_last_modification_date',
+        new lang_string('month', 'local_deleteoldcourses'),
+        new lang_string('month_last_modification_date_desc', 'local_deleteoldcourses'),
+        0,
+        $monthsoftheyear
+    ));
 
-    $ADMIN->add('reports', new admin_category('deleteoldcourses', new lang_string('pluginname', 'local_deleteoldcourses')));
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/day_last_modification_date',
+        new lang_string('day', 'local_deleteoldcourses'),
+        new lang_string('day_last_modification_date_desc', 'local_deleteoldcourses'),
+        0,
+        $daysofthemonth
+    ));
 
-    $ADMIN->add('deleteoldcourses',
-        new admin_externalpage('indexdeleteoldcourses', new lang_string('courses', 'local_deleteoldcourses'),
-            new moodle_url('/local/deleteoldcourses/index.php'), 'moodle/site:configview'
-        )
-    );
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/hour_last_modification_date',
+        new lang_string('hour', 'local_deleteoldcourses'),
+        new lang_string('hour_last_modification_date_desc', 'local_deleteoldcourses'),
+        0,
+        $hoursinaday
+    ));
+
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/minutes_last_modification_date',
+        new lang_string('minutes', 'local_deleteoldcourses'),
+        new lang_string('minutes_last_modification_date_desc', 'local_deleteoldcourses'),
+        0,
+        $minutesinahour
+    ));
+
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/seconds_last_modification_date',
+        new lang_string('seconds', 'local_deleteoldcourses'),
+        new lang_string('seconds_last_modification_date_desc', 'local_deleteoldcourses'),
+        0,
+        $minutesinahour
+    ));
+
+    // Must add the page after definiting all the settings!
+    $settings->add($settingspage);
+
+    // Configuraciones para la fecha de modificacion de los cursos.
+
+    $settingspage = new admin_settingpage('deletion_process_parameters',
+                                        new lang_string('parameterstab', 'local_deleteoldcourses'));
+
+    // Parameters of the delete process.
+    $settingspage->add(new admin_setting_heading(
+        'settings_parameters_heading',
+        new lang_string('settings_parameters_heading', 'local_deleteoldcourses'),
+        new lang_string('settings_parameters_heading_desc', 'local_deleteoldcourses')));
+
+    $settingspage->add(new admin_setting_configtext(
+        'local_deleteoldcourses/course_queue_size',
+        new lang_string('course_queue_size', 'local_deleteoldcourses'),
+        new lang_string('course_queue_size_desc', 'local_deleteoldcourses'),
+        500,
+        PARAM_INT,
+        3
+    ));
+
+    // Must add the page after definiting all the settings!
+    $settings->add($settingspage);
 }
+
+$ADMIN->add('localplugins', $settings);
