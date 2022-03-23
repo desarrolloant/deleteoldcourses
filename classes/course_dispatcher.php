@@ -47,7 +47,14 @@ class course_dispatcher {
     protected $timemodifiedcriteria;
     protected $categoriestoignore;
 
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct() {
-        $this->timecreatedcriteria = date_config_to_timestamp();
+
+        $this->timecreatedcriteria = date_config_to_timestamp('creation');
+        $this->timemodifiedcriteria = date_config_to_timestamp('last_modification');
     }
 }
