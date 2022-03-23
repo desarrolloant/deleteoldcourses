@@ -88,10 +88,12 @@ $string['courses_last_modification_date_criteria_heading'] = 'Criterio: fecha de
 $string['courses_last_modification_date_criteria_heading_desc'] = 'Descripción del criterio última fecha de modificación';
 $string['year_last_modification_date_desc'] = 'Ejemplo';
 
-// Multiple parameter settings.
-$string['parameterstab'] = 'Parámetros';
-$string['settings_parameters_heading'] = 'Parámetros del proceso de eliminación de cursos';
-$string['settings_parameters_heading_desc'] = 'Configuración de múltiples parametros para filtrar los cursos a eliminar';
+// Advanced settings.
+$string['advancedtab'] = 'Configuraciones avanzadas';
+$string['advanced_settings_heading'] = 'Configuraciones avanzadas para la eliminación de cursos';
+$string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
+$string['limit_query'] = 'Limite de la consulta';
+$string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
 $string['course_queue_size'] = 'Tamaño de la cola de cursos a eliminar';
 $string['course_queue_size_desc'] = 'Ejemplo: los cursos son eliminados en una cola de tamaño máximo de 500 cursos por ejecución.';
 
@@ -114,4 +116,9 @@ $string['day'] = 'Día';
 $string['hour'] = 'Hora';
 $string['minutes'] = 'Minutos';
 $string['seconds'] = 'Segundos';
+
+// Exceptions.
+$string['timecreated_criteria_is_empty'] = 'El criterio fecha de creación no puede estar vacio.';
+$string['timemodified_criteria_is_empty'] = 'El criterio fecha de modificación no puede estar vacio.';
+$string['limit_query_is_empty'] = 'El limite de la consulta no puede estar vacio.';
 

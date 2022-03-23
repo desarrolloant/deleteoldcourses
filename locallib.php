@@ -823,7 +823,7 @@ function get_years() {
     $fromyear = 2005;
     $toyear = 2040;
     for ($i = $fromyear; $i <= $toyear; $i++) {
-        array_push($years, $i);
+        $years[$i] = $i;
     }
     return $years;
 }
@@ -870,10 +870,17 @@ function get_months_of_the_year() {
  * @return array $daysofthemonth
  */
 function get_days_of_the_month() {
+
     $daysofthemonth = array();
+
     for ($i = 1; $i <= 31; $i++) {
-        array_push($daysofthemonth, $i);
+        if ($i < 10) {
+            $daysofthemonth['0' . $i] = '0' . $i;
+        } else {
+            $daysofthemonth[$i] = strval($i);
+        }
     }
+
     return $daysofthemonth;
 }
 
@@ -883,9 +890,15 @@ function get_days_of_the_month() {
  * @return array $hoursinaday
  */
 function get_hours_in_day() {
-    $hoursinaday = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-    for ($i = 10; $i <= 23; $i++) {
-        array_push($hoursinaday, strval($i));
+
+    $hoursinaday = array();
+
+    for ($i = 0; $i <= 23; $i++) {
+        if ($i < 10) {
+            $hoursinaday['0' . $i] = '0' . $i;
+        } else {
+            $hoursinaday[$i] = strval($i);
+        }
     }
     return $hoursinaday;
 }
@@ -896,10 +909,17 @@ function get_hours_in_day() {
  * @return array $minutesinahour
  */
 function get_minutes_in_hour() {
-    $minutesinahour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-    for ($i = 10; $i <= 59; $i++) {
-        array_push($minutesinahour, strval($i));
+
+    $minutesinahour = array();
+
+    for ($i = 0; $i <= 59; $i++) {
+        if ($i < 10) {
+            $minutesinahour['0' . $i] = '0' . $i;
+        } else {
+            $minutesinahour[$i] = strval($i);
+        }
     }
+
     return $minutesinahour;
 }
 

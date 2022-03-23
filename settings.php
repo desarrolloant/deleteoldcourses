@@ -47,12 +47,12 @@ if ($ADMIN->fulltree) {
 
     // Criteria to courses creation date.
     $settingspage->add(new admin_setting_heading(
-        'courses_creation_date_criteria_heading',
+        'local_deleteoldcourses/courses_creation_date_criteria_heading',
         new lang_string('courses_creation_date_criteria_heading', 'local_deleteoldcourses'),
         new lang_string('courses_creation_date_criteria_heading_desc', 'local_deleteoldcourses')));
 
     $settingspage->add(new admin_setting_configselect(
-        'year_creation_date',
+        'local_deleteoldcourses/year_creation_date',
         new lang_string('year', 'local_deleteoldcourses'),
         new lang_string('year_creation_date_desc', 'local_deleteoldcourses'),
         0,
@@ -60,7 +60,7 @@ if ($ADMIN->fulltree) {
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'month_creation_date',
+        'local_deleteoldcourses/month_creation_date',
         new lang_string('month', 'local_deleteoldcourses'),
         new lang_string('month_creation_date_desc', 'local_deleteoldcourses'),
         0,
@@ -68,7 +68,7 @@ if ($ADMIN->fulltree) {
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'day_creation_date',
+        'local_deleteoldcourses/day_creation_date',
         new lang_string('day', 'local_deleteoldcourses'),
         new lang_string('day_creation_date_desc', 'local_deleteoldcourses'),
         0,
@@ -76,7 +76,7 @@ if ($ADMIN->fulltree) {
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'hour_creation_date',
+        'local_deleteoldcourses/hour_creation_date',
         new lang_string('hour', 'local_deleteoldcourses'),
         new lang_string('hour_creation_date_desc', 'local_deleteoldcourses'),
         0,
@@ -84,7 +84,7 @@ if ($ADMIN->fulltree) {
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'minutes_creation_date',
+        'local_deleteoldcourses/minutes_creation_date',
         new lang_string('minutes', 'local_deleteoldcourses'),
         new lang_string('minutes_creation_date_desc', 'local_deleteoldcourses'),
         0,
@@ -92,7 +92,7 @@ if ($ADMIN->fulltree) {
     ));
 
     $settingspage->add(new admin_setting_configselect(
-        'seconds_creation_date',
+        'local_deleteoldcourses/seconds_creation_date',
         new lang_string('seconds', 'local_deleteoldcourses'),
         new lang_string('seconds_creation_date_desc', 'local_deleteoldcourses'),
         0,
@@ -158,14 +158,23 @@ if ($ADMIN->fulltree) {
 
     // Configuraciones para la fecha de modificacion de los cursos.
 
-    $settingspage = new admin_settingpage('deletion_process_parameters',
-                                        new lang_string('parameterstab', 'local_deleteoldcourses'));
+    $settingspage = new admin_settingpage('advanced_settings',
+                                        new lang_string('advancedtab', 'local_deleteoldcourses'));
 
-    // Parameters of the delete process.
+    // Advanced settings.
     $settingspage->add(new admin_setting_heading(
-        'settings_parameters_heading',
-        new lang_string('settings_parameters_heading', 'local_deleteoldcourses'),
-        new lang_string('settings_parameters_heading_desc', 'local_deleteoldcourses')));
+        'local_deleteoldcourses/advanced_settings_heading',
+        new lang_string('advanced_settings_heading', 'local_deleteoldcourses'),
+        new lang_string('advanced_settings_heading_desc', 'local_deleteoldcourses')));
+
+    $settingspage->add(new admin_setting_configtext(
+        'local_deleteoldcourses/limit_query',
+        new lang_string('limit_query', 'local_deleteoldcourses'),
+        new lang_string('limit_query_desc', 'local_deleteoldcourses'),
+        5000,
+        PARAM_INT,
+        5
+    ));
 
     $settingspage->add(new admin_setting_configtext(
         'local_deleteoldcourses/course_queue_size',
@@ -173,7 +182,7 @@ if ($ADMIN->fulltree) {
         new lang_string('course_queue_size_desc', 'local_deleteoldcourses'),
         500,
         PARAM_INT,
-        3
+        5
     ));
 
     // Must add the page after definiting all the settings!

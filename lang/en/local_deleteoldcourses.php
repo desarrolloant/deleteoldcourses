@@ -93,10 +93,12 @@ $string['hour_last_modification_date_desc'] = 'Ejemplo';
 $string['minutes_last_modification_date_desc'] = 'Ejemplo';
 $string['seconds_last_modification_date_desc'] = 'Ejemplo';
 
-// Multiple parameter settings.
-$string['parameterstab'] = 'Parameters';
-$string['settings_parameters_heading'] = 'Parameters of the courses elimination process';
-$string['settings_parameters_heading_desc'] = 'Settings of multiple parameters to filter the courses to be deleted';
+// Advanced settings.
+$string['advancedtab'] = 'Configuraciones avanzadas';
+$string['advanced_settings_heading'] = 'Configuraciones avanzadas para la eliminación de cursos';
+$string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
+$string['limit_query'] = 'Limite de la consulta';
+$string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
 $string['course_queue_size'] = 'Queue size of courses to delete';
 $string['course_queue_size_desc'] = 'Example: courses are deleted in a queue with a maximum size of 500 courses per execution.';
 
@@ -119,3 +121,8 @@ $string['day'] = 'Day';
 $string['hour'] = 'Hour';
 $string['minutes'] = 'Minutes';
 $string['seconds'] = 'Seconds';
+
+// Exceptions.
+$string['timecreated_criteria_is_empty'] = 'Timecreated criteria cannot be empty';
+$string['timemodified_criteria_is_empty'] = 'Timecreated criteria cannot be empty';
+$string['limit_query_is_empty'] = 'Limit query criteria cannot be empty';
