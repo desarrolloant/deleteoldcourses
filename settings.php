@@ -55,7 +55,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/year_creation_date',
         new lang_string('year', 'local_deleteoldcourses'),
         new lang_string('year_creation_date_desc', 'local_deleteoldcourses'),
-        0,
+        2010,
         $years
     ));
 
@@ -63,7 +63,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/month_creation_date',
         new lang_string('month', 'local_deleteoldcourses'),
         new lang_string('month_creation_date_desc', 'local_deleteoldcourses'),
-        0,
+        12,
         $monthsoftheyear
     ));
 
@@ -71,7 +71,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/day_creation_date',
         new lang_string('day', 'local_deleteoldcourses'),
         new lang_string('day_creation_date_desc', 'local_deleteoldcourses'),
-        0,
+        31,
         $daysofthemonth
     ));
 
@@ -79,7 +79,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/hour_creation_date',
         new lang_string('hour', 'local_deleteoldcourses'),
         new lang_string('hour_creation_date_desc', 'local_deleteoldcourses'),
-        0,
+        23,
         $hoursinaday
     ));
 
@@ -87,7 +87,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/minutes_creation_date',
         new lang_string('minutes', 'local_deleteoldcourses'),
         new lang_string('minutes_creation_date_desc', 'local_deleteoldcourses'),
-        0,
+        59,
         $minutesinahour
     ));
 
@@ -95,7 +95,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/seconds_creation_date',
         new lang_string('seconds', 'local_deleteoldcourses'),
         new lang_string('seconds_creation_date_desc', 'local_deleteoldcourses'),
-        0,
+        59,
         $minutesinahour
     ));
 
@@ -109,7 +109,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/year_last_modification_date',
         new lang_string('year', 'local_deleteoldcourses'),
         new lang_string('year_last_modification_date_desc', 'local_deleteoldcourses'),
-        0,
+        2009,
         $years
     ));
 
@@ -117,7 +117,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/month_last_modification_date',
         new lang_string('month', 'local_deleteoldcourses'),
         new lang_string('month_last_modification_date_desc', 'local_deleteoldcourses'),
-        0,
+        12,
         $monthsoftheyear
     ));
 
@@ -125,7 +125,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/day_last_modification_date',
         new lang_string('day', 'local_deleteoldcourses'),
         new lang_string('day_last_modification_date_desc', 'local_deleteoldcourses'),
-        0,
+        31,
         $daysofthemonth
     ));
 
@@ -133,7 +133,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/hour_last_modification_date',
         new lang_string('hour', 'local_deleteoldcourses'),
         new lang_string('hour_last_modification_date_desc', 'local_deleteoldcourses'),
-        0,
+        23,
         $hoursinaday
     ));
 
@@ -141,7 +141,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/minutes_last_modification_date',
         new lang_string('minutes', 'local_deleteoldcourses'),
         new lang_string('minutes_last_modification_date_desc', 'local_deleteoldcourses'),
-        0,
+        59,
         $minutesinahour
     ));
 
@@ -149,7 +149,7 @@ if ($ADMIN->fulltree) {
         'local_deleteoldcourses/seconds_last_modification_date',
         new lang_string('seconds', 'local_deleteoldcourses'),
         new lang_string('seconds_last_modification_date_desc', 'local_deleteoldcourses'),
-        0,
+        59,
         $minutesinahour
     ));
 
