@@ -93,6 +93,11 @@ $string['hour_last_modification_date_desc'] = 'Ejemplo';
 $string['minutes_last_modification_date_desc'] = 'Ejemplo';
 $string['seconds_last_modification_date_desc'] = 'Ejemplo';
 
+$string['course_categories_criteria_heading'] = 'Categorías de curso excluidas';
+$string['course_categories_criteria_heading_desc'] = 'Categorías que no se tendrán en cuenta en el proceso de eliminación automática de cursos.';
+$string['excluded_course_categories'] = 'Categorías de curso excluidas';
+$string['excluded_course_categories_desc'] = 'Categorías que no se tendrán en cuenta en el proceso de eliminación automática de cursos.';
+
 // Advanced settings.
 $string['advancedtab'] = 'Configuraciones avanzadas';
 $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la eliminación de cursos';

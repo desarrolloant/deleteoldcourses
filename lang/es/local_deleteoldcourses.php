@@ -88,6 +88,11 @@ $string['courses_last_modification_date_criteria_heading'] = 'Criterio: fecha de
 $string['courses_last_modification_date_criteria_heading_desc'] = 'Descripción del criterio última fecha de modificación';
 $string['year_last_modification_date_desc'] = 'Ejemplo';
 
+$string['course_categories_criteria_heading'] = 'Categorías de curso excluidas';
+$string['course_categories_criteria_heading_desc'] = 'Categorías que no se tendrán en cuenta en el proceso de eliminación automática de cursos.';
+$string['excluded_course_categories'] = 'Categorías';
+$string['excluded_course_categories_desc'] = 'Seleccione las categorias de curso';
+
 // Advanced settings.
 $string['advancedtab'] = 'Configuraciones avanzadas';
 $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la eliminación de cursos';

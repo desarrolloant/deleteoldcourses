@@ -153,6 +153,41 @@ if ($ADMIN->fulltree) {
         $minutesinahour
     ));
 
+    // Criteria excluded course categories.
+    $settingspage->add(new admin_setting_heading(
+        'local_deleteoldcourses/course_categories_criteria_heading',
+        new lang_string('course_categories_criteria_heading', 'local_deleteoldcourses'),
+        new lang_string('course_categories_criteria_heading_desc', 'local_deleteoldcourses')));
+
+    $options = array();
+
+    for ($i = 0; $i <= 10; $i++) {
+        array_push($options, $i);
+    }
+
+    $settingspage->add(new admin_setting_configselect(
+        'local_deleteoldcourses/number_of_categories_to_exclude',
+        new lang_string('number_of_categories', 'number_of_categories_to_exclude'),
+        new lang_string('number_of_categories_to_exclude_desc', 'local_deleteoldcourses'),
+        1,
+        $options
+    ));
+
+    $numbercategoriestoexclude = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
+
+    for ($i = 1; $i <= $numbercategoriestoexclude; $i++) {
+
+        $settingspage->add(new admin_settings_coursecat_select(
+            'local_deleteoldcourses/excluded_course_categories' . $i,
+            new lang_string('excluded_course_categories', 'local_deleteoldcourses'),
+            new lang_string('excluded_course_categories_desc', 'local_deleteoldcourses'),
+            500,
+            PARAM_INT,
+            109
+        ));
+
+    }
+
     // Must add the page after definiting all the settings!
     $settings->add($settingspage);
 
