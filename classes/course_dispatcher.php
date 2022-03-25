@@ -89,11 +89,16 @@ class course_dispatcher {
 
         // Traer todos los cursos de la base datos cuya fecha de creacion sea menor al criterio.
 
-        $conditions = 'timecreated <=' . $this->timecreatedcriteria;
+        $conditions = 'timecreated <= ' . $this->timecreatedcriteria;
+        $conditions .= ' AND timemodified <= ' . $this->timemodifiedcriteria;
         $conditions .= ' AND id > 1';
         $conditions .= ' AND id NOT IN (SELECT courseid FROM {deleteoldcourses})';
 
-        $coursestoreview = $DB->get_records_select('courses', $conditions);
+        $order = 'id ASC';
+
+        $coursestoreview = $DB->get_records_select('course', $conditions, null, $order, '*', 0, $this->limitquery);
+
+        return $coursestoreview;
 
         // list($sql, $params) = get_courses_sql($timecreated, $order);
         // $rs = $DB->get_recordset_sql($sql, $params, 0, $limit_query);
@@ -182,14 +187,36 @@ class course_dispatcher {
 
     }
 
-    /**
-     * set_quantity
-     *
-     * @return void
-     */
-    public function set_quantity() {
 
-    }
 
     // Metodo que encole los cursos a borrar.
+
+    /**
+     * Get the value of timecreatedcriteria
+     */
+    public function get_timecreated_criteria() {
+        return $this->timecreatedcriteria;
+    }
+
+    /**
+     * Get the value of timemodifiedcriteria
+    */
+    public function get_timemodified_criteria() {
+        return $this->timemodifiedcriteria;
+    }
+
+        /**
+         * Get the value of limitquery
+         */
+    public function get_limitquery() {
+        return $this->limitquery;
+    }
+
+        /**
+         * Get the value of categoriestoignore
+         */
+    public function get_categories_to_ignore() {
+        return $this->categoriestoignore;
+    }
+
 }
