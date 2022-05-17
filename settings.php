@@ -185,7 +185,6 @@ if ($ADMIN->fulltree) {
             PARAM_INT,
             109
         ));
-
     }
 
     // Must add the page after definiting all the settings!

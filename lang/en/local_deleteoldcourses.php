@@ -131,3 +131,11 @@ $string['seconds'] = 'Seconds';
 $string['timecreated_criteria_is_empty'] = 'Timecreated criteria cannot be empty';
 $string['timemodified_criteria_is_empty'] = 'Timecreated criteria cannot be empty';
 $string['limit_query_is_empty'] = 'Limit query criteria cannot be empty';
+
+// Notifier.
+$string['message_to_send'] = 'Resumen de la ejecución: \n
+                            <pre>
+                                - Cantidad de cursos borrados: {$a->deletedcourses}
+                                - Cantidad de cursos pendientes: {$a->pendingcourses}
+                            </pre>
+                            Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.';
