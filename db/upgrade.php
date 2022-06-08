@@ -23,7 +23,7 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 20201005100) {
+    if ($oldversion < 2020100510) {
 
         // Modify tables: deleteoldcourses and deleteoldcourses_deleted.
         $table_deleteoldcourses = new xmldb_table('deleteoldcourses');
@@ -60,6 +60,61 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         $dbman->add_field($table_deleteoldcourses_deleted, $coursecreatedat_field);
 
         upgrade_plugin_savepoint(true, 20201005100, 'local', 'deleteoldcourses');
+    }
+
+    if ($oldversion < 2022060600) {
+
+        // Define table local_delcoursesuv_todelete to be created.
+        $todeletetable = new xmldb_table('local_delcoursesuv_todelete');
+
+        // Adding fields to table local_delcoursesuv_todelete.
+        $todeletetable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $todeletetable->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $todeletetable->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $todeletetable->add_field('coursesize', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '-1');
+        $todeletetable->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table local_delcoursesuv_todelete.
+        $todeletetable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $todeletetable->add_key('fk_courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
+        $todeletetable->add_key('fk_userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+
+        // Conditionally launch create table for local_delcoursesuv_todelete.
+        if (!$dbman->table_exists($todeletetable)) {
+            $dbman->create_table($todeletetable);
+        }
+
+        // Define table local_delcoursesuv_deleted to be created.
+        $deletedtable = new xmldb_table('local_delcoursesuv_deleted');
+
+        // Adding fields to table local_delcoursesuv_deleted.
+        $deletedtable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $deletedtable->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $deletedtable->add_field('courseshortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $deletedtable->add_field('coursefullname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $deletedtable->add_field('coursesize', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '-1');
+        $deletedtable->add_field('coursetimecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $deletedtable->add_field('coursetimesenttodelete', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $deletedtable->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $deletedtable->add_field('usershortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $deletedtable->add_field('userfullname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $deletedtable->add_field('useremail', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $deletedtable->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table local_delcoursesuv_deleted.
+        $deletedtable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Adding indexes to table local_delcoursesuv_deleted.
+        $deletedtable->add_index('courseid', XMLDB_INDEX_UNIQUE, ['courseid']);
+        $deletedtable->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
+
+        // Conditionally launch create table for local_delcoursesuv_deleted.
+        if (!$dbman->table_exists($deletedtable)) {
+            $dbman->create_table($deletedtable);
+        }
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022060600, 'local', 'deleteoldcourses');
     }
 
     return true;
