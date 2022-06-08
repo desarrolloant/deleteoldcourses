@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_deleteoldcourses\task;
 
@@ -31,9 +31,8 @@ const COURSE_LAST_MODIFICATION = '2020-10-10 23:59:59'; // Before Campus Histori
  * Adhoc task for deleting courses.
  *
  * @package   local_deleteoldcourses
- * @since     Moodle 3.6.6
- * @author    2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class delete_courses_task extends \core\task\scheduled_task {
 
@@ -56,7 +55,7 @@ class delete_courses_task extends \core\task\scheduled_task {
     }
 
     /**
-     * Execute the task
+     * Execute the task.
      */
     public function execute() {
         global $DB;

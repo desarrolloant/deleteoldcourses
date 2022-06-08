@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,8 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_deleteoldcourses\output;
 
@@ -28,10 +27,9 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Class containing the filter options data for rendering the date filter element for the old courses page.
  *
- * @since      Moodle 3.6.6
  * @package    local_deleteoldcourses
- * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class date_filter implements renderable, templatable {
 
@@ -63,7 +61,7 @@ class date_filter implements renderable, templatable {
     /**
      * Function to export the renderer data in a format that is suitable for a mustache template.
      *
-     * @param renderer_base $output Used to do a final render of any components that need to be rendered for export.
+     * @param renderer_base $output Used to do a final render of any components that need to be rendered for export
      * @return stdClass|array
      */
     public function export_for_template(renderer_base $output) {

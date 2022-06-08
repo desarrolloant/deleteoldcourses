@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,27 +12,17 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Version information for deletecourses.
- *
- * @package local_deleteoldcourses - Local Library
- * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
- * Local deleteoldcourses internal functions
+ * This file contains functions (logic) used by plugin.
  *
  * @package    local_deleteoldcourses
- * @category   internal
- * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @since      Moodle 3.6.6
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Editingteacher roleid.
@@ -40,7 +30,7 @@ defined('MOODLE_INTERNAL') || die;
 const EDITING_TEACHER_ROLE_ID = 3;
 
 /**
- * Count teacher courses created more than 1 year ago
+ * Count teacher courses created more than 1 year ago.
  *
  * @param int $userid ID of the user
  * @param int $now epoch date no
@@ -65,7 +55,7 @@ function user_count_courses($userid, $now, $ago = 1) {
 
 
 /**
- * Get courses for delete courses table
+ * Get courses for delete courses table.
  *
  * @param int $userid ID of the user
  * @param string $sort order registers
@@ -86,7 +76,7 @@ function user_get_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago 
 }
 
 /**
- * get sql string for query
+ * Get SQL string for query.
  *
  * @param int $roleid id of teacher
  * @param int $userid ID of the user
@@ -117,7 +107,7 @@ function user_get_courses_sql($roleid, $userid, $since) {
 }
 
 /**
- * Check if a course is the list for delete
+ * Check if a course is the list for delete.
  *
  * @param int $userid ID of the user
  * @return bool
@@ -135,10 +125,9 @@ function course_in_delete_list($courseid) {
 
 
 /**
- * Trigger deleteoldcourses viewed event,
+ * Trigger deleteoldcourses viewed event.
  *
  * @param stdClass  $context page context object
- * @since Moodle 3.6.6
  */
 function deleteoldcourses_viewed($context, $userid) {
     $event = \local_deleteoldcourses\event\old_courses_list_viewed::create(array(
@@ -153,6 +142,7 @@ function deleteoldcourses_viewed($context, $userid) {
 
 /**
  * Lib for email messages.
+ *
  * @author Iader E. Garcia Gomez <iader.garcia@correounivalle.edu.co>
  * Version: 0.1
  **/
@@ -220,7 +210,7 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
  *******************************************************************************************/
 
 /**
- * Count all deleted courses
+ * Count all deleted courses.
  *
  * @param int $userid id of user who deleted a course
  * @param int $now date now
@@ -245,7 +235,7 @@ function count_deleted_courses($userid, $now, $ago = 0) {
 }
 
 /**
- * get sql string for query
+ * Get SQL string for query.
  *
  * @param int $userid ID of the user
  * @param int $since date ago
@@ -277,7 +267,7 @@ function get_deleted_courses_sql($userid, $since) {
 }
 
 /**
- * Get courses for deleted courses table
+ * Get courses for deleted courses table.
  *
  * @param int $userid ID of the user
  * @param string $sort order registers
@@ -299,7 +289,7 @@ function get_deleted_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $a
 }
 
 /**
- * Count all pending courses
+ * Count all pending courses.
  *
  * @return int number of pending courses
  */
@@ -311,7 +301,7 @@ function count_pending_courses() {
 }
 
 /**
- * get sql string for query
+ * Get SQL string for query.
  *
  * @return string for query
  */
@@ -336,7 +326,7 @@ function get_pending_courses_sql() {
 
 
 /**
- * Get courses for pending courses table
+ * Get courses for pending courses table.
  *
  * @param string $sort order registers
  * @param int $limitfrom limit sql
@@ -357,8 +347,8 @@ function get_pending_courses($sort, $limitfrom=0, $limitnum=0) {
  **************************************************************************************/
 
 /**
- * get sql string for query queue of courses
- * query for select courses by user last course access
+ * Get SQL string for query queue of courses. Query for select courses by user last course access.
+ *
  * @return string for query
  */
 function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified) {
@@ -377,9 +367,9 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
 
     $orderby = "ASC";
 
-    // Day of week
+    // Day of week.
     $day = date('N');
-    // If is Sat, Sun or Mon, change size to DESC
+    // If is Sat, Sun or Mon, change size to DESC.
     if ($day == 1 || $day == 6 || $day == 7) {
         $orderby = "DESC";
     }
@@ -456,7 +446,8 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
  ****************************************************************************/
 
 /**
- * check if a course was updated after date
+ * Check if a course was updated after date.
+ *
  * @param object $course
  * @param string $timemodified
  * @return boolean
@@ -481,7 +472,8 @@ function course_was_updated($course, $timemodified) {
 }
 
 /**
- * check if at least one section of a course was updated after date
+ * Check if at least one section of a course was updated after date.
+ *
  * @param object $course
  * @param string $timemodified
  * @return boolean
@@ -512,7 +504,8 @@ function course_sections_was_updated($course, $timemodified) {
 }
 
 /**
- * check if at least one module of a course was updated after date
+ * Check if at least one module of a course was updated after date.
+ *
  * @param object $course
  * @param string $timemodified
  * @return boolean
@@ -545,7 +538,8 @@ function course_modules_was_updated($course, $timemodified) {
 }
 
 /**
- * check if at least one role was updated in this course after date
+ * Check if at least one role was updated in this course after date.
+ *
  * @param object $course
  * @param string $timemodified
  * @return boolean
@@ -584,7 +578,8 @@ function course_roles_was_updated($course, $timemodified) {
 }
 
 /**
- * check if at least one role was updated in this course after date
+ * Check if at least one role was updated in this course after date.
+ *
  * @param object $course
  * @param string $timemodified
  * @return boolean
@@ -618,7 +613,7 @@ function course_user_enrolments_was_updated($course, $timemodified) {
 }
 
 /**
- * Get sql query for get courses created before date
+ * Get SQL query for get courses created before date.
  *
  * @param string $timecreated
  * @return Array $sql, $params[]
@@ -643,7 +638,7 @@ function get_courses_sql($timecreated, $order) {
 }
 
 /**
- * Add courses to be deleted
+ * Add courses to be deleted.
  *
  * @param  string $timecreated
  * @param  string $timemodified
@@ -791,7 +786,9 @@ function courseCalculateSize($courseid) {
     return $result;
 }
 
-// Get first categoryid of parents tree.
+/**
+ * Get first categoryid of parents tree.
+ */
 function recursiveParentCategory($categoryid) {
     global $DB;
     $category = $DB->get_record('course_categories', array('id' => $categoryid));
@@ -814,7 +811,7 @@ function countDeletedCourses($starttime) {
 }
 
 /**
- * Return years array
+ * Return years array.
  *
  * @return array $years
  */
@@ -829,7 +826,7 @@ function get_years() {
 }
 
 /**
- * Return a month array
+ * Return a month array.
  *
  * @return array $monthsoftheyear
  */
@@ -865,7 +862,7 @@ function get_months_of_the_year() {
 }
 
 /**
- * get_days_of__the_month
+ * Get days of the month.
  *
  * @return array $daysofthemonth
  */
@@ -885,7 +882,7 @@ function get_days_of_the_month() {
 }
 
 /**
- * Return hours in a day
+ * Return hours in a day.
  *
  * @return array $hoursinaday
  */
@@ -904,7 +901,7 @@ function get_hours_in_day() {
 }
 
 /**
- * Return minutes in a day
+ * Return minutes in a day.
  *
  * @return array $minutesinahour
  */
@@ -924,7 +921,7 @@ function get_minutes_in_hour() {
 }
 
 /**
- * Date config to timestamp
+ * Date config to timestamp.
  *
  * Date type:
  *   - creation

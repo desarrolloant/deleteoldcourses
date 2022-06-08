@@ -1,4 +1,4 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -11,15 +11,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * JavaScript for the delete old courses plugin.
+ * JavaScript for the plugin.
  *
- * @module    local_deleteoldcourses/delete_old_courses
- * @package   local_deleteoldcourses
- * @Author 	  Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @module     local_deleteoldcourses/delete_old_courses
+ * @package    local_deleteoldcourses
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(
 	[
@@ -84,8 +84,7 @@ define(
 		/**
 	     * Get the modal factory promise.
 	     *
-	     * @param .
-	     * @return {promise} Promise for create modal.
+	     * @return {promise} Promise for create modal
 	     */
 		var getModal = function(){
 			return ModalFactory.create({
@@ -99,8 +98,8 @@ define(
 		/**
 	     * Get the course info promise.
 	     *
-	     * @param {int} courseid id of course to delete.
-	     * @return {promise} Promise for get course.
+	     * @param {int} courseid id of course to delete
+	     * @return {promise} Promise for get course
 	     */
 		var getCourse = function(courseid){
 			var request = {
@@ -113,7 +112,7 @@ define(
 	        return promise;
 		}
 
-		//Variables for initial promises
+		// Variables for initial promises.
 		var my_modal = null;
 		var my_strings = null;
 		var get_strings_promise = getStrings();
@@ -121,9 +120,9 @@ define(
 		/**
 	     * Create html text for show alert with other teachers.
 	     *
-	     * @param {string} message head message.
-	     * @param {string[]} teachers others teachers of a course.
-	     * @return {string} string for show html alert.
+	     * @param {string} message head message
+	     * @param {string[]} teachers others teachers of a course
+	     * @return {string} string for show html alert
 	     */
 		var builWarning = function(message, teachers){
 			var alert = "<div class='alert alert-warning p-1'>";
@@ -142,8 +141,8 @@ define(
 		/**
 	     * Send course info by ajax to add deletion list.
 	     *
-	     * @param {jquery} course course object info.
-	     * @param {jquery} button pressed button add.
+	     * @param {jquery} course course object info
+	     * @param {jquery} button pressed button add
 	     * @return
 	     */
 		var addCoursesToList = function(course, button){
@@ -167,10 +166,10 @@ define(
 	        		$("button[course-id='"+course.id+"']").addClass("remove-course");
 	        		$("button[course-id='"+course.id+"']").html("<i class='fa fa-check' aria-hidden='true'></i>");
 
-	        		//Remove add event
+	        		// Remove add event.
 	        		$(button).unbind();
 
-	        		//Add remove event
+	        		// Add remove event.
 	        		$(button).click(function(){
 	        			removeCoursesFromList(this);
 	        		});
@@ -185,8 +184,8 @@ define(
 		/**
 	     * Prepare modal for delete a course.
 	     *
-	     * @param {promise} gerCoursePromise promise for get course.
-	     * @param {jquery} button pressed button add.
+	     * @param {promise} gerCoursePromise promise for get course
+	     * @param {jquery} button pressed button add
 	     * @return
 	     */
 		var buildModal = function(gerCoursePromise, button){
@@ -194,9 +193,9 @@ define(
 			my_modal.setBody("");
 			my_modal.header.addClass('hidden');
 			my_modal.footer.addClass('hidden');
-			//Execute add loader promise
+			// Execute add loader promise.
 			LoadingIcon.addIconToContainer(my_modal.body).then(function(loadingIcon){
-				//Execute get course promise
+				// Execute get course promise.
 				gerCoursePromise.then(function(course) {
 					if (course.id) {
 						my_modal.setTitle(my_strings[0]+" <strong>"+course.shortname+"</strong>");
@@ -214,14 +213,14 @@ define(
 
 						body_content += "<strong>"+my_strings[2]+"</strong>";
 						my_modal.setBody(body_content);
-	       				
-						//Add buton confirm - cancel event
+
+						// Add buton confirm - cancel event.
 						var root = my_modal.getRoot();
 			            root.on(ModalEvents.save, function() {
-			            	//Destroy modal
+			            	// Destroy modal.
 			            	my_modal.destroy();
 
-			            	//Add course to delete list
+			            	// Add course to delete list.
 			                addCoursesToList(course, button);
 			            });
 					}else{
@@ -236,13 +235,13 @@ define(
 		/**
 	     * Execute create modal promise and add its content.
 	     *
-	     * @param {jquery} button pressed button add.
+	     * @param {jquery} button pressed button add
 	     * @return
 	     */
 		var openModal = function(trigger){
 			$("div.modal.moodle-has-zindex").remove();
 			var create_modal_promise = getModal();
-			//Execute get modal promise
+			// Execute get modal promise.
 			create_modal_promise.then(function(modal){
 				my_modal = modal;
 				my_modal.getRoot().on(ModalEvents.cancel, function() {
@@ -260,7 +259,7 @@ define(
 		/**
 	     * Remove a course added to deletion list by ajax.
 	     *
-	     * @param {jquery} button pressed button remove.
+	     * @param {jquery} button pressed button remove
 	     * @return
 	     */
 		var removeCoursesFromList = function(trigger){
@@ -284,10 +283,10 @@ define(
 	        		$("button[course-id='"+courseid+"']").addClass("add-course");
 	        		$("button[course-id='"+courseid+"']").html("<i class='fa fa-trash' aria-hidden='true'></i>");
 
-	        		//Remove remove event
+	        		// Remove remove event.
 	        		button.unbind();
 
-	        		//Add add event
+	        		// Add add event.
         			button.click(function(){
         				openModal(this);
         			});
@@ -299,19 +298,17 @@ define(
 		}
 
 		/**
-	     * Trigger the first load of the preview section and then listen for modifications
-	     *
-	     * @param.
+	     * Trigger the first load of the preview section and then listen for modifications.
 	     */
 		var init = function(){
-			
-			//Execute get strings promise
+
+			// Execute get strings promise.
 			get_strings_promise.then(function(strings){
 
-				//Start strings
+				// Start strings.
 				my_strings = strings;
 
-				//Buttons start events
+				// Buttons start events.
 				$("button.add-course").click(function(){
 					openModal(this);
 				});
@@ -320,8 +317,8 @@ define(
 				});
 
 			});
-		
-	
+
+
 		}
 
 		return {

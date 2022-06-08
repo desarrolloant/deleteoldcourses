@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,17 +12,17 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for ACAT-LEFGA task.
+ * Unit tests for notifier class (email notifications).
  *
- * @package    local_iracv
+ * @package    local_deleteoldcourses
  * @category   phpunit
  * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -36,7 +36,7 @@ defined('MOODLE_INTERNAL') || die();
 class local_deleteoldcourses_notifier_tests extends advanced_testcase {
 
     /**
-     * Test for text generation for a notification
+     * Test for text generation for a notification.
      *
      * @return void
      */

@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,14 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Version information for deletecourses.
+ * This file serves as the interface between Moodle core and the plugin.
  *
  * @package    local_deleteoldcourses
- * @since   Moodle 3.6.6
- * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -31,10 +30,10 @@ defined('MOODLE_INTERNAL') || die;
 
 
 /**
- * Fumble with Moodle's global navigation by leveraging Moodle's *_extend_navigation() hook.
- * Show node in sidebar
+ * Add a link into the navigation drawer.
  *
- * @param global_navigation $navigation
+ * @package  local_deleteolcourses
+ * @param    global_navigation $navigation Node representing the global navigation tree
  */
 function local_deleteoldcourses_extend_navigation(global_navigation $navigation) {
 

@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,17 +12,17 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Course distpacher class
+ * Course dispatcher class.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
  * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -34,14 +34,14 @@ require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
 use moodle_exception;
 
 /**
- * Course dispatcher class for Delete Old Courses
+ * Course dispatcher class for Delete old courses.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
  * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_dispatcher {
 
@@ -51,7 +51,7 @@ class course_dispatcher {
     protected array $categoriestoignore;
 
     /**
-     * __construct
+     * __construct.
      */
     public function __construct() {
 
@@ -61,7 +61,7 @@ class course_dispatcher {
     }
 
     /**
-     * Get courses to delete according to elimination criteria
+     * Get courses to delete according to elimination criteria.
      *
      * @return array $courses
      * @since  Moodle 3.10
@@ -187,34 +187,32 @@ class course_dispatcher {
 
     }
 
-
-
     // Metodo que encole los cursos a borrar.
 
     /**
-     * Get the value of timecreatedcriteria
+     * Get the value of timecreatedcriteria.
      */
     public function get_timecreated_criteria() {
         return $this->timecreatedcriteria;
     }
 
     /**
-     * Get the value of timemodifiedcriteria
-    */
+     * Get the value of timemodifiedcriteria.
+     */
     public function get_timemodified_criteria() {
         return $this->timemodifiedcriteria;
     }
 
-        /**
-         * Get the value of limitquery
-         */
+    /**
+     * Get the value of limitquery.
+     */
     public function get_limitquery() {
         return $this->limitquery;
     }
 
-        /**
-         * Get the value of categoriestoignore
-         */
+    /**
+     * Get the value of categoriestoignore.
+     */
     public function get_categories_to_ignore() {
         return $this->categoriestoignore;
     }

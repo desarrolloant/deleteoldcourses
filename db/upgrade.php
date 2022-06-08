@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,12 +12,26 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
+/**
+ * Plugin upgrade code.
+ *
+ * @package    local_deleteoldcourses
+ * @copyright  2022 Juan Felipe Orozco Escobar <juan.oroczo.escobar@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
 
+/**
+ * Function to upgrade the plugin.
+ *
+ * @param int $oldversion the version it is upgrading from
+ * @return bool result
+ */
 function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
     global $DB;
 

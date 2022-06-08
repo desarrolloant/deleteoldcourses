@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,14 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Version information for deletecourses.
+ * Plugin renderer.
  *
- * @package local_deleteoldcourses
- * @since   Moodle 3.6.6
- * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_deleteoldcourses
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses\output;
@@ -31,20 +30,19 @@ use plugin_renderer_base;
 use stdClass;
 
 /**
- * deleteoldcourses local renderer
+ * Plugin renderer.
  *
  * @package    local_deleteoldcourses
- * @since      Moodle 3.6.6
- * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
 
     /**
-     * Html to action buttons.
+     * HTML to action buttons.
      *
-     * @param string $action pending o deleted courses.
-     * @return string html for show total courses.
+     * @param string $action pending o deleted courses
+     * @return string html for show total courses
      */
     public function render_buttons($action) {
         $url_deleted = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'deleted'));
@@ -67,10 +65,10 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
-     * Html to show number of courses.
+     * HTML to show number of courses.
      *
-     * @param int $number_of_courses Total courses.
-     * @return string html for show total courses.
+     * @param int $number_of_courses Total courses
+     * @return string html for show total courses
      */
     public function render_number_of_courses($number_of_courses) {
         $o = \html_writer::tag('p', get_string('coursescount', 'local_deleteoldcourses').$number_of_courses);
@@ -79,9 +77,9 @@ class renderer extends plugin_renderer_base {
 
 
     /**
-     * Html to show alert for delete courses created less that 1 year ago.
+     * HTMl to show alert for delete courses created less that 1 year ago.
      *
-     * @return string html for show alert.
+     * @return string html for show alert
      */
     public function render_alert_delete_courses_created_less_1_year() {
         $data = new stdClass();
@@ -94,8 +92,8 @@ class renderer extends plugin_renderer_base {
     /**
      * Returns a formatted filter option.
      *
-     * @param int $year The value for the filter option.
-     * @return array The formatted option with the ['filtertype:value' => 'label'] format.
+     * @param int $year The value for the filter option
+     * @return array The formatted option with the ['filtertype:value' => 'label'] format
      */
     protected function format_filter_option($year) {
         $optionvalue = $year;
@@ -121,11 +119,11 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
-     * Html to show old courses table of a teacher.
+     * HTML to show old courses table of a teacher.
      *
-     * @param list_courses_table $renderable The courses table.
-     * @param int $perpage Number of courses per page.
-     * @return string html for the old courses table.
+     * @param list_courses_table $renderable The courses table
+     * @param int $perpage Number of courses per page
+     * @return string html for the old courses table
      */
     public function render_courses_table(list_courses_table $renderable, $perpage) {
         ob_start();
@@ -136,13 +134,13 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
-     * Html to show a all rows in old courses table.
+     * HTML to show a all rows in old courses table.
      *
-     * @param moodle_url $perpageurl The url of course list page with $perpage parameter.
-     * @param int $page_size Number of courses to show in a page.
-     * @param int $number_of_courses Total Number of courses.
-     * @param int $perpage Variable number of courses to show in a page.
-     * @return string html for display the link of show all courses.
+     * @param moodle_url $perpageurl The url of course list page with $perpage parameter
+     * @param int $page_size Number of courses to show in a page
+     * @param int $number_of_courses Total Number of courses
+     * @param int $perpage Variable number of courses to show in a page
+     * @return string html for display the link of show all courses
      */
     public function render_courses_show_all_link(\moodle_url $perpageurl, $page_size, $number_of_courses, $perpage) {
         $perpageurl->remove_params('perpage');
@@ -162,11 +160,11 @@ class renderer extends plugin_renderer_base {
 
 
     /**
-     * Html to show old deleted courses table.
+     * HTML to show old deleted courses table.
      *
-     * @param admin_deleted_table $renderable The courses table.
-     * @param int $perpage Number of courses per page.
-     * @return string html for the old courses table.
+     * @param admin_deleted_table $renderable The courses table
+     * @param int $perpage Number of courses per page
+     * @return string html for the old courses table
      */
     public function render_deleted_table(admin_deleted_table $renderable, $perpage) {
         ob_start();
@@ -180,8 +178,8 @@ class renderer extends plugin_renderer_base {
     /**
      * Returns a formatted filter option.
      *
-     * @param int $month The value for the filter option.
-     * @return array The formatted option with the ['filtertype:value' => 'label'] format.
+     * @param int $month The value for the filter option
+     * @return array The formatted option with the ['filtertype:value' => 'label'] format
      */
     protected function format_deleted_filter_option($month) {
         $optionvalue = $month;
@@ -208,11 +206,11 @@ class renderer extends plugin_renderer_base {
 
 
     /**
-     * Html to show old pending courses table.
+     * HTML to show old pending courses table.
      *
-     * @param admin_deleted_table $renderable The courses table.
-     * @param int $perpage Number of courses per page.
-     * @return string html for the old courses table.
+     * @param admin_deleted_table $renderable The courses table
+     * @param int $perpage Number of courses per page
+     * @return string html for the old courses table
      */
     public function render_pending_table(admin_pending_table $renderable, $perpage) {
         ob_start();
