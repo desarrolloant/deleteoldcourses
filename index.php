@@ -22,22 +22,24 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG, $PAGE, $USER, $DB;
-
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
+
+require_login();
+
+if (isguestuser()) {
+    throw new moodle_exception('noguest');
+}
 
 define('DEFAULT_PAGE_SIZE', 15);
 define('SHOW_ALL_PAGE_SIZE', 5000);
 define('MAX_CREATED_AGO', 5);
 define('MIN_CREATED_AGO', 1);
 
-$page         = optional_param('page', 0, PARAM_INT); // Which page to show.
-$perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
-$selectall    = optional_param('selectall', false, PARAM_BOOL); // When rendering checkboxes against users mark them all checked.
-$ago         = optional_param('ago', MIN_CREATED_AGO, PARAM_INT); // Created ago number of years.
+$page      = optional_param('page', 0, PARAM_INT); // Which page to show.
+$perpage   = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
+$selectall = optional_param('selectall', false, PARAM_BOOL); // When rendering checkboxes against users mark them all checked.
+$ago       = optional_param('ago', MIN_CREATED_AGO, PARAM_INT); // Created ago number of years.
 
 if ($ago < MIN_CREATED_AGO) {
     $ago = MIN_CREATED_AGO;
@@ -57,14 +59,13 @@ $PAGE->set_url('/local/deleteoldcourses/index.php', array(
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-// Ensure the user can be here.
-require_login();
-
-
-$PAGE->set_pagelayout('admin');
-$PAGE->set_heading($SITE->fullname);
+// Page configuration.
 $PAGE->set_title($SITE->fullname . ': ' . get_string('pluginname', 'local_deleteoldcourses'));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagelayout('admin');
 $PAGE->navbar->add(get_string('pluginname', 'local_deleteoldcourses'));
+
+// Rendering page.
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_deleteoldcourses'));
 
@@ -102,5 +103,4 @@ $PAGE->requires->js_call_amd('local_deleteoldcourses/delete_old_courses', 'init'
 // Trigger deleteoldcourses viewed event.
 deleteoldcourses_viewed($PAGE->context, $USER->id);
 
-// Print footer.
 echo $OUTPUT->footer();

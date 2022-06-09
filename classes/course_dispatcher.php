@@ -27,9 +27,9 @@
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
 use moodle_exception;
 
@@ -105,7 +105,7 @@ class course_dispatcher {
         // foreach ($rs as $row) {
 
         //     // Get first category parent of this course category.
-        //     $first_category_parent = recursiveParentCategory($row->category);
+        //     $first_category_parent = recursive_parent_category($row->category);
         //     // Exclude regular courses on categories with id < 30000.
         //     if ($row->category < 30000 && $first_category_parent == 6) {
         //         continue;
@@ -161,7 +161,7 @@ class course_dispatcher {
 
         //     // Show test queries - Confirm creation date.
         //     if ($test) {
-        //         echo $count.' - '.$row->id.' - '.$row->fullname.' - '.userdate($row->timecreated).'<br>';
+        //         echo $count . ' - ' . $row->id . ' - ' . $row->fullname . ' - ' . userdate($row->timecreated) . '<br>';
         //         continue;
         //     }
 
@@ -171,7 +171,7 @@ class course_dispatcher {
         //     'shortname'         => $row->shortname,
         //     'fullname'          => $row->fullname,
         //     'userid'            => $user->id,
-        //     'size'              => courseCalculateSize($row->id),
+        //     'size'              => course_calculate_size($row->id),
         //     'coursecreatedat'   => $row->timecreated,
         //     'timecreated'       => time()
         //     );

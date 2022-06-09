@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
 class local_deleteoldcourses_lib_testcase extends advanced_testcase {
 

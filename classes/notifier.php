@@ -29,7 +29,7 @@ namespace local_deleteoldcourses;
 
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 class notifier {
 

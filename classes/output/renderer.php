@@ -24,7 +24,7 @@
 
 namespace local_deleteoldcourses\output;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 use plugin_renderer_base;
 use stdClass;
@@ -42,11 +42,11 @@ class renderer extends plugin_renderer_base {
      * HTML to action buttons.
      *
      * @param string $action pending o deleted courses
-     * @return string html for show total courses
+     * @return string HTML for show total courses
      */
     public function render_buttons($action) {
-        $url_deleted = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'deleted'));
-        $url_pending = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'pending'));
+        $urldeleted = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'deleted'));
+        $urlpending = new \moodle_url('/local/deleteoldcourses/report.php', array('action' => 'pending'));
 
         $data = new stdClass();
 
@@ -59,27 +59,27 @@ class renderer extends plugin_renderer_base {
         }
         $data->str_deleted = get_string('deleted_courses', 'local_deleteoldcourses');
         $data->str_pending = get_string('pending_courses', 'local_deleteoldcourses');
-        $data->url_deleted = $url_deleted->out(false);
-        $data->url_pending = $url_pending->out(false);
+        $data->url_deleted = $urldeleted->out(false);
+        $data->url_pending = $urlpending->out(false);
         return $this->render_from_template('local_deleteoldcourses/buttons', $data);
     }
 
     /**
      * HTML to show number of courses.
      *
-     * @param int $number_of_courses Total courses
-     * @return string html for show total courses
+     * @param int $numberofcourses Total courses
+     * @return string HTML for show total courses
      */
-    public function render_number_of_courses($number_of_courses) {
-        $o = \html_writer::tag('p', get_string('coursescount', 'local_deleteoldcourses').$number_of_courses);
+    public function render_number_of_courses($numberofcourses) {
+        $o = \html_writer::tag('p', get_string('coursescount', 'local_deleteoldcourses') . $numberofcourses);
         return $o;
     }
 
 
     /**
-     * HTMl to show alert for delete courses created less that 1 year ago.
+     * HTML to show alert for delete courses created less that 1 year ago.
      *
-     * @return string html for show alert
+     * @return string HTML for show alert
      */
     public function render_alert_delete_courses_created_less_1_year() {
         $data = new stdClass();
@@ -100,7 +100,7 @@ class renderer extends plugin_renderer_base {
         if ($year == MIN_CREATED_AGO) {
             $optionlabel = get_string('more_than_1_year_ago', 'local_deleteoldcourses');
         } else {
-            $optionlabel = get_string('more_than_n_years_ago', 'local_deleteoldcourses', $year.'');
+            $optionlabel = get_string('more_than_n_years_ago', 'local_deleteoldcourses', $year . '');
         }
 
         return [$optionvalue => $optionlabel];
@@ -123,7 +123,7 @@ class renderer extends plugin_renderer_base {
      *
      * @param list_courses_table $renderable The courses table
      * @param int $perpage Number of courses per page
-     * @return string html for the old courses table
+     * @return string HTML for the old courses table
      */
     public function render_courses_table(list_courses_table $renderable, $perpage) {
         ob_start();
@@ -137,23 +137,23 @@ class renderer extends plugin_renderer_base {
      * HTML to show a all rows in old courses table.
      *
      * @param moodle_url $perpageurl The url of course list page with $perpage parameter
-     * @param int $page_size Number of courses to show in a page
-     * @param int $number_of_courses Total Number of courses
+     * @param int $pagesize Number of courses to show in a page
+     * @param int $numberofcourses Total Number of courses
      * @param int $perpage Variable number of courses to show in a page
-     * @return string html for display the link of show all courses
+     * @return string HTML for display the link of show all courses
      */
-    public function render_courses_show_all_link(\moodle_url $perpageurl, $page_size, $number_of_courses, $perpage) {
+    public function render_courses_show_all_link(\moodle_url $perpageurl, $pagesize, $numberofcourses, $perpage) {
         $perpageurl->remove_params('perpage');
-        if ($perpage == SHOW_ALL_PAGE_SIZE && $number_of_courses > DEFAULT_PAGE_SIZE) {
+        if ($perpage == SHOW_ALL_PAGE_SIZE && $numberofcourses > DEFAULT_PAGE_SIZE) {
             $perpageurl->param('perpage', DEFAULT_PAGE_SIZE);
             return $this->container(\html_writer::link($perpageurl,
                                     get_string('showperpage', '', DEFAULT_PAGE_SIZE)),
                                     array(),
                                     'showall');
 
-        } else if ($page_size < $number_of_courses) {
+        } else if ($pagesize < $numberofcourses) {
             $perpageurl->param('perpage', SHOW_ALL_PAGE_SIZE);
-            return $this->container(\html_writer::link($perpageurl, get_string('showall', '', $number_of_courses)),
+            return $this->container(\html_writer::link($perpageurl, get_string('showall', '', $numberofcourses)),
             array(), 'showall');
         }
     }
@@ -164,7 +164,7 @@ class renderer extends plugin_renderer_base {
      *
      * @param admin_deleted_table $renderable The courses table
      * @param int $perpage Number of courses per page
-     * @return string html for the old courses table
+     * @return string HTML for the old courses table
      */
     public function render_deleted_table(admin_deleted_table $renderable, $perpage) {
         ob_start();
@@ -186,7 +186,7 @@ class renderer extends plugin_renderer_base {
         if ($month == MIN_DELETED_AGO && MIN_DELETED_AGO == 1) {
             $optionlabel = get_string('more_than_1_month_ago', 'local_deleteoldcourses');
         } else {
-            $optionlabel = get_string('more_than_n_months_ago', 'local_deleteoldcourses', $month.'');
+            $optionlabel = get_string('more_than_n_months_ago', 'local_deleteoldcourses', $month . '');
         }
 
         return [$optionvalue => $optionlabel];
@@ -210,7 +210,7 @@ class renderer extends plugin_renderer_base {
      *
      * @param admin_deleted_table $renderable The courses table
      * @param int $perpage Number of courses per page
-     * @return string html for the old courses table
+     * @return string HTML for the old courses table
      */
     public function render_pending_table(admin_pending_table $renderable, $perpage) {
         ob_start();

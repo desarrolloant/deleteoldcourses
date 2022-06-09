@@ -46,8 +46,8 @@ class local_deleteoldcourses_notifier_tests extends advanced_testcase {
 
         global $CFG;
 
-        $user1 = $this->getDataGenerator()->create_user(array('email'=>'user1@example.com', 'username'=>'desadmin2021'));
-        $user2 = $this->getDataGenerator()->create_user(array('email'=>'user2@example.com', 'username'=>'desadmin2022'));
+        $user1 = $this->getDataGenerator()->create_user(array('email' => 'user1@example.com', 'username' => 'desadmin2021'));
+        $user2 = $this->getDataGenerator()->create_user(array('email' => 'user2@example.com', 'username' => 'desadmin2022'));
 
         // Los usuarios vienen en forma de arreglo de nombres de usuario.
         $userstonotify = array('desadmin2021', 'desadmin2022');

@@ -22,24 +22,28 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG, $PAGE, $USER, $DB;
-
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 require_once($CFG->libdir . '/adminlib.php');
+
+require_login();
+
+if (isguestuser()) {
+    throw new moodle_exception('noguest');
+}
+
+require_capability('local/deleteoldcourses:viewreport', context_system::instance());
 
 define('DEFAULT_PAGE_SIZE', 100);
 define('SHOW_ALL_PAGE_SIZE', 5000);
 define('MAX_DELETED_AGO', 60);
 define('MIN_DELETED_AGO', 12);
 
-$page         = optional_param('page', 0, PARAM_INT); // Which page to show.
-$perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
-$userid       = optional_param('userid', 0, PARAM_INT);
-$ago          = optional_param('ago', MIN_DELETED_AGO, PARAM_INT); // Created ago number of years.
-$action       = optional_param('action', 'pending', PARAM_TEXT); // Pending or deleted report.
+$page    = optional_param('page', 0, PARAM_INT); // Which page to show.
+$perpage = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT); // How many per page.
+$userid  = optional_param('userid', 0, PARAM_INT);
+$ago     = optional_param('ago', MIN_DELETED_AGO, PARAM_INT); // Created ago number of years.
+$action  = optional_param('action', 'pending', PARAM_TEXT); // Pending or deleted report.
 
 if ($ago < MIN_DELETED_AGO) {
     $ago = MIN_DELETED_AGO;
@@ -61,15 +65,13 @@ $PAGE->set_url('/local/deleteoldcourses/report.php', array(
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-require_login();
-require_capability('local/deleteoldcourses:viewreport', context_system::instance());
-
-// admin_externalpage_setup('local_deleteoldcourses', '', null);
-
-$PAGE->set_pagelayout('admin');
-$PAGE->set_heading($SITE->fullname);
+// Page configuration.
 $PAGE->set_title($SITE->fullname . ': ' . get_string('pluginname', 'local_deleteoldcourses'));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagelayout('admin');
 $PAGE->navbar->add(get_string('pluginname', 'local_deleteoldcourses'));
+
+// Rendering page.
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_deleteoldcourses'));
 
@@ -121,5 +123,4 @@ if ($action == 'deleted') {
     echo $output->render_courses_show_all_link($perpageurl, $coursestable->get_page_size(), $coursestable->totalrows, $perpage);
 }
 
-// Print footer.
 echo $OUTPUT->footer();

@@ -24,14 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG, $PAGE, $USER, $DB;
-
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
 const COURSE_TIME_CREATED = '2018-12-31 23:59:59';
 const COURSE_LAST_MODIFICATION = '2020-06-31 23:59:59';
-
 
 $PAGE->set_url('/local/deleteoldcourses/test.php', array());
 

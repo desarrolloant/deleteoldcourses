@@ -28,12 +28,12 @@ use renderable;
 use context;
 use DateTime;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
 require_once($CFG->libdir . '/tablelib.php');
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
 /**
  * Class for displaying the courses table.
@@ -73,7 +73,7 @@ class list_courses_table extends \table_sql implements renderable {
     public function __construct($userid, $ago) {
         global $CFG;
 
-        parent::__construct('user-old-courses-' .'user-id');
+        parent::__construct('user-old-courses-' . 'user-id');
 
         $this->userid = $userid;
 
@@ -104,9 +104,6 @@ class list_courses_table extends \table_sql implements renderable {
         $this->define_columns($columns);
         $this->define_headers($headers);
 
-        // The name column is a header.
-        // $this->define_header_column('c_fullname');
-
         // Make this table sorted by last name by default.
         $this->sortable(true, 'c_shortname');
 
@@ -115,11 +112,6 @@ class list_courses_table extends \table_sql implements renderable {
         $this->no_sorting('table_option');
 
         $this->set_attribute('id', 'courses');
-
-        /*
-        // Set the variables we need to use later.
-        $this->search = $search;
-        $this->selectall = $selectall;*/
     }
 
     /**
@@ -154,7 +146,7 @@ class list_courses_table extends \table_sql implements renderable {
     public function col_c_fullname($data) {
         global $CFG;
         $courselink = $CFG->wwwroot . "/course/view.php?id=" . $data->id;
-        return '<a href="'.$courselink.'" target="_blank">'.$data->c_fullname.'</a>';
+        return '<a href="' . $courselink . '" target="_blank">' . $data->c_fullname . '</a>';
     }
 
     /**
@@ -204,10 +196,10 @@ class list_courses_table extends \table_sql implements renderable {
             $icon = '<i class="fa fa-check" aria-hidden="true"></i>';
         }
         return '<button
-                    class="'.$class.'"
-                    course-id="'.$data->id.'"
+                    class="' . $class . '"
+                    course-id="' . $data->id . '"
                     action="delete">
-                    '.$icon.'
+                    ' . $icon . '
                 </button>';
     }
 
@@ -218,7 +210,6 @@ class list_courses_table extends \table_sql implements renderable {
      * @param bool $useinitialsbar do you want to use the initials bar.
      */
     public function query_db($pagesize, $useinitialsbar = true) {
-        // list($twhere, $tparams) = $this->get_sql_where();
 
         $now = time();
 

@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/local/deleteoldcourses/lib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/lib.php');
 
 /**
  * Function to upgrade the plugin.
@@ -40,38 +40,38 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
     if ($oldversion < 2020100510) {
 
         // Modify tables: deleteoldcourses and deleteoldcourses_deleted.
-        $table_deleteoldcourses = new xmldb_table('deleteoldcourses');
-        $table_deleteoldcourses_deleted = new xmldb_table('deleteoldcourses_deleted');
+        $tabledeleteoldcourses = new xmldb_table('deleteoldcourses');
+        $tabledeleteoldcoursesdeleted = new xmldb_table('deleteoldcourses_deleted');
 
         // Adding fields to tables deleteoldcourses.
-        $size_field = $table_deleteoldcourses->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
-        $coursecreatedat_field = $table_deleteoldcourses->add_field('coursecreatedat',
+        $sizefield = $tabledeleteoldcourses->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
+        $coursecreatedatfield = $tabledeleteoldcourses->add_field('coursecreatedat',
                                                                     XMLDB_TYPE_INTEGER,
                                                                     '10',
                                                                     null,
                                                                     XMLDB_NOTNULL,
                                                                     false,
                                                                     '0');
-        $dbman->add_field($table_deleteoldcourses, $size_field);
-        $dbman->add_field($table_deleteoldcourses, $coursecreatedat_field);
+        $dbman->add_field($tabledeleteoldcourses, $sizefield);
+        $dbman->add_field($tabledeleteoldcourses, $coursecreatedatfield);
 
         // Adding fields to tables deleteoldcourses_deleted.
-        $size_field = $table_deleteoldcourses_deleted->add_field('size',
+        $sizefield = $tabledeleteoldcoursesdeleted->add_field('size',
                                                                 XMLDB_TYPE_INTEGER,
                                                                 '10',
                                                                 null,
                                                                 XMLDB_NOTNULL,
                                                                 false,
                                                                 '-1');
-        $coursecreatedat_field = $table_deleteoldcourses_deleted->add_field('coursecreatedat',
+        $coursecreatedatfield = $tabledeleteoldcoursesdeleted->add_field('coursecreatedat',
                                                                             XMLDB_TYPE_INTEGER,
                                                                             '10',
                                                                             null,
                                                                             XMLDB_NOTNULL,
                                                                             false,
                                                                             '0');
-        $dbman->add_field($table_deleteoldcourses_deleted, $size_field);
-        $dbman->add_field($table_deleteoldcourses_deleted, $coursecreatedat_field);
+        $dbman->add_field($tabledeleteoldcoursesdeleted, $sizefield);
+        $dbman->add_field($tabledeleteoldcoursesdeleted, $coursecreatedatfield);
 
         upgrade_plugin_savepoint(true, 20201005100, 'local', 'deleteoldcourses');
     }

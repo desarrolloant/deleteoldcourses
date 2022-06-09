@@ -39,7 +39,7 @@ const EDITING_TEACHER_ROLE_ID = 3;
  */
 function user_count_courses($userid, $now, $ago = 1) {
     global $DB;
-    $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
+    $since = strtotime(date("Y-m-d H:i:s", $now) . ' -' . $ago . ' year');
     $params = array();
     $sql = "SELECT COUNT(c.id)
             FROM {user} u
@@ -65,9 +65,9 @@ function user_count_courses($userid, $now, $ago = 1) {
  * @param int $ago number of years ago
  * @return query
  */
-function user_get_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago = 1) {
+function user_get_courses($userid, $sort, $limitfrom = 0, $limitnum = 0, $now, $ago = 1) {
     global $DB;
-    $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' year');
+    $since = strtotime(date("Y-m-d H:i:s", $now) . ' -' . $ago . ' year');
 
     list($select, $from, $join, $params) = user_get_courses_sql(EDITING_TEACHER_ROLE_ID, $userid, $since);
 
@@ -100,8 +100,8 @@ function user_get_courses_sql($roleid, $userid, $since) {
     $from = "FROM {user} u";
 
     $join = "JOIN {role_assignments} ra ON (ra.userid = u.id AND ra.roleid = :roleid AND u.id = :userid)
-           JOIN {context} ct ON (ra.contextid = ct.id)
-           JOIN {course} c ON (ct.instanceid = c.id AND c.timecreated <= :since)";
+             JOIN {context} ct ON (ra.contextid = ct.id)
+             JOIN {course} c ON (ct.instanceid = c.id AND c.timecreated <= :since)";
 
     return array($select, $from, $join, $params);
 }
@@ -114,7 +114,7 @@ function user_get_courses_sql($roleid, $userid, $since) {
  */
 function course_in_delete_list($courseid) {
     global $DB;
-    // Get the editing teacher role
+    // Get the editing teacher role.
     $record = $DB->get_record('deleteoldcourses', array('courseid' => $courseid));
     if (!$record) {
         return false;
@@ -131,11 +131,11 @@ function course_in_delete_list($courseid) {
  */
 function deleteoldcourses_viewed($context, $userid) {
     $event = \local_deleteoldcourses\event\old_courses_list_viewed::create(array(
-    'objectid' => $userid,
-    'context' => $context,
-    'other' => array(),
-    'relateduserid' => $userid,
-    ));
+            'objectid' => $userid,
+            'context' => $context,
+            'other' => array(),
+            'relateduserid' => $userid,
+            ));
     $event->trigger();
 }
 
@@ -146,10 +146,10 @@ function deleteoldcourses_viewed($context, $userid) {
  * @author Iader E. Garcia Gomez <iader.garcia@correounivalle.edu.co>
  * Version: 0.1
  **/
-function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDelete, $coursesDeleted) {
+function delete_old_courses_send_email($usernameto, $usernamefrom, $coursestodelete, $coursesdeleted) {
 
-    $fromUser = core_user::get_user_by_username(
-                                        $usernameFrom,
+    $fromuser = core_user::get_user_by_username(
+                                        $usernamefrom,
                                         'id,
                                         firstname,
                                         lastname,
@@ -163,8 +163,8 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
                                         alternatename'
                                     );
 
-    $toUser = core_user::get_user_by_username(
-                                        $usernameTo,
+    $touser = core_user::get_user_by_username(
+                                        $usernameto,
                                         'id,
                                         firstname,
                                         lastname,
@@ -181,28 +181,31 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
     $subject = "Notificación sobre cursos pendientes por borrar en el Campus Virtual";
 
     $texttosendhtml = '';
-    if ($coursesToDelete > 0) {
-        $texttosendhtml .= "El plugin de eliminación de cursos ha detectado que el día de hoy quedan cursos pendientes por borrar.<br><br>";
+    if ($coursestodelete > 0) {
+        $texttosendhtml .= "El plugin de eliminación de cursos ha detectado que el día
+                            de hoy quedan cursos pendientes por borrar.<br><br>";
     } else {
-        $texttosendhtml .= "El módulo de eliminación de cursos ha detectado que el día de hoy <strong>NO</strong> quedan cursos pendientes por borrar.<br><br>";
+        $texttosendhtml .= "El módulo de eliminación de cursos ha detectado que el día
+                            de hoy <strong>NO</strong> quedan cursos pendientes por borrar.<br><br>";
     }
-    $texttosendhtml .= "Cantidad de cursos pendientes: " . $coursesToDelete . "<br>";
-    $texttosendhtml .= "Cantidad de cursos borrados: ". $coursesDeleted ."<br><br>";
+    $texttosendhtml .= "Cantidad de cursos pendientes: " . $coursestodelete . "<br>";
+    $texttosendhtml .= "Cantidad de cursos borrados: " . $coursesdeleted . "<br><br>";
     $texttosendhtml .= "Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.<br>";
 
-    $textToSend = html_to_text($texttosendhtml);
+    $texttosend = html_to_text($texttosendhtml);
 
-    echo $textToSend;
+    echo $texttosend;
 
-    $completeFilePath = "/vhosts/campus/moodledata/temp/backup/";
+    $completefilepath = "/vhosts/campus/moodledata/temp/backup/";
 
-    $nameFile = 'deleteoldcourses.log';
+    $namefile = 'deleteoldcourses.log';
 
-    $completeFilePath .= $nameFile;
+    $completefilepath .= $namefile;
 
-    echo $completeFilePath;
+    echo $completefilepath;
 
-    $resultSendMessage = email_to_user($toUser, $fromUser, $subject, $textToSend, $textToSendHtml, $completeFilePath, $nameFile, true);
+    $resultsendmessage = email_to_user($touser, $fromuser, $subject, $texttosend,
+                                        $texttosendhtml, $completefilepath, $namefile, true);
 }
 
 /*******************************************************************************************
@@ -218,15 +221,15 @@ function delete_old_courses_send_email( $usernameTo, $usernameFrom, $coursesToDe
  */
 function count_deleted_courses($userid, $now, $ago = 0) {
     global $DB;
-    $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' month');
+    $since = strtotime(date("Y-m-d H:i:s", $now) . ' -' . $ago . ' month');
     $params = array();
     $sql = "SELECT COUNT(cd.id)
-              FROM {deleteoldcourses_deleted} cd
-             WHERE cd.timecreated >=:since";
+            FROM {deleteoldcourses_deleted} cd
+            WHERE cd.timecreated >= :since";
     if ($userid > 0) {
         $sql = "SELECT COUNT(cd.id)
-              FROM {deleteoldcourses_deleted} cd
-             WHERE cd.userid=:userid AND cd.timecreated >=:since";
+                FROM {deleteoldcourses_deleted} cd
+                WHERE cd.userid=:userid AND cd.timecreated >= :since";
     }
 
     $params['userid'] = $userid;
@@ -258,9 +261,9 @@ function get_deleted_courses_sql($userid, $since) {
 
     $from = "FROM {deleteoldcourses_deleted} cd";
 
-    $join = "JOIN {user} u ON (cd.userid = u.id AND cd.timecreated >=:since)";
+    $join = "JOIN {user} u ON (cd.userid = u.id AND cd.timecreated >= :since)";
     if ($userid > 0) {
-        $join = "JOIN {user} u ON (cd.userid = u.id AND cd.userid = :userid AND cd.timecreated >=:since)";
+        $join = "JOIN {user} u ON (cd.userid = u.id AND cd.userid = :userid AND cd.timecreated >= :since)";
     }
 
     return array($select, $from, $join, $params);
@@ -277,10 +280,10 @@ function get_deleted_courses_sql($userid, $since) {
  * @param int $ago number of years ago
  * @return query
  */
-function get_deleted_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $ago = 0) {
+function get_deleted_courses($userid, $sort, $limitfrom = 0, $limitnum = 0, $now, $ago = 0) {
     global $DB;
 
-    $since = strtotime(date("Y-m-d H:i:s", $now) .' -'.$ago.' month');
+    $since = strtotime(date("Y-m-d H:i:s", $now) . ' -' . $ago . ' month');
 
     list($select, $from, $join, $params) = get_deleted_courses_sql($userid, $since);
 
@@ -296,7 +299,7 @@ function get_deleted_courses($userid, $sort, $limitfrom=0, $limitnum=0, $now, $a
 function count_pending_courses() {
     global $DB;
     $sql = "SELECT COUNT(d.id)
-              FROM {deleteoldcourses} d";
+            FROM {deleteoldcourses} d";
     return $DB->count_records_sql($sql);
 }
 
@@ -333,7 +336,7 @@ function get_pending_courses_sql() {
  * @param int $limitnum limit sql
  * @return query
  */
-function get_pending_courses($sort, $limitfrom=0, $limitnum=0) {
+function get_pending_courses($sort, $limitfrom = 0, $limitnum = 0) {
     global $DB;
 
     list($select, $from, $join, $params) = get_pending_courses_sql();
@@ -351,19 +354,19 @@ function get_pending_courses($sort, $limitfrom=0, $limitnum=0) {
  *
  * @return string for query
  */
-function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $no_regular_timemodified) {
-    $regular_timecreated   = new DateTime($regular_timecreated);
-    $no_regular_timecreated   = new DateTime($no_regular_timecreated);
-    $no_regular_timemodified   = new DateTime($no_regular_timemodified);
+function get_queue_courses_sql($regulartimecreated, $noregulartimecreated, $noregulartimemodified) {
+    $regulartimecreated = new DateTime($regulartimecreated);
+    $noregulartimecreated = new DateTime($noregulartimecreated);
+    $noregulartimemodified = new DateTime($noregulartimemodified);
 
-    $params              = array();
-    $params['context1']   = CONTEXT_COURSE;
-    $params['context2']   = CONTEXT_COURSE;
-    $params['regular_timecreated']      = $regular_timecreated->getTimestamp();
-    $params['regular_timeaccess']      = $no_regular_timemodified->getTimestamp();
-    $params['no_regular_timecreated']      = $no_regular_timecreated->getTimestamp();
-    $params['no_regular_timemodified']      = $no_regular_timemodified->getTimestamp();
-    $params['no_regular_timeaccess']      = $no_regular_timemodified->getTimestamp();
+    $params = array();
+    $params['context1'] = CONTEXT_COURSE;
+    $params['context2'] = CONTEXT_COURSE;
+    $params['regular_timecreated'] = $regulartimecreated->getTimestamp();
+    $params['regular_timeaccess'] = $noregulartimemodified->getTimestamp();
+    $params['no_regular_timecreated'] = $noregulartimecreated->getTimestamp();
+    $params['no_regular_timemodified'] = $noregulartimemodified->getTimestamp();
+    $params['no_regular_timeaccess'] = $noregulartimemodified->getTimestamp();
 
     $orderby = "ASC";
 
@@ -397,10 +400,10 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             SELECT courseid, max(timeaccess) AS timeaccess
             FROM   {user_lastaccess}
             GROUP BY courseid
-          ) AS ul ON ul.courseid=c.id AND ul.timeaccess < :regular_timeaccess
+          ) AS ul ON ul.courseid = c.id AND ul.timeaccess < :regular_timeaccess
           WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
           GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.category, c.timemodified, c.timecreated
-          ORDER BY sum(filesize) '.$orderby.')
+          ORDER BY sum(filesize) ' . $orderby . ')
 
           UNION ALL
 
@@ -428,12 +431,12 @@ function get_queue_courses_sql($regular_timecreated, $no_regular_timecreated, $n
             SELECT courseid, max(timeaccess) AS timeaccess
             FROM   {user_lastaccess}
             GROUP BY courseid
-          ) AS ul ON ul.courseid=c.id AND ul.timeaccess < :no_regular_timeaccess
+          ) AS ul ON ul.courseid = c.id AND ul.timeaccess < :no_regular_timeaccess
           WHERE c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
           GROUP BY f.contextid, x.instanceid, c.fullname, c.shortname, c.category, c.timemodified, c.timecreated
-          ORDER BY sum(filesize) '.$orderby.')
+          ORDER BY sum(filesize) ' . $orderby . ')
 
-          ORDER BY size_in_bytes '.$orderby;
+          ORDER BY size_in_bytes ' . $orderby;
     return array($sql, $params);
 }
 
@@ -464,7 +467,6 @@ function course_was_updated($course, $timemodified) {
 
     if ($course) {
         if ($timemodified < $course->timemodified) {
-            // echo $course->shortname.' - '.userdate($course->timemodified);
             $result = true;
         }
     }
@@ -488,13 +490,13 @@ function course_sections_was_updated($course, $timemodified) {
         return true;
     }
 
-    $course_sections = $DB->get_records_sql("SELECT cs.summary, cs.timemodified
-                                             FROM {course_sections} cs
+    $coursesections = $DB->get_records_sql("SELECT cs.summary, cs.timemodified
+                                            FROM {course_sections} cs
                                             WHERE cs.course = ?",
-                                      array($course->id));
-    if ($course_sections) {
-        foreach ($course_sections as $course_section) {
-            if ($timemodified < $course_section->timemodified) {
+                                            array($course->id));
+    if ($coursesections) {
+        foreach ($coursesections as $coursesection) {
+            if ($timemodified < $coursesection->timemodified) {
                 $result = true;
                 break;
             }
@@ -520,16 +522,15 @@ function course_modules_was_updated($course, $timemodified) {
         return true;
     }
 
-    $course_mods = $DB->get_records_sql("SELECT cm.instance, m.name as modname
-                                         FROM {modules} m, {course_modules} cm
+    $coursemods = $DB->get_records_sql("SELECT cm.instance, m.name as modname
+                                        FROM {modules} m, {course_modules} cm
                                         WHERE cm.course = ? AND cm.module = m.id",
-                                      array($course->id));
-    if ($course_mods) {
-        foreach ($course_mods as $course_mod) {
-            $course_module_instance = $DB->get_record($course_mod->modname, array('id' => $course_mod->instance ));
-            if ($timemodified < $course_module_instance->timemodified) {
+                                        array($course->id));
+    if ($coursemods) {
+        foreach ($coursemods as $coursemod) {
+            $coursemoduleinstance = $DB->get_record($coursemod->modname, array('id' => $coursemod->instance));
+            if ($timemodified < $coursemoduleinstance->timemodified) {
                 $result = true;
-                // echo $course_module_instance->name.' - '.userdate($course_module_instance->timemodified).'<br>';
                 break;
             }
         }
@@ -560,16 +561,15 @@ function course_roles_was_updated($course, $timemodified) {
         return true;
     }
 
-    $course_role_assignments = $DB->get_records_sql("SELECT ra.timemodified
-                                                     FROM {role_assignments} ra
-                                                     JOIN {user} u ON u.id=ra.userid
+    $$courseroleassignments = $DB->get_records_sql("SELECT ra.timemodified
+                                                    FROM {role_assignments} ra
+                                                    JOIN {user} u ON u.id = ra.userid
                                                     WHERE ra.contextid = ?",
-                                                  array($context->id));
-    if ($course_role_assignments) {
-        foreach ($course_role_assignments as $role_assignment) {
-            if ($timemodified < $role_assignment->timemodified) {
+                                                    array($context->id));
+    if ($$courseroleassignments) {
+        foreach ($$courseroleassignments as $roleassignment) {
+            if ($timemodified < $roleassignment->timemodified) {
                 $result = true;
-                // echo userdate($role_assignment->timemodified).'<br>';
                 break;
             }
         }
@@ -594,17 +594,16 @@ function course_user_enrolments_was_updated($course, $timemodified) {
         return true;
     }
 
-    $course_user_enrolments = $DB->get_records_sql("SELECT ue.userid, ue.timecreated, ue.timemodified
+    $courseuserenrolments = $DB->get_records_sql("SELECT ue.userid, ue.timecreated, ue.timemodified
                                                     FROM {user_enrolments} ue
                                                     JOIN {enrol} e ON e.id = ue.enrolid
                                                     WHERE e.courseid = ?",
-                                                  array($course->id));
+                                                    array($course->id));
 
-    if ($course_user_enrolments) {
-        foreach ($course_user_enrolments as $user_enrolment) {
-            if ($timemodified < $user_enrolment->timemodified || $timemodified < $user_enrolment->timecreated) {
+    if ($courseuserenrolments) {
+        foreach ($courseuserenrolments as $userenrolment) {
+            if ($timemodified < $userenrolment->timemodified || $timemodified < $userenrolment->timecreated) {
                 $result = true;
-                // echo $user_enrolment->userid.' - '.userdate($user_enrolment->timemodified).' - '.userdate($user_enrolment->timemodified).'<br>';
                 break;
             }
         }
@@ -626,13 +625,10 @@ function get_courses_sql($timecreated, $order) {
     $params = array();
     $params['timecreated'] = $timecreated;
 
-    $sql = '
-    SELECT c.id, c.shortname, c.fullname, c.category, c.timemodified, c.timecreated
-      FROM {course} c
-     WHERE c.id > 1 AND
-           c.timecreated < :timecreated AND
-           c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
-  ORDER BY c.timecreated '.$order;
+    $sql = "SELECT c.id, c.shortname, c.fullname, c.category, c.timemodified, c.timecreated
+            FROM {course} c
+            WHERE c.id > 1 AND c.timecreated < :timecreated AND c.id NOT IN (SELECT courseid FROM {deleteoldcourses})
+            ORDER BY c.timecreated " . $order;
 
     return array($sql, $params);
 }
@@ -646,7 +642,7 @@ function get_courses_sql($timecreated, $order) {
  * @param  bool $test
  * @return void
  */
-function add_courses_to_delete($timecreated, $timemodified, $quantity=0, $test=false) {
+function add_courses_to_delete($timecreated, $timemodified, $quantity = 0, $test = false) {
 
     global $DB;
 
@@ -662,22 +658,22 @@ function add_courses_to_delete($timecreated, $timemodified, $quantity=0, $test=f
     $user = $DB->get_record('user', array('username' => 'desadmin'));
     $count = 0;
     $order = 'ASC';
-    $limit_query = 5000;
+    $limitquery = 5000;
 
     // For test queries.
     if ($test) {
-        $limit_query = 25000;
+        $limitquery = 25000;
         $order = 'DESC';
     }
 
     list($sql, $params) = get_courses_sql($timecreated, $order);
-    $rs = $DB->get_recordset_sql($sql, $params, 0, $limit_query);
+    $rs = $DB->get_recordset_sql($sql, $params, 0, $limitquery);
     foreach ($rs as $row) {
 
         // Get first category parent of this course category.
-        $first_category_parent = recursiveParentCategory($row->category);
+        $firstcategoryparent = recursive_parent_category($row->category);
         // Exclude regular courses on categories with id < 30000.
-        if ($row->category < 30000 && $first_category_parent == 6) {
+        if ($row->category < 30000 && $firstcategoryparent == 6) {
             continue;
         }
         // Exclude Cursos Abiertos.
@@ -685,9 +681,9 @@ function add_courses_to_delete($timecreated, $timemodified, $quantity=0, $test=f
             continue;
         }
         // Exclude Cursos de Extensión.
-        // if ($first_category_parent == 7) { continue; }-->
+        // if ($firstcategoryparent == 7) { continue; }-->
         // Exclude Cursos Virtuales y Mixtos (blended).
-        if ($first_category_parent == 110) {
+        if ($firstcategoryparent == 110) {
             continue;
         }
         // Exclude Categoría DEMO.
@@ -699,7 +695,7 @@ function add_courses_to_delete($timecreated, $timemodified, $quantity=0, $test=f
             continue;
         }
         // Exclude Medios Educativos-AMED.
-        // if ($first_category_parent == 43) { continue; } -->
+        // if ($firstcategoryparent == 43) { continue; } -->
         // Exclude Formación Docente en Integración Pedagógica de las TIC.
         // if ($row->category == 89) { continue; } -->
         // Exclude Elecciones Electrónicas.
@@ -716,14 +712,14 @@ function add_courses_to_delete($timecreated, $timemodified, $quantity=0, $test=f
             continue;
         }
 
-        $course_updated = course_was_updated($row, $timemodified);
-        $sections_updated = course_sections_was_updated($row, $timemodified);
-        $modules_updated = course_modules_was_updated($row, $timemodified);
-        $roles_updated = course_roles_was_updated($row, $timemodified);
-        $user_enrolments = course_user_enrolments_was_updated($row, $timemodified);
+        $courseupdated = course_was_updated($row, $timemodified);
+        $sectionsupdated = course_sections_was_updated($row, $timemodified);
+        $modulesupdated = course_modules_was_updated($row, $timemodified);
+        $rolesupdated = course_roles_was_updated($row, $timemodified);
+        $userenrolments = course_user_enrolments_was_updated($row, $timemodified);
 
         // If this course was updated after date.
-        if ($course_updated || $sections_updated || $modules_updated || $roles_updated || $user_enrolments) {
+        if ($courseupdated || $sectionsupdated || $modulesupdated || $rolesupdated || $userenrolments) {
             continue;
         }
 
@@ -731,19 +727,19 @@ function add_courses_to_delete($timecreated, $timemodified, $quantity=0, $test=f
 
         // Show test queries - Confirm creation date.
         if ($test) {
-            echo $count.' - '.$row->id.' - '.$row->fullname.' - '.userdate($row->timecreated).'<br>';
+            echo $count . ' - ' . $row->id. ' - ' . $row->fullname . ' - ' . userdate($row->timecreated) . '<br>';
             continue;
         }
 
         // Add course to queue for delete.
         $record = (object) array(
-        'courseid'          => $row->id,
-        'shortname'         => $row->shortname,
-        'fullname'          => $row->fullname,
-        'userid'            => $user->id,
-        'size'              => courseCalculateSize($row->id),
-        'coursecreatedat'   => $row->timecreated,
-        'timecreated'       => time()
+            'courseid' => $row->id,
+            'shortname' => $row->shortname,
+            'fullname' => $row->fullname,
+            'userid' => $user->id,
+            'size' => course_calculate_size($row->id),
+            'coursecreatedat' => $row->timecreated,
+            'timecreated' => time()
         );
         // Add to deletion list.
         $DB->insert_record('deleteoldcourses', $record);
@@ -764,18 +760,18 @@ function add_courses_to_delete($timecreated, $timemodified, $quantity=0, $test=f
 /****************************************************************************
  * ****************************** Other Methods *******************************
  ****************************************************************************/
-function courseCalculateSize($courseid) {
+function course_calculate_size($courseid) {
     global $DB;
 
     $result = 0;
 
     $params = [];
-    $params['courseid']   = $courseid;
-    $params['context']    = CONTEXT_COURSE;
+    $params['courseid'] = $courseid;
+    $params['context'] = CONTEXT_COURSE;
     $sql = "SELECT sum(f.filesize) AS size
-          FROM {files} f
-          INNER JOIN {context} x ON (f.contextid = x.id AND x.contextlevel = :context)
-          INNER JOIN {course} c ON (c.id = x.instanceid AND c.id = :courseid)";
+            FROM {files} f
+            INNER JOIN {context} x ON (f.contextid = x.id AND x.contextlevel = :context)
+            INNER JOIN {course} c ON (c.id = x.instanceid AND c.id = :courseid)";
 
     if ($query = $DB->get_record_sql($sql, $params)) {
         if ($query->size != null) {
@@ -789,23 +785,23 @@ function courseCalculateSize($courseid) {
 /**
  * Get first categoryid of parents tree.
  */
-function recursiveParentCategory($categoryid) {
+function recursive_parent_category($categoryid) {
     global $DB;
     $category = $DB->get_record('course_categories', array('id' => $categoryid));
     if ($category->parent > 0) {
-        return recursiveParentCategory($category->parent);
+        return recursive_parent_category($category->parent);
     } else {
         return $category->id;
     }
 }
 
-function countDeletedCourses($starttime) {
+function count_currently_deleted_dourses($starttime) {
     global $DB;
     $params = [];
     $params['starttime']   = $starttime;
     $sql = "SELECT COUNT(*)
-          FROM {deleteoldcourses_deleted}
-          WHERE timecreated > :starttime";
+            FROM {deleteoldcourses_deleted}
+            WHERE timecreated > :starttime";
     $deletedcourses = $DB->count_records_sql($sql, $params);
     return $deletedcourses;
 }
