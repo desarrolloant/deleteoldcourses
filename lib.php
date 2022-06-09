@@ -24,9 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
-
-defined('MOODLE_INTERNAL') || die;
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
 
 /**
@@ -59,21 +57,21 @@ function local_deleteoldcourses_extend_navigation(global_navigation $navigation)
     $key = 'deleteoldcourses';
     $icon = new pix_icon('i/trash', '');
 
-    $show_node = false;
-    $show_alert = false;
+    $shownode = false;
+    $showalert = false;
     $total = 0;
 
     if (has_capability('local/deleteoldcourses:viewreport', context_system::instance())) {
         $action = new moodle_url('/local/deleteoldcourses/report.php', array());
-        $show_node = true;
+        $shownode = true;
     } else {
         $now = time();
         $total = user_count_courses($USER->id, $now);
-        $show_alert = true;
+        $showalert = true;
     }
 
     if ($total > 0) {
-        $show_node = true;
+        $shownode = true;
     }
 
     $node = navigation_node::create(
@@ -85,8 +83,8 @@ function local_deleteoldcourses_extend_navigation(global_navigation $navigation)
     $icon
     );
 
-    if ($show_node) {
-        if ($show_alert) {
+    if ($shownode) {
+        if ($showalert) {
             $PAGE->requires->js_call_amd('local_deleteoldcourses/show_alert', 'init', array(
             'link' => $action->out(false),
             'str_content' => get_string('alert_delete_content', 'local_deleteoldcourses'),
@@ -108,7 +106,7 @@ function local_deleteoldcourses_reset_fontawesome_icon_map() {
     // Thus, we clear the icon system cache brutally.
     $instance = \core\output\icon_system::instance(\core\output\icon_system::FONTAWESOME);
     $cache = \cache::make('core', 'fontawesomeiconmapping');
-    $mapkey = 'mapping_'.preg_replace('/[^a-zA-Z0-9_]/', '_', get_class($instance));
+    $mapkey = 'mapping_' . preg_replace('/[^a-zA-Z0-9_]/', '_', get_class($instance));
     $cache->delete($mapkey);
     // And rebuild it brutally.
     $instance->get_icon_name_map();

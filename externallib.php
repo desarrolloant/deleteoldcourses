@@ -92,7 +92,7 @@ class local_deleteoldcourses_external extends external_api {
         // Get the editing teacher role.
         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
         // Get the course context.
-        $context = get_context_instance(CONTEXT_COURSE, $params['courseid']);
+        $context = context_course::instance($params['courseid']);
         // Get the course teachers.
         $teachers = get_role_users($role->id, $context);
 
@@ -100,12 +100,12 @@ class local_deleteoldcourses_external extends external_api {
         // Get teachers.
         $temp = [];
         foreach ($teachers as $teacher) {
-            $url_user = $CFG->wwwroot . "/user/view.php?id=" . $teacher->id . "&course=" . $courseid;
+            $userurl = $CFG->wwwroot . "/user/view.php?id=" . $teacher->id . "&course=" . $courseid;
             if ($USER->id != $teacher->id) {
                 array_push($temp, array(
                     'id' => $teacher->id,
                     'fullname' => fullname($teacher),
-                    'url' => $url_user
+                    'url' => $userurl
                 ));
             } else {
                 $isteacher = true;
@@ -200,7 +200,7 @@ class local_deleteoldcourses_external extends external_api {
         // Get the editing teacher role.
         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
         // Get the course context.
-        $context = get_context_instance(CONTEXT_COURSE, $params['courseid']);
+        $context = context_course::instance($params['courseid']);
         // Get the course teachers.
         $teachers = get_role_users($role->id, $context);
 
@@ -222,13 +222,13 @@ class local_deleteoldcourses_external extends external_api {
             'timecreated'       => time()
         );
 
-        $record_id = null;
+        $recordid = null;
 
         if ($isteacher) {
-            $record_id = $DB->insert_record('deleteoldcourses', $record);
+            $recordid = $DB->insert_record('deleteoldcourses', $record);
         }
 
-        if ($record_id) {
+        if ($recordid) {
 
             // Create event for sent course to be deleted.
             $event = \local_deleteoldcourses\event\course_sent_delete::create(array(
@@ -241,7 +241,7 @@ class local_deleteoldcourses_external extends external_api {
 
             return array(
                 'success' => true,
-                'record_id' => $record_id
+                'record_id' => $recordid
             );
         }
 
@@ -298,7 +298,7 @@ class local_deleteoldcourses_external extends external_api {
         // Get the editing teacher role.
         $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
         // Get the course context.
-        $context = get_context_instance(CONTEXT_COURSE, $params['courseid']);
+        $context = context_course::instance($params['courseid']);
         // Get the course teachers.
         $teachers = get_role_users($role->id, $context);
 

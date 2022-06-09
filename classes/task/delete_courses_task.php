@@ -16,9 +16,9 @@
 
 namespace local_deleteoldcourses\task;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/local/deleteoldcourses/locallib.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
 use DateTime;
 
@@ -88,7 +88,7 @@ class delete_courses_task extends \core\task\scheduled_task {
         $this->delete_courses_in_list();
 
         // Deleted courses in this rutine.
-        $deletedcourses = countDeletedCourses($starttasktime);
+        $deletedcourses = count_currently_deleted_dourses($starttasktime);
 
         if ($deletedcourses > 0) {
             $difftime = microtime_diff($starttime, microtime());
@@ -104,9 +104,9 @@ class delete_courses_task extends \core\task\scheduled_task {
         // Send email.
         $coursestodelete = $DB->count_records('deleteoldcourses');
 
-        delete_old_courses_send_email( '66996031' , 'administrador', $coursestodelete, $deletedcourses );
-        delete_old_courses_send_email( '1144132883' , 'administrador', $coursestodelete, $deletedcourses );
-        delete_old_courses_send_email( '1130589899' , 'administrador', $coursestodelete, $deletedcourses);
+        delete_old_courses_send_email('66996031' , 'administrador', $coursestodelete, $deletedcourses);
+        delete_old_courses_send_email('1144132883' , 'administrador', $coursestodelete, $deletedcourses);
+        delete_old_courses_send_email('1130589899' , 'administrador', $coursestodelete, $deletedcourses);
     }
 
     /**
@@ -133,9 +133,9 @@ class delete_courses_task extends \core\task\scheduled_task {
             $minutes    = intval(date('i'));
 
             // Run only between 0:15 and 7:00.
-            if ($hour > 7 && $day < 6 ) {
-                // break;
-            }
+            // if ($hour > 7 && $day < 6) {
+            //     break;
+            // }
 
             // Stop at 23:00.
             if ($hour >= 23) {
@@ -146,7 +146,7 @@ class delete_courses_task extends \core\task\scheduled_task {
 
             // Size when the course was send for an user.
             if ($item->size == -1) {
-                $size = courseCalculateSize($item->courseid);
+                $size = course_calculate_size($item->courseid);
             }
 
             $lockkey = "course{$item->courseid}";
