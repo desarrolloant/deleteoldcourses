@@ -53,4 +53,28 @@ class local_deleteoldcourses_generator extends testing_module_generator {
 
         return $record;
     }
+
+    /**
+     * Update setting plugin for tests
+     *
+     * @param  string   $namesetting
+     * @param  string   $value
+     * @return stdClass $record
+     */
+    public function update_setting($settingname, $settingvalue) {
+
+        global $DB;
+
+        $idsetting = $DB->get_record('config_plugins', array('name' => $settingname), 'id')->id;
+
+        $record = new stdClass();
+        $record->id = $idsetting;
+        $record->value = $settingvalue;
+
+        $DB->update_record('config_plugins', $record);
+
+        $setting = $DB->get_record('config_plugins', array('name' => $settingname));
+
+        return $setting;
+    }
 }

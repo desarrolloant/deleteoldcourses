@@ -90,6 +90,8 @@ $string['year_last_modification_date_desc'] = 'Ejemplo';
 
 $string['course_categories_criteria_heading'] = 'Categorías de curso excluidas';
 $string['course_categories_criteria_heading_desc'] = 'Categorías que no se tendrán en cuenta en el proceso de eliminación automática de cursos.';
+$string['number_of_categories'] = 'Cantidad de categorías a excluir';
+$string['number_of_categories_desc'] = 'Seleccione la cantidad de categorías a excluir.';
 $string['excluded_course_categories'] = 'Categorías';
 $string['excluded_course_categories_desc'] = 'Seleccione las categorias de curso';
 
@@ -101,6 +103,13 @@ $string['limit_query'] = 'Limite de la consulta';
 $string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
 $string['course_queue_size'] = 'Tamaño de la cola de cursos a eliminar';
 $string['course_queue_size_desc'] = 'Ejemplo: los cursos son eliminados en una cola de tamaño máximo de 500 cursos por ejecución.';
+
+// Notification settings.
+$string['notification_settings_tab'] = 'Notificaciones';
+$string['notification_settings_heading'] = 'Configuraciones para notificaciones';
+$string['notification_settings_heading_desc'] = 'Configuraciones para notificaciones sobre eliminación de cursos.';
+$string['users_to_notify'] = 'Usuarios a notificar';
+$string['users_to_notify_desc'] = 'Ingrese, separados por comas, los nombres de usuario (username) de los usuarios a notificar.';
 
 // Date settings.
 $string['january'] = 'Enero';
@@ -129,8 +138,8 @@ $string['limit_query_is_empty'] = 'El limite de la consulta no puede estar vacio
 
 // Notifier.
 $string['message_to_send'] = 'Resumen de la ejecución: \n
-                            <pre>
+                              <pre>
                                 - Cantidad de cursos borrados: {$a->deletedcourses}
                                 - Cantidad de cursos pendientes: {$a->pendingcourses}
-                            </pre>
-                            Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.';
+                              </pre>
+                              Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.';

@@ -18,7 +18,10 @@
  * Add page to admin menu.
  *
  * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @copyright  2020 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @author     Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
+ * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -36,6 +39,7 @@ $settings = new theme_boost_admin_settingspage_tabs('managelocaldeleteoldcourses
 
 if ($ADMIN->fulltree) {
 
+    // First settings tab.
     $settingspage = new admin_settingpage('deletioncriterias', new lang_string('criteriatab', 'local_deleteoldcourses'));
 
     $years = get_years();
@@ -166,7 +170,7 @@ if ($ADMIN->fulltree) {
 
     $settingspage->add(new admin_setting_configselect(
         'local_deleteoldcourses/number_of_categories_to_exclude',
-        new lang_string('number_of_categories', 'number_of_categories_to_exclude'),
+        new lang_string('number_of_categories_to_exclude', 'local_deleteoldcourses'),
         new lang_string('number_of_categories_to_exclude_desc', 'local_deleteoldcourses'),
         1,
         $options
@@ -189,12 +193,10 @@ if ($ADMIN->fulltree) {
     // Must add the page after definiting all the settings!
     $settings->add($settingspage);
 
-    // Configuraciones para la fecha de modificacion de los cursos.
-
+    // Second settings tab: Advanced settings.
     $settingspage = new admin_settingpage('advanced_settings',
-                                        new lang_string('advancedtab', 'local_deleteoldcourses'));
+                                           new lang_string('advancedtab', 'local_deleteoldcourses'));
 
-    // Advanced settings.
     $settingspage->add(new admin_setting_heading(
         'local_deleteoldcourses/advanced_settings_heading',
         new lang_string('advanced_settings_heading', 'local_deleteoldcourses'),
@@ -217,6 +219,27 @@ if ($ADMIN->fulltree) {
         PARAM_INT,
         5
     ));
+
+    // Must add the page after definiting all the settings!
+    $settings->add($settingspage);
+
+    // Third settings tab: Notification settings.
+    $settingspage = new admin_settingpage('notification_settings',
+                                          new lang_string('notification_settings_tab', 'local_deleteoldcourses'));
+
+    $settingspage->add(new admin_setting_heading(
+                       'local_deleteoldcourses/notification_settings_heading',
+                       new lang_string('notification_settings_heading', 'local_deleteoldcourses'),
+                       new lang_string('notification_settings_heading_desc', 'local_deleteoldcourses')));
+
+    $settingspage->add(new admin_setting_configtext(
+                       'local_deleteoldcourses/users_to_notify',
+                       new lang_string('users_to_notify', 'local_deleteoldcourses'),
+                       new lang_string('users_to_notify_desc', 'local_deleteoldcourses'),
+                       '',
+                       PARAM_TEXT,
+                       50
+                    ));
 
     // Must add the page after definiting all the settings!
     $settings->add($settingspage);

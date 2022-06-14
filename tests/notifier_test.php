@@ -44,20 +44,43 @@ class local_deleteoldcourses_notifier_tests extends advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        global $CFG;
-
-        $user1 = $this->getDataGenerator()->create_user(array('email' => 'user1@example.com', 'username' => 'desadmin2021'));
-        $user2 = $this->getDataGenerator()->create_user(array('email' => 'user2@example.com', 'username' => 'desadmin2022'));
-
-        // Los usuarios vienen en forma de arreglo de nombres de usuario.
-        $userstonotify = array('desadmin2021', 'desadmin2022');
-
-        $this->resetAfterTest(true);
+        // TO DO
+        // Mejorar la prueba con la cantidad de cursos borrados y a borrar.
 
         $notifier = new notifier();
         $this->assertInstanceOf(notifier::class, $notifier);
 
         $messagetosend = $notifier->generate_text_to_send();
         $this->assertIsString($messagetosend);
+    }
+
+    /**
+     * Test case for sending notification.
+     *
+     * @return void
+     */
+    public function test_send_notification() {
+
+        $this->resetAfterTest(true);
+
+        // Creating users.
+        $user1 = $this->getDataGenerator()->create_user(array('email' => 'user1@example.com', 'username' => 'desadmin2021'));
+        $user2 = $this->getDataGenerator()->create_user(array('email' => 'user2@example.com', 'username' => 'desadmin2022'));
+
+        // Call to plugin generator.
+        $testgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
+
+        $userstonotifysetting = $testgenerator->update_setting('users_to_notify', 'desadmin2021, desadmin2022');
+
+        $notifier = new notifier();
+
+        $userstonotify = $notifier->get_userstonotify();
+
+        $this->assertInstanceOf(notifier::class, $notifier);
+        $this->assertIsString($notifier->get_text_to_send());
+        $this->assertIsArray($userstonotify);
+        $this->assertSame(2, count($userstonotify));
+        $this->assertSame($userstonotify[0]->username, 'desadmin2021');
+        $this->assertSame($userstonotify[1]->username, 'desadmin2022');
     }
 }
