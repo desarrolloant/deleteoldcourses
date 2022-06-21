@@ -27,6 +27,7 @@
 namespace local_deleteoldcourses;
 
 use stdClass;
+use DateTimeZone;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -40,4 +41,28 @@ defined('MOODLE_INTERNAL') || die();
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class date_manager {
+
+    private $datetimezone;
+
+    /**
+     * Set the value of datetimezone
+     *
+     * @return  self
+     * @since  Moodle 3.10
+     */
+    public function set_datetimezone() {
+        $this->datetimezone = new DateTimeZone('America/Bogota');
+
+        return $this;
+    }
+
+    /**
+     * Get the value of datetimezone
+     *
+     * @return dateTimeZone datetimezone
+     * @since  Moodle 3.10
+     */
+    public function get_datetimezone() {
+        return $this->datetimezone;
+    }
 }
