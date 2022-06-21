@@ -142,9 +142,11 @@ $string['timemodified_criteria_is_empty'] = 'Timecreated criteria cannot be empt
 $string['limit_query_is_empty'] = 'Limit query criteria cannot be empty';
 
 // Notifier.
-$string['message_to_send'] = 'Resumen de la ejecución: \n
-                              <pre>
-                                - Cantidad de cursos borrados: {$a->deletedcourses}
-                                - Cantidad de cursos pendientes: {$a->pendingcourses}
-                              </pre>
-                              Este mensaje ha sido generado automáticamente, por favor no responda a este mensaje.';
+$string['message_to_send'] = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
+$string['message_to_send'] .= 'Resumen de la ejecución: \n';
+$string['message_to_send'] .= '<pre>';
+$string['message_to_send'] .= '- Cantidad de cursos borrados: {$a->deletedcourses}';
+$string['message_to_send'] .= '- Cantidad de cursos pendientes: {$a->pendingcourses}';
+$string['message_to_send'] .= '</pre>';
+$string['message_to_send'] .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
+$string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendientes por eliminar';

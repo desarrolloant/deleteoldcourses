@@ -44,7 +44,6 @@ class notifier {
         $this->texttosend = $this->generate_text_to_send();
     }
 
-
     /**
      * Generate text for notify users.
      *
@@ -74,16 +73,27 @@ class notifier {
         global $DB;
 
         // TO DO.
-        // Método que envia notificaciones.
+        // Revisar path de los logs de la ejecución.
+        // Revisar logs de la ejecución.
         $notificationsent = false;
 
         $userfrom = $DB->get_record('user', array('username' => 'administrador'));
         $subject = get_string('notification_subject', 'local_deleteoldcourses');
+        $completefilepath = "/vhosts/campus/moodledata/temp/backup/";
+        $filename = 'deleteoldcourses.log';
 
         $userstonotify = $this->get_userstonotify();
+        $texttosend = $this->get_text_to_send();
 
         foreach ($userstonotify as $user) {
-            email_to_user($user, $userfrom, $this->get_text_to_send, '', '', '', true);
+            $notificationsent = email_to_user($user,
+                                              $userfrom,
+                                              $subject,
+                                              $texttosend,
+                                              html_to_text($texttosend),
+                                              $completefilepath,
+                                              $filename,
+                                              true);
         }
 
         return $notificationsent;
