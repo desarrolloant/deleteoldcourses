@@ -52,6 +52,16 @@ class local_deleteoldcourses_notifier_tests extends advanced_testcase {
 
         $messagetosend = $notifier->generate_text_to_send();
         $this->assertIsString($messagetosend);
+
+        $expectedmessage = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
+        $expectedmessage .= 'Resumen de la ejecución: \n';
+        $expectedmessage .= '<pre>';
+        $expectedmessage .= '- Cantidad de cursos borrados: 2';
+        $expectedmessage .= '- Cantidad de cursos pendientes: 3';
+        $expectedmessage .= '</pre>';
+        $expectedmessage .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
+
+        $this->assertSame($expectedmessage, $messagetosend);
     }
 
     /**
@@ -82,5 +92,13 @@ class local_deleteoldcourses_notifier_tests extends advanced_testcase {
         $this->assertSame(2, count($userstonotify));
         $this->assertSame($userstonotify[0]->username, 'desadmin2021');
         $this->assertSame($userstonotify[1]->username, 'desadmin2022');
+
+        unset_config('noemailever');
+        $sink = $this->redirectEmails();
+
+        $notifier->send_notification();
+
+        $messages = $sink->get_messages();
+        $this->assertEquals(2, count($messages));
     }
 }
