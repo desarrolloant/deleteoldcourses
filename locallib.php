@@ -812,12 +812,16 @@ function count_currently_deleted_dourses($starttime) {
  * @return array $years
  */
 function get_years() {
+
     $years = array();
     $fromyear = 2005;
     $toyear = 2040;
-    for ($i = $fromyear; $i <= $toyear; $i++) {
-        $years[$i] = $i;
+
+    for ($index = 0; $fromyear <= $toyear; $index++) {
+        $years[$index] = $fromyear;
+        $fromyear++;
     }
+
     return $years;
 }
 
@@ -919,15 +923,11 @@ function get_minutes_in_hour() {
 /**
  * Date config to timestamp.
  *
- * Date type:
- *   - creation
- *   - last_modification
- *
- * @param  string $datetype
- * @return int    $timestamp
- * @since    Moodle 3.10
- * @author   Iader E. García Gómez <iadergg@gmail.com>
- * @author   Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
+ * @param   string $datetype 'creation' or 'last_modification'
+ * @return  int    $timestamp
+ * @since   Moodle 3.10
+ * @author  Iader E. García Gómez <iadergg@gmail.com>
+ * @author  Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
  */
 function date_config_to_timestamp($datetype) {
 
