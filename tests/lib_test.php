@@ -59,68 +59,29 @@ class lib_test extends advanced_testcase {
 
         $configgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
 
-        $config = new stdClass();
-        $config->plugin = 'local_deleteoldcourses';
-        $config->name = 'year_creation_date';
-        $config->value = '2005';
+        $configgenerator->update_setting('year_creation_date', '2005');
 
-        $configgenerator->update_config($config);
+        $configgenerator->update_setting('month_creation_date', '08');
 
-        $config->name = 'month_creation_date';
-        $config->value = '08';
+        $configgenerator->update_setting('day_creation_date', '01');
 
-        $configgenerator->update_config($config);
+        $configgenerator->update_setting('hour_creation_date', '23');
 
-        $config->name = 'day_creation_date';
-        $config->value = '01';
+        $configgenerator->update_setting('minutes_creation_date', '59');
 
-        $configgenerator->update_config($config);
+        $configgenerator->update_setting('seconds_creation_date', '59');
 
-        $config->name = 'hour_creation_date';
-        $config->value = '23';
+        $configgenerator->update_setting('year_last_modification_date', '2022');
 
-        $configgenerator->update_config($config);
+        $configgenerator->update_setting('month_last_modification_date', '01');
 
-        $config->name = 'minutes_creation_date';
-        $config->value = '59';
+        $configgenerator->update_setting('day_last_modification_date', '05');
 
-        $configgenerator->update_config($config);
+        $configgenerator->update_setting('hour_last_modification_date', '00');
 
-        $config->name = 'seconds_creation_date';
-        $config->value = '59';
+        $configgenerator->update_setting('minutes_last_modification_date', '20');
 
-        $configgenerator->update_config($config);
-
-        // Modification date 2022-01-05 00:20:20.
-        $config->name = 'year_last_modification_date';
-        $config->value = '2022';
-
-        $configgenerator->update_config($config);
-
-        $config->name = 'month_last_modification_date';
-        $config->value = '01';
-
-        $configgenerator->update_config($config);
-
-        $config->name = 'day_last_modification_date';
-        $config->value = '05';
-
-        $configgenerator->update_config($config);
-
-        $config->name = 'hour_last_modification_date';
-        $config->value = '00';
-
-        $configgenerator->update_config($config);
-
-        $config->name = 'minutes_last_modification_date';
-        $config->value = '20';
-
-        $configgenerator->update_config($config);
-
-        $config->name = 'seconds_last_modification_date';
-        $config->value = '20';
-
-        $configgenerator->update_config($config);
+        $configgenerator->update_setting('seconds_last_modification_date', '20');
 
         $timecreated = date_config_to_timestamp('creation');
         $timemodified = date_config_to_timestamp('last_modification');
