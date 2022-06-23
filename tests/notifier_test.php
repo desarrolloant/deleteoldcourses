@@ -28,12 +28,10 @@
 namespace local_deleteoldcourses;
 
 use advanced_testcase;
-use moodle_exception;
-use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
-class local_deleteoldcourses_notifier_tests extends advanced_testcase {
+class notifier_test extends advanced_testcase {
 
     /**
      * Test for text generation for a notification.
@@ -44,20 +42,61 @@ class local_deleteoldcourses_notifier_tests extends advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        global $CFG;
-
-        $user1 = $this->getDataGenerator()->create_user(array('email' => 'user1@example.com', 'username' => 'desadmin2021'));
-        $user2 = $this->getDataGenerator()->create_user(array('email' => 'user2@example.com', 'username' => 'desadmin2022'));
-
-        // Los usuarios vienen en forma de arreglo de nombres de usuario.
-        $userstonotify = array('desadmin2021', 'desadmin2022');
-
-        $this->resetAfterTest(true);
+        // TO DO
+        // Mejorar la prueba con la cantidad de cursos borrados y a borrar.
 
         $notifier = new notifier();
         $this->assertInstanceOf(notifier::class, $notifier);
 
         $messagetosend = $notifier->generate_text_to_send();
         $this->assertIsString($messagetosend);
+
+        $expectedmessage = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
+        $expectedmessage .= 'Resumen de la ejecución: \n';
+        $expectedmessage .= '<pre>';
+        $expectedmessage .= '- Cantidad de cursos borrados: 2';
+        $expectedmessage .= '- Cantidad de cursos pendientes: 3';
+        $expectedmessage .= '</pre>';
+        $expectedmessage .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
+
+        $this->assertSame($expectedmessage, $messagetosend);
+    }
+
+    /**
+     * Test case for sending notification.
+     *
+     * @return void
+     */
+    public function test_send_notification() {
+
+        $this->resetAfterTest(true);
+
+        // Creating users.
+        $user1 = $this->getDataGenerator()->create_user(array('email' => 'user1@example.com', 'username' => 'desadmin2021'));
+        $user2 = $this->getDataGenerator()->create_user(array('email' => 'user2@example.com', 'username' => 'desadmin2022'));
+
+        // Call to plugin generator.
+        $testgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
+
+        $userstonotifysetting = $testgenerator->update_setting('users_to_notify', 'desadmin2021, desadmin2022');
+
+        $notifier = new notifier();
+
+        $userstonotify = $notifier->get_userstonotify();
+
+        $this->assertInstanceOf(notifier::class, $notifier);
+        $this->assertIsString($notifier->get_text_to_send());
+        $this->assertIsArray($userstonotify);
+        $this->assertSame(2, count($userstonotify));
+        $this->assertSame($userstonotify[0]->username, 'desadmin2021');
+        $this->assertSame($userstonotify[1]->username, 'desadmin2022');
+
+        unset_config('noemailever');
+        $sink = $this->redirectEmails();
+
+        $notifier->send_notification();
+
+        $messages = $sink->get_messages();
+        $this->assertEquals(2, count($messages));
     }
 }

@@ -34,14 +34,15 @@ defined('MOODLE_INTERNAL') || die();
 class notifier {
 
     protected $userstonotify;
+    protected string $texttosend;
 
     /**
      * Notifier class constructor.
      */
     public function __construct() {
         $this->set_userstonotify();
+        $this->texttosend = $this->generate_text_to_send();
     }
-
 
     /**
      * Generate text for notify users.
@@ -63,6 +64,42 @@ class notifier {
     }
 
     /**
+     * Send notify to users.
+     *
+     * @return bool $notificationsent
+     */
+    public function send_notification() {
+
+        global $DB;
+
+        // TO DO.
+        // Revisar path de los logs de la ejecución.
+        // Revisar logs de la ejecución.
+        $notificationsent = false;
+
+        $userfrom = $DB->get_record('user', array('username' => 'administrador'));
+        $subject = get_string('notification_subject', 'local_deleteoldcourses');
+        $completefilepath = "/vhosts/campus/moodledata/temp/backup/";
+        $filename = 'deleteoldcourses.log';
+
+        $userstonotify = $this->get_userstonotify();
+        $texttosend = $this->get_text_to_send();
+
+        foreach ($userstonotify as $user) {
+            $notificationsent = email_to_user($user,
+                                              $userfrom,
+                                              $subject,
+                                              $texttosend,
+                                              html_to_text($texttosend),
+                                              $completefilepath,
+                                              $filename,
+                                              true);
+        }
+
+        return $notificationsent;
+    }
+
+    /**
      * Get the value of userstonotify.
      */
     public function get_userstonotify() {
@@ -71,14 +108,37 @@ class notifier {
 
     /**
      * Set the value of userstonotify.
+     * Set an empty array if the config field is empty.
      *
      * @return  self
      */
     public function set_userstonotify() {
 
-        // TO DO.
-        // El metodo set debe leer las configuraciones del plugin y luego setear el atributo.
+        global $DB;
+
+        $userstonotifysetting = get_config('local_deleteoldcourses', 'users_to_notify');
+
+        $usertonotifyusernames = explode(',', $userstonotifysetting);
+
+        $userstonotify = array();
+
+        foreach ($usertonotifyusernames as $username) {
+            $user = $DB->get_record('user', array('username' => trim($username)), 'id, username, email');
+
+            if ($user) {
+                array_push($userstonotify, $user);
+            }
+        }
+
+        $this->userstonotify = $userstonotify;
 
         return $this;
+    }
+
+    /**
+     * Get the value of texttosend.
+     */
+    public function get_text_to_send() {
+        return $this->texttosend;
     }
 }

@@ -40,17 +40,41 @@ defined('MOODLE_INTERNAL') || die();
 class local_deleteoldcourses_generator extends testing_module_generator {
 
     /**
-     * Insert config plugin for tests
+     * Insert plugin setting for tests.
      *
-     * @param  stdClass $record
+     * @param  stdClass $record plugin config record
      * @return stdClass $record
      */
-    public function insert_config($record = null) {
+    public function insert_setting($record = null) {
 
         global $DB;
 
         $record->id = $DB->insert_record('config_plugins', $record);
 
         return $record;
+    }
+
+    /**
+     * Update plugin setting for tests.
+     *
+     * @param  string   $namesetting
+     * @param  string   $value
+     * @return stdClass $record
+     */
+    public function update_setting($settingname, $settingvalue) {
+
+        global $DB;
+
+        $idsetting = $DB->get_record('config_plugins', array('name' => $settingname), 'id')->id;
+
+        $record = new stdClass();
+        $record->id = $idsetting;
+        $record->value = $settingvalue;
+
+        $DB->update_record('config_plugins', $record);
+
+        $setting = $DB->get_record('config_plugins', array('name' => $settingname));
+
+        return $setting;
     }
 }
