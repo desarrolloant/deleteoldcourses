@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Provides the date_manager class.
+ * Provides the datetime_manager class.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -32,7 +32,7 @@ use DateTimeZone;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Date manager class for the plugin Delete old courses.
+ * DateTime manager class for the plugin Delete old courses.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -40,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class date_manager {
+class datetime_manager {
 
     private $datetimezone;
 
