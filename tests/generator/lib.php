@@ -40,9 +40,9 @@ defined('MOODLE_INTERNAL') || die();
 class local_deleteoldcourses_generator extends testing_module_generator {
 
     /**
-     * Insert config plugin for tests
+     * Insert plugin config for tests.
      *
-     * @param  stdClass $record
+     * @param  stdClass $record plugin config record
      * @return stdClass $record
      */
     public function insert_config($record = null) {
@@ -55,7 +55,23 @@ class local_deleteoldcourses_generator extends testing_module_generator {
     }
 
     /**
-     * Update setting plugin for tests
+     * Update plugin config for tests.
+     *
+     * @param stdClass $record plugin config record
+     */
+    public function update_config($record = null) {
+
+        global $DB;
+
+        $sql = "UPDATE {config_plugins}
+                SET value = ?
+                WHERE plugin = ? AND name = ?";
+
+        $DB->execute($sql, array($record->value, $record->plugin, $record->name));
+    }
+
+    /**
+     * Update plugin setting for tests.
      *
      * @param  string   $namesetting
      * @param  string   $value
