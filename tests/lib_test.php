@@ -28,7 +28,6 @@
 namespace local_deleteoldcourses;
 
 use advanced_testcase;
-use moodle_exception;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -37,7 +36,7 @@ global $CFG;
 
 require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
-class local_deleteoldcourses_lib_testcase extends advanced_testcase {
+class lib_test extends advanced_testcase {
 
     /**
      * test_student_generate_username

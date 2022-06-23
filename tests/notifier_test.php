@@ -28,12 +28,10 @@
 namespace local_deleteoldcourses;
 
 use advanced_testcase;
-use moodle_exception;
-use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
-class local_deleteoldcourses_notifier_tests extends advanced_testcase {
+class notifier_test extends advanced_testcase {
 
     /**
      * Test for text generation for a notification.

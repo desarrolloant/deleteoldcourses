@@ -28,13 +28,12 @@
 namespace local_deleteoldcourses;
 
 use advanced_testcase;
-use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-class local_deleteoldcourses_course_dispatcher_testcase extends advanced_testcase {
+class course_dispatcher_test extends advanced_testcase {
 
     /**
      * Test course dispatcher
