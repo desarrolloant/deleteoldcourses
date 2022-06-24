@@ -55,8 +55,10 @@ class course_dispatcher {
      */
     public function __construct() {
 
-        $this->timecreatedcriteria = date_config_to_timestamp('creation');
-        $this->timemodifiedcriteria = date_config_to_timestamp('last_modification');
+        $datemanager = new datetime_manager;
+
+        $this->timecreatedcriteria = $datemanager->date_config_to_timestamp('creation');
+        $this->timemodifiedcriteria = $datemanager->date_config_to_timestamp('last_modification');
         $this->limitquery = get_config('local_deleteoldcourses', 'limit_query');
     }
 

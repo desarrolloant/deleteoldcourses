@@ -42,11 +42,13 @@ if ($ADMIN->fulltree) {
     // First settings tab.
     $settingspage = new admin_settingpage('deletioncriterias', new lang_string('criteriatab', 'local_deleteoldcourses'));
 
-    $years = get_years();
-    $monthsoftheyear = get_months_of_the_year();
-    $daysofthemonth = get_days_of_the_month();
-    $hoursinaday = get_hours_in_day();
-    $minutesinahour = get_minutes_in_hour(); // Also used for the secondsstartdate option (seconds in a minute).
+    $datetimemanager = new \local_deleteoldcourses\datetime_manager;
+
+    $years = $datetimemanager->get_years();
+    $monthsoftheyear = $datetimemanager->get_months_of_the_year();
+    $daysofthemonth = $datetimemanager->get_days_of_the_month();
+    $hoursinaday = $datetimemanager->get_hours_in_day();
+    $minutesinahour = $datetimemanager->get_minutes_in_hour(); // Also used for the secondsstartdate option (seconds in a minute).
 
     // Criteria to courses creation date.
     $settingspage->add(new admin_setting_heading(

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for lib.
+ * Unit tests for datetime_manager class.
  *
  * @package    local_deleteoldcourses
  * @category   phpunit
@@ -35,14 +35,23 @@ global $CFG;
 
 require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
-class lib_test extends advanced_testcase {
+class datetime_manager_test extends advanced_testcase {
+
+    private datetime_manager $datetimemanager;
 
     /**
-     * test_student_generate_username
+     * Initialize $datetimemanager object before calling the test methods.
+     */
+    protected function setUp(): void {
+        $this->datetimemanager = new datetime_manager;
+    }
+
+    /**
+     * Test get_years function.
      */
     public function test_lib_get_years() {
 
-        $years = get_years();
+        $years = $this->datetimemanager->get_years();
         $this->assertIsArray($years);
         $this->assertSame(count($years), 36);
         $this->assertSame(reset($years), 2005);
@@ -50,7 +59,7 @@ class lib_test extends advanced_testcase {
     }
 
     /**
-     * test_lib_date_config_to_timestamp
+     * Test date_config_to_timestamp function.
      */
     public function test_lib_date_config_to_timestamp() {
 
@@ -72,8 +81,8 @@ class lib_test extends advanced_testcase {
         $configgenerator->update_setting('minutes_last_modification_date', '20');
         $configgenerator->update_setting('seconds_last_modification_date', '20');
 
-        $timecreated = date_config_to_timestamp('creation');
-        $timemodified = date_config_to_timestamp('last_modification');
+        $timecreated = $this->datetimemanager->date_config_to_timestamp('creation');
+        $timemodified = $this->datetimemanager->date_config_to_timestamp('last_modification');
 
         $this->assertSame($timecreated, 1122958799);
         $this->assertSame($timemodified, 1641360020);
