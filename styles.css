@@ -1,0 +1,17 @@
+/* Settings styles */
+
+#id_s_local_deleteoldcourses_year_creation_date,
+#id_s_local_deleteoldcourses_month_creation_date,
+#id_s_local_deleteoldcourses_day_creation_date,
+#id_s_local_deleteoldcourses_hour_creation_date,
+#id_s_local_deleteoldcourses_minutes_creation_date,
+#id_s_local_deleteoldcourses_seconds_creation_date,
+#id_s_local_deleteoldcourses_year_last_modification_date,
+#id_s_local_deleteoldcourses_month_last_modification_date,
+#id_s_local_deleteoldcourses_hour_last_modification_date,
+#id_s_local_deleteoldcourses_day_last_modification_date,
+#id_s_local_deleteoldcourses_minutes_last_modification_date,
+#id_s_local_deleteoldcourses_seconds_last_modification_date,
+#id_s_local_deleteoldcourses_number_of_categories_to_exclude {
+    width: 10em;
+}
