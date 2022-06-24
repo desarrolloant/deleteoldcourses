@@ -131,5 +131,4 @@ class course_dispatcher {
     public function get_categories_to_ignore() {
         return $this->categoriestoignore;
     }
-
 }

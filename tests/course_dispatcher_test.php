@@ -44,44 +44,24 @@ class course_dispatcher_test extends advanced_testcase {
 
         $this->resetAfterTest(false);
 
+        $numberofcategoriesexcluded = 4;
+        $coursecategoriesexcluded = array();
+        $numberofcoursesexcluded = 50;
+        $numberofcoursesok = 100;
+
+        // Test environment.
+
+        // Course categories.
+        for ($i = 0; $i < $numberofcategoriesexcluded; $i++) {
+            $excludedcategory = $this->getDataGenerator()->create_category(array("name" => "Excluded category " . strval($i + 1)));
+            array_push($coursecategoriesexcluded, $excludedcategory);
+        }
+
+        for ($i = 0; $i < $numberofcoursesexcluded / 2; $i++) {
+            $course = $this->getDataGenerator()->create_course(array("category" => $coursecategoriesexcluded[rand(0, 3)]->id));
+        }
+
         $coursedispatcher = new course_dispatcher();
 
-        // Timecreated ok. Timemodified ok.
-
-        $course1 = $this->getDataGenerator()->create_course(array('timecreated' => 1293856998));
-        $course1->timemodified = 1262311998;
-        $DB->update_record('course', $course1);
-
-        $course2 = $this->getDataGenerator()->create_course(array('timecreated' => 1293857998));
-        $course2->timemodified = 1262221998;
-        $DB->update_record('course', $course2);
-
-        // Timecreated ok. Timemodified not.
-        $course3 = $this->getDataGenerator()->create_course(array('timecreated' => 1293851998));
-        $course3->timemodified = 1262331999;
-        $DB->update_record('course', $course3);
-
-        // Timecreated not. Timemodified ok.
-        $course4 = $this->getDataGenerator()->create_course(array('timecreated' => 1293859999));
-        $course4->timemodified = 1252321999;
-        $DB->update_record('course', $course4);
-
-        // Timecreated not. Timemodified not.
-        $course5 = $this->getDataGenerator()->create_course(array('timecreated' => 1293867999));
-        $course5->timemodified = 1262921999;
-        $DB->update_record('course', $course5);
-
-        $this->assertInstanceOf(course_dispatcher::class, $coursedispatcher);
-        $this->assertIsInt($coursedispatcher->get_timecreated_criteria());
-        $this->assertIsInt($coursedispatcher->get_timemodified_criteria());
-        $this->assertIsInt($coursedispatcher->get_limitquery());
-
-        $this->assertEquals(1293857999, $coursedispatcher->get_timecreated_criteria());
-        $this->assertEquals(1262321999, $coursedispatcher->get_timemodified_criteria());
-        $this->assertEquals(5000, $coursedispatcher->get_limitquery());
-
-        $this->assertIsArray($coursedispatcher->get_courses_to_delete());
-
-        $this->assertEquals(2, count($coursedispatcher->get_courses_to_delete()));
     }
 }
