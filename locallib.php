@@ -817,9 +817,8 @@ function get_years() {
     $fromyear = 2005;
     $toyear = 2040;
 
-    for ($index = 0; $fromyear <= $toyear; $index++) {
-        $years[$index] = $fromyear;
-        $fromyear++;
+    for ($i = $fromyear; $i <= $toyear; $i++) {
+        $years[$i] = $i;
     }
 
     return $years;
