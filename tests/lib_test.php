@@ -28,7 +28,6 @@
 namespace local_deleteoldcourses;
 
 use advanced_testcase;
-use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -46,7 +45,7 @@ class lib_test extends advanced_testcase {
         $years = get_years();
         $this->assertIsArray($years);
         $this->assertSame(count($years), 36);
-        $this->assertSame($years[0], 2005);
+        $this->assertSame(reset($years), 2005);
         $this->assertSame(end($years), 2040);
     }
 
@@ -60,27 +59,17 @@ class lib_test extends advanced_testcase {
         $configgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
 
         $configgenerator->update_setting('year_creation_date', '2005');
-
         $configgenerator->update_setting('month_creation_date', '08');
-
         $configgenerator->update_setting('day_creation_date', '01');
-
         $configgenerator->update_setting('hour_creation_date', '23');
-
         $configgenerator->update_setting('minutes_creation_date', '59');
-
         $configgenerator->update_setting('seconds_creation_date', '59');
 
         $configgenerator->update_setting('year_last_modification_date', '2022');
-
         $configgenerator->update_setting('month_last_modification_date', '01');
-
         $configgenerator->update_setting('day_last_modification_date', '05');
-
         $configgenerator->update_setting('hour_last_modification_date', '00');
-
         $configgenerator->update_setting('minutes_last_modification_date', '20');
-
         $configgenerator->update_setting('seconds_last_modification_date', '20');
 
         $timecreated = date_config_to_timestamp('creation');
