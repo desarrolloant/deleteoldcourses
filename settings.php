@@ -44,11 +44,11 @@ if ($ADMIN->fulltree) {
 
     $datetimemanager = new \local_deleteoldcourses\datetime_manager;
 
-    $years = $datetimemanager->get_years();
-    $monthsoftheyear = $datetimemanager->get_months_of_the_year();
-    $daysofthemonth = $datetimemanager->get_days_of_the_month();
-    $hoursinaday = $datetimemanager->get_hours_in_day();
-    $minutesinahour = $datetimemanager->get_minutes_in_hour(); // Also used for the secondsstartdate option (seconds in a minute).
+    $years = $datetimemanager->get_datetime('years');
+    $monthsoftheyear = $datetimemanager->get_datetime('monthsoftheyear');
+    $daysofthemonth = $datetimemanager->get_datetime('daysofthemonth');
+    $hoursinaday = $datetimemanager->get_datetime('hoursinaday');
+    $minutesinanhour = $datetimemanager->get_datetime('minutesinanhour'); // Also used for the secondsstartdate option (seconds in a minute).
 
     // Criteria to courses creation date.
     $settingspage->add(new admin_setting_heading(
@@ -93,7 +93,7 @@ if ($ADMIN->fulltree) {
         new lang_string('minutes', 'local_deleteoldcourses'),
         new lang_string('minutes_creation_date_desc', 'local_deleteoldcourses'),
         59,
-        $minutesinahour
+        $minutesinanhour
     ));
 
     $settingspage->add(new admin_setting_configselect(
@@ -101,7 +101,7 @@ if ($ADMIN->fulltree) {
         new lang_string('seconds', 'local_deleteoldcourses'),
         new lang_string('seconds_creation_date_desc', 'local_deleteoldcourses'),
         59,
-        $minutesinahour
+        $minutesinanhour
     ));
 
     // Criteria to courses modify date.
@@ -147,7 +147,7 @@ if ($ADMIN->fulltree) {
         new lang_string('minutes', 'local_deleteoldcourses'),
         new lang_string('minutes_last_modification_date_desc', 'local_deleteoldcourses'),
         59,
-        $minutesinahour
+        $minutesinanhour
     ));
 
     $settingspage->add(new admin_setting_configselect(
@@ -155,7 +155,7 @@ if ($ADMIN->fulltree) {
         new lang_string('seconds', 'local_deleteoldcourses'),
         new lang_string('seconds_last_modification_date_desc', 'local_deleteoldcourses'),
         59,
-        $minutesinahour
+        $minutesinanhour
     ));
 
     // Criteria excluded course categories.

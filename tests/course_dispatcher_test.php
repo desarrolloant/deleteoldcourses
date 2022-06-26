@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for course dispatcher class.
+ * Unit tests for course_dispatcher class.
  *
  * @package    local_deleteoldcourses
  * @category   phpunit
@@ -27,13 +27,9 @@
 
 namespace local_deleteoldcourses;
 
-use advanced_testcase;
-
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-
-class course_dispatcher_test extends advanced_testcase {
+class course_dispatcher_test extends \advanced_testcase {
 
     /**
      * Test course dispatcher

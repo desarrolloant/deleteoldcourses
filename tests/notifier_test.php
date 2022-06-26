@@ -27,11 +27,9 @@
 
 namespace local_deleteoldcourses;
 
-use advanced_testcase;
-
 defined('MOODLE_INTERNAL') || die();
 
-class notifier_test extends advanced_testcase {
+class notifier_test extends \advanced_testcase {
 
     /**
      * Test for text generation for a notification.
