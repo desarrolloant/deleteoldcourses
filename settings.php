@@ -183,12 +183,10 @@ if ($ADMIN->fulltree) {
     for ($i = 1; $i <= $numbercategoriestoexclude; $i++) {
 
         $settingspage->add(new admin_settings_coursecat_select(
-            'local_deleteoldcourses/excluded_course_categories' . $i,
+            'local_deleteoldcourses/excluded_course_categories_' . $i,
             new lang_string('excluded_course_categories', 'local_deleteoldcourses'),
             new lang_string('excluded_course_categories_desc', 'local_deleteoldcourses'),
-            500,
-            PARAM_INT,
-            109
+            6
         ));
     }
 
