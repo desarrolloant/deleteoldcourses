@@ -45,10 +45,10 @@ use moodle_exception;
  */
 class course_dispatcher {
 
-    protected int $timecreatedcriteria;
-    protected int $timemodifiedcriteria;
+    protected int $timecreationcriteria;
+    protected int $timemodificationcriteria;
     protected int $limitquery;
-    protected array $categoriestoignore;
+    protected array $categoriestoexclude;
 
     /**
      * __construct.
@@ -57,9 +57,10 @@ class course_dispatcher {
 
         $datemanager = new datetime_manager;
 
-        $this->timecreatedcriteria = $datemanager->date_config_to_timestamp('creation');
-        $this->timemodifiedcriteria = $datemanager->date_config_to_timestamp('last_modification');
+        $this->timecreationcriteria = $datemanager->date_config_to_timestamp('creation');
+        $this->timemodificationcriteria = $datemanager->date_config_to_timestamp('last_modification');
         $this->limitquery = get_config('local_deleteoldcourses', 'limit_query');
+
     }
 
     /**
@@ -72,65 +73,63 @@ class course_dispatcher {
 
         global $DB;
 
-        if (empty($this->timecreatedcriteria)) {
-            throw new moodle_exception('timecreated_criteria_is_empty', 'local_deleteoldcourses');
-        }
+        $coursestodelete = array();
 
-        if (empty($this->timemodifiedcriteria)) {
-            throw new moodle_exception('timemodified_criteria_is_empty', 'local_deleteoldcourses');
-        }
-
-        if (empty($this->limitquery)) {
-            throw new moodle_exception('limit_query_is_empty', 'local_deleteoldcourses');
-        }
-
-        // Admin user.
-        $user = $DB->get_record('user', array('username' => 'desadmin'));
-        $count = 0;
-        $order = 'ASC';
-
-        // Traer todos los cursos de la base datos cuya fecha de creacion sea menor al criterio.
-
-        $conditions = 'timecreated <= ' . $this->timecreatedcriteria;
-        $conditions .= ' AND timemodified <= ' . $this->timemodifiedcriteria;
-        $conditions .= ' AND id > 1';
-        $conditions .= ' AND id NOT IN (SELECT courseid FROM {deleteoldcourses})';
-
-        $order = 'id ASC';
-
-        $coursestoreview = $DB->get_records_select('course', $conditions, null, $order, '*', 0, $this->limitquery);
-
-        return $coursestoreview;
-
+        return $coursestodelete;
     }
 
-    // Metodo que encole los cursos a borrar.
-
     /**
-     * Get the value of timecreatedcriteria.
+     * Get the value of timecreationcriteria.
+     *
+     * @return int $timecreationcriteria
+     * @since  Moodle 3.10
      */
-    public function get_timecreated_criteria() {
-        return $this->timecreatedcriteria;
+    public function get_timecreation_criteria() {
+        return $this->timecreationcriteria;
     }
 
     /**
      * Get the value of timemodifiedcriteria.
+     *
+     * @return int $timemodificationcriteria
+     * @since  Moodle 3.10
      */
-    public function get_timemodified_criteria() {
-        return $this->timemodifiedcriteria;
+    public function get_timemodification_criteria() {
+        return $this->timemodificationcriteria;
     }
 
     /**
      * Get the value of limitquery.
+     *
+     * @return int $limitquery
+     * @since  Moodle 3.10
      */
     public function get_limitquery() {
         return $this->limitquery;
     }
 
     /**
-     * Get the value of categoriestoignore.
+     * set_categoriestoexclude
+     *
+     * @return array $categoriestoexclude
+     * @since  Moodle 3.10
      */
-    public function get_categories_to_ignore() {
-        return $this->categoriestoignore;
+    public function set_categoriestoexclude() {
+
+        $categoriestoexclude = array();
+        $numbercategoriestoexclude = intval(get_config('local_deleteoldcourses', 'number_of_categories_to_exclude'));
+
+        for ($i = 1; $i <= $numbercategoriestoexclude; $i++) {
+            array_push($categoriestoexclude, get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i));
+        }
+
+        $this->categoriestoexclude = $categoriestoexclude;
+    }
+
+    /**
+     * Get the value of categoriestoexclude.
+     */
+    public function get_categories_to_exclude() {
+        return $this->categoriestoexclude;
     }
 }
