@@ -49,19 +49,58 @@ class course_dispatcher_test extends advanced_testcase {
         $numberofcoursesexcluded = 50;
         $numberofcoursesok = 100;
 
+        $configgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
+
         // Test environment.
+        // Plugin Settings.
+        // Creation date: 01-01-2005. Timestamp local time: 1122872400.
+        $configgenerator->update_setting('year_creation_date', '2005');
+        $configgenerator->update_setting('month_creation_date', '01');
+        $configgenerator->update_setting('day_creation_date', '01');
+        $configgenerator->update_setting('hour_creation_date', '00');
+        $configgenerator->update_setting('minutes_creation_date', '00');
+        $configgenerator->update_setting('seconds_creation_date', '00');
+
+        // Last modification date: 31-12-2010. Timestamp local time: 1293857999.
+        $configgenerator->update_setting('year_last_modification_date', '2010');
+        $configgenerator->update_setting('month_last_modification_date', '12');
+        $configgenerator->update_setting('day_last_modification_date', '31');
+        $configgenerator->update_setting('hour_last_modification_date', '23');
+        $configgenerator->update_setting('minutes_last_modification_date', '59');
+        $configgenerator->update_setting('seconds_last_modification_date', '59');
+
+        // Categories to exclude.
+        $configgenerator->update_setting('number_of_categories_to_exclude', $numberofcategoriesexcluded);
 
         // Course categories.
-        for ($i = 0; $i < $numberofcategoriesexcluded; $i++) {
-            $excludedcategory = $this->getDataGenerator()->create_category(array("name" => "Excluded category " . strval($i + 1)));
+        for ($i = 1; $i <= $numberofcategoriesexcluded; $i++) {
+            $excludedcategory = $this->getDataGenerator()->create_category(array("name" => "Excluded category " . strval($i)));
+            $configgenerator->update_setting('excluded_course_categories_' . $i, $excludedcategory->id);
             array_push($coursecategoriesexcluded, $excludedcategory);
         }
 
-        for ($i = 0; $i < $numberofcoursesexcluded / 2; $i++) {
+        // 25 courses that belgon to categories excluded from a plugin setting.
+        for ($i = 0; $i < 25; $i++) {
             $course = $this->getDataGenerator()->create_course(array("category" => $coursecategoriesexcluded[rand(0, 3)]->id));
         }
 
+        // 15 courses whose creation date is less than the criteria and the modification date is less than the criteria.
+        for ($i = 0; $i < 15; $i++) {
+            $course = $this->getDataGenerator()->create_course();
+
+            $course->timecreated = rand(1104555600, 1122872399);
+            $course->timemodified = rand(1104555600, 1122872399);
+            $DB->update_record('course', $course);
+        };
+
+        // 10 courses whose last modification date is greater than the criteria.
+        for ($i = 0; $i < 10; $i++) {
+            $course = $this->getDataGenerator()->create_course();
+        }
+
         $coursedispatcher = new course_dispatcher();
+        $course->timecreated = rand(1104555600, 1122872399);
+        $DB->update_record('course', $course);
 
     }
 }
