@@ -65,15 +65,29 @@ class local_deleteoldcourses_generator extends testing_module_generator {
 
         global $DB;
 
-        $idsetting = $DB->get_record('config_plugins', array('name' => $settingname), 'id')->id;
+        $setting = $DB->get_record('config_plugins',
+                                     array('name' => $settingname,
+                                           'plugin' => 'local_deleteoldcourses'),
+                                     'id');
 
         $record = new stdClass();
-        $record->id = $idsetting;
-        $record->value = $settingvalue;
 
-        $DB->update_record('config_plugins', $record);
+        if ($setting) {
+            $record->id = $setting->id;
+            $record->value = $settingvalue;
 
-        $setting = $DB->get_record('config_plugins', array('name' => $settingname));
+            $DB->update_record('config_plugins', $record);
+
+            $setting = $DB->get_record('config_plugins', array('name' => $settingname, 'plugin' => 'local_deleteoldcourses'));
+        } else {
+            $record->plugin = 'local_deleteoldcourses';
+            $record->name = $settingname;
+            $record->value = $settingvalue;
+
+            $DB->insert_record('config_plugins', $record);
+        }
+
+        $setting = $DB->get_record('config_plugins', array('name' => $settingname, 'plugin' => 'local_deleteoldcourses'));
 
         return $setting;
     }
