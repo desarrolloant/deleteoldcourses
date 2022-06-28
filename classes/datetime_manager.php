@@ -32,7 +32,7 @@ use DateTime;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * DateTime manager class for the plugin Delete old courses.
+ * Date and time manager class for the plugin Delete old courses.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -53,11 +53,11 @@ class datetime_manager {
      * datetime_manager class constructor.
      */
     public function __construct() {
-        $this->set_years();
         $this->set_months_of_the_year();
-        $this->set_days_of_the_month();
-        $this->set_hours_in_day();
-        $this->set_minutes_in_hour();
+        $this->set_datetime('years');
+        $this->set_datetime('daysofthemonth');
+        $this->set_datetime('hoursinaday');
+        $this->set_datetime('minutesinanhour');
     }
 
     /**
@@ -66,9 +66,8 @@ class datetime_manager {
      * @return self
      * @since  Moodle 3.10
      */
-    public function set_datetimezone() {
+    private function set_datetimezone() {
         $this->datetimezone = new DateTimeZone('America/Bogota');
-
         return $this;
     }
 
@@ -80,31 +79,6 @@ class datetime_manager {
      */
     public function get_datetimezone() {
         return $this->datetimezone;
-    }
-
-    /**
-     * Set years array.
-     */
-    private function set_years() {
-
-        $years = array();
-        $fromyear = 2005;
-        $toyear = 2040;
-
-        for ($i = $fromyear; $i <= $toyear; $i++) {
-            $years[$i] = $i;
-        }
-
-        $this->years = $years;
-    }
-
-    /**
-     * Get years array.
-     *
-     * @return array $years
-     */
-    public function get_years() {
-        return $this->years;
     }
 
     /**
@@ -142,93 +116,65 @@ class datetime_manager {
     }
 
     /**
-     * Get months of the year array.
+     * Polymorphic function that creates date and time arrays given a datetime type string.
      *
-     * @return array $monthsoftheyear
+     * @param string $datetimetype 'years', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
      */
-    public function get_months_of_the_year() {
-        return $this->monthsoftheyear;
-    }
+    private function set_datetime(string $datetimetype) {
 
-    /**
-     * Set days of the month array.
-     */
-    private function set_days_of_the_month() {
+        if ($datetimetype == 'years') {
+            $fromindex = 2005;
+            $toindex = 2040;
+        } else if ($datetimetype == 'daysofthemonth') {
+            $fromindex = 1;
+            $toindex = 31;
+        } else if ($datetimetype == 'hoursinaday') {
+            $fromindex = 0;
+            $toindex = 23;
+        } else if ($datetimetype == 'minutesinanhour') {
+            $fromindex = 0;
+            $toindex = 59;
+        }
 
-        $daysofthemonth = array();
+        $datetime = array();
 
-        for ($i = 1; $i <= 31; $i++) {
-            if ($i < 10) {
-                $daysofthemonth['0' . $i] = '0' . $i;
+        for ($index = $fromindex; $index <= $toindex; $index++) {
+            if ($index < 10) {
+                $datetime['0' . $index] = '0' . $index;
             } else {
-                $daysofthemonth[$i] = strval($i);
+                $datetime[strval($index)] = strval($index);
             }
         }
 
-        $this->daysofthemonth = $daysofthemonth;
-    }
-
-     /**
-      * Get days of the month array.
-      *
-      * @return array $daysofthemonth
-      */
-    public function get_days_of_the_month() {
-        return $this->daysofthemonth;
-    }
-
-    /**
-     * Set hours in a day array.
-     */
-    private function set_hours_in_day() {
-
-        $hoursinaday = array();
-
-        for ($i = 0; $i <= 23; $i++) {
-            if ($i < 10) {
-                $hoursinaday['0' . $i] = '0' . $i;
-            } else {
-                $hoursinaday[$i] = strval($i);
-            }
+        if ($datetimetype == 'years') {
+            $this->years = $datetime;
+        } else if ($datetimetype == 'daysofthemonth') {
+            $this->daysofthemonth = $datetime;
+        } else if ($datetimetype == 'hoursinaday') {
+            $this->hoursinaday = $datetime;
+        } else if ($datetimetype == 'minutesinanhour') {
+            $this->minutesinanhour = $datetime;
         }
-
-        $this->hoursinaday = $hoursinaday;
     }
 
     /**
-     * Get hours in a day array.
+     * Get date and time arrays given a datetime type string.
      *
-     * @return array $hoursinaday
+     * @param string $datetimetype 'years', 'monthsoftheyear', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
+     * @return array datetime array
      */
-    public function get_hours_in_day() {
-        return $this->hoursinaday;
-    }
-
-    /**
-     * Set minutes in an hour array.
-     */
-    private function set_minutes_in_hour() {
-
-        $minutesinanhour = array();
-
-        for ($i = 0; $i <= 59; $i++) {
-            if ($i < 10) {
-                $minutesinanhour['0' . $i] = '0' . $i;
-            } else {
-                $minutesinanhour[$i] = strval($i);
-            }
+    public function get_datetime(string $datetimetype) {
+        if ($datetimetype == 'years') {
+            return $this->years;
+        } else if ($datetimetype == 'monthsoftheyear') {
+            return $this->monthsoftheyear;
+        } else if ($datetimetype == 'daysofthemonth') {
+            return $this->daysofthemonth;
+        } else if ($datetimetype == 'hoursinaday') {
+            return $this->hoursinaday;
+        } else if ($datetimetype == 'minutesinanhour') {
+            return $this->minutesinanhour;
         }
-
-        $this->minutesinanhour = $minutesinanhour;
-    }
-
-    /**
-     * Get minutes in an hour array.
-     *
-     * @return array $minutesinanhour
-     */
-    public function get_minutes_in_hour() {
-        return $this->minutesinanhour;
     }
 
     /**
