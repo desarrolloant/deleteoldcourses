@@ -76,6 +76,10 @@ class datetime_manager_test extends \advanced_testcase {
         $this->assertSame(end($minutesinanhour), '59');
         $this->assertContainsOnly('string', $minutesinanhour);
         $this->is_key_equal_to_value($minutesinanhour);
+
+        $this->expectException(\moodle_exception::class);
+        $this->expectExceptionMessage(get_string('invalid_input_datetimetype', 'local_deleteoldcourses', 'randominvalidinput'));
+        $randominvalidinput = $this->datetimemanager->get_datetime('randominvalidinput');
     }
 
     /**

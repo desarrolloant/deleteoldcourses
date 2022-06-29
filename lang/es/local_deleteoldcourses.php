@@ -145,3 +145,6 @@ $string['message_to_send'] .= '- Cantidad de cursos pendientes: {$a->pendingcour
 $string['message_to_send'] .= '</pre>';
 $string['message_to_send'] .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
 $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendientes por eliminar';
+
+// Moodle exceptions.
+$string['invalid_input_datetimetype'] = 'Entered input: {$a}. Valid inputs: monthsoftheyear, daysofthemonth, hoursinaday or minutesinanhour';
