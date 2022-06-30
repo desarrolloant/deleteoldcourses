@@ -48,7 +48,7 @@ if ($ADMIN->fulltree) {
     $monthsoftheyear = $datetimemanager->get_datetime('monthsoftheyear');
     $daysofthemonth = $datetimemanager->get_datetime('daysofthemonth');
     $hoursinaday = $datetimemanager->get_datetime('hoursinaday');
-    $minutesinanhour = $datetimemanager->get_datetime('minutesinanhour'); // Also used for the secondsstartdate option (seconds in a minute).
+    $minutesinanhour = $datetimemanager->get_datetime('minutesinanhour'); // Also used in secondsstartdate (seconds in a minute).
 
     // Criteria to courses creation date.
     $settingspage->add(new admin_setting_heading(

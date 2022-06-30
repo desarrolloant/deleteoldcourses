@@ -119,6 +119,7 @@ class datetime_manager {
      * Polymorphic function that creates date and time arrays given a datetime type string.
      *
      * @param string $datetimetype 'years', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
+     * @throws moodle_exception
      */
     private function set_datetime(string $datetimetype) {
 
@@ -134,6 +135,8 @@ class datetime_manager {
         } else if ($datetimetype == 'minutesinanhour') {
             $fromindex = 0;
             $toindex = 59;
+        } else {
+            throw new \moodle_exception('invalid_input_datetimetype', 'local_deleteoldcourses', '', $datetimetype);
         }
 
         $datetime = array();
@@ -162,6 +165,7 @@ class datetime_manager {
      *
      * @param string $datetimetype 'years', 'monthsoftheyear', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
      * @return array datetime array
+     * @throws moodle_exception
      */
     public function get_datetime(string $datetimetype) {
         if ($datetimetype == 'years') {
@@ -174,6 +178,8 @@ class datetime_manager {
             return $this->hoursinaday;
         } else if ($datetimetype == 'minutesinanhour') {
             return $this->minutesinanhour;
+        } else {
+            throw new \moodle_exception('invalid_input_datetimetype', 'local_deleteoldcourses', '', $datetimetype);
         }
     }
 
