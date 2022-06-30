@@ -73,13 +73,19 @@ class course_dispatcher {
 
         global $DB;
 
-        $timecreatedcriteria = 00;
+        $datetimemanager = new datetime_manager();
+        $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
+        $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
 
         $coursestodelete = array();
 
         $sqlquery = "SELECT *
                      FROM {course}
-                     WHERE timecreated < ";
+                     WHERE timecreated <= ?
+                        AND timemodified <= ?
+                        AND id <> 1";
+
+        $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
 
         return $coursestodelete;
     }
