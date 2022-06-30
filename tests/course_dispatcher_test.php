@@ -38,7 +38,7 @@ class course_dispatcher_test extends \advanced_testcase {
 
         global $DB;
 
-        $this->resetAfterTest(true);
+        $this->resetAfterTest(false);
 
         $numberofcategoriesexcluded = 4;
         $coursecategoriesexcluded = array();
@@ -46,7 +46,7 @@ class course_dispatcher_test extends \advanced_testcase {
         $numberofcoursestodelete = 15;
 
         $creationtimecriteria = 1293771599; // Thursday, December 30th 2010 23:59:59 GMT-05:00.
-        $lastmodificationtimecriteria = 1357016399; // Monday, December 31th 2012 23:59:59 GMT-05:00
+        $lastmodificationtimecriteria = 1357016399; // Monday, December 31th 2012 23:59:59 GMT-05:00.
         $mintimestamp = 1104555600; // Saturday, 1 january 2005 0:00:00 GMT-05:00.
         $maxtimestamp = 2556161999; // Saturday, 31 december 2050 23:59:59 GMT-05:00.
 
