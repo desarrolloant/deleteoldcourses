@@ -73,7 +73,13 @@ class course_dispatcher {
 
         global $DB;
 
+        $timecreatedcriteria = 00;
+
         $coursestodelete = array();
+
+        $sqlquery = "SELECT *
+                     FROM {course}
+                     WHERE timecreated < ";
 
         return $coursestodelete;
     }
