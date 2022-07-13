@@ -50,28 +50,28 @@ class course_dispatcher_test extends \advanced_testcase {
         $mintimestamp = 1104555600; // Saturday, 1 january 2005 0:00:00 GMT-05:00.
         $maxtimestamp = 2556161999; // Saturday, 31 december 2050 23:59:59 GMT-05:00.
 
-        $configgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
+        $plugingenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
 
         // Test environment.
         // Plugin Settings.
         // Creation date: 31-12-2010. Timestamp local time: 1293771600.
-        $configgenerator->update_setting('year_creation_date', '2010');
-        $configgenerator->update_setting('month_creation_date', '12');
-        $configgenerator->update_setting('day_creation_date', '31');
-        $configgenerator->update_setting('hour_creation_date', '23');
-        $configgenerator->update_setting('minutes_creation_date', '59');
-        $configgenerator->update_setting('seconds_creation_date', '59');
+        $plugingenerator->update_setting('year_creation_date', '2010');
+        $plugingenerator->update_setting('month_creation_date', '12');
+        $plugingenerator->update_setting('day_creation_date', '31');
+        $plugingenerator->update_setting('hour_creation_date', '23');
+        $plugingenerator->update_setting('minutes_creation_date', '59');
+        $plugingenerator->update_setting('seconds_creation_date', '59');
 
         // Last modification date: 31-12-2012. Timestamp local time: 1357016399.
-        $configgenerator->update_setting('year_last_modification_date', '2012');
-        $configgenerator->update_setting('month_last_modification_date', '12');
-        $configgenerator->update_setting('day_last_modification_date', '31');
-        $configgenerator->update_setting('hour_last_modification_date', '23');
-        $configgenerator->update_setting('minutes_last_modification_date', '59');
-        $configgenerator->update_setting('seconds_last_modification_date', '59');
+        $plugingenerator->update_setting('year_last_modification_date', '2012');
+        $plugingenerator->update_setting('month_last_modification_date', '12');
+        $plugingenerator->update_setting('day_last_modification_date', '31');
+        $plugingenerator->update_setting('hour_last_modification_date', '23');
+        $plugingenerator->update_setting('minutes_last_modification_date', '59');
+        $plugingenerator->update_setting('seconds_last_modification_date', '59');
 
         // Categories to exclude.
-        $configgenerator->update_setting('number_of_categories_to_exclude', $numberofcategoriesexcluded);
+        $plugingenerator->update_setting('number_of_categories_to_exclude', $numberofcategoriesexcluded);
 
         // Course categories.
         for ($i = 1; $i <= $numberofcategoriesexcluded; $i++) {
@@ -85,18 +85,46 @@ class course_dispatcher_test extends \advanced_testcase {
             $course = $this->getDataGenerator()->create_course(array("category" => $coursecategoriesexcluded[rand(0, 3)]->id));
         }
 
-        // 15 courses whose creation date is less than the criteria and the modification date is less than the criteria.
+        // 15 courses whose creation date is less than the criteria and the modification date is greater than the criteria.
         // Courses type A.
         for ($i = 0; $i < 15; $i++) {
             $course = $this->getDataGenerator()->create_course();
 
             $course->timecreated = rand($mintimestamp, $creationtimecriteria);
-            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $course->timemodified = rand($lastmodificationtimecriteria, $maxtimestamp);
             $DB->update_record('course', $course);
         };
 
+        // TODO: #56 20 courses whose creation date is less than the criteria and sections were added to these courses
+        // after the last modification date criteria. Courses type B.
+        for ($i = 0; $i < 20; $i++) {
+            $course = $this->getDataGenerator()->create_course(
+                array('shortname' => 'TestingCourse ' . $i,
+                      'fullname' => 'Testing Course ' . $i,
+                      'numsections' => 2),
+                array('createsections' => true));
+
+            $course->timecreated = rand($mintimestamp, $creationtimecriteria);
+            $DB->update_record('course', $course);
+
+            $sections = $DB->get_records('course_sections', array('course' => $course->id));
+
+            foreach ($sections as $section) {
+                $section->timemodified = rand($lastmodificationtimecriteria, $maxtimestamp);
+                $DB->update_record('course_sections', $section);
+            }
+        }
+
+        // TODO: #57 Create type C courses for the course dispatcher test environment.
+        // 20 courses whose creation date is less than the criteria and some participants enroll or unenroll in these courses
+        // before the last modification date criteria. Courses type C.
+
+        // TODO: #58 Create type D courses for the course dispatcher test environment.
+        // 10 courses whose creation date is less than the criteria and activities or resources were created in these courses
+        // before the last modification date criteria. Courses type D.
+
         // 20 courses whose creation date is greater than the criteria and the last modification date is less than the criteria.
-        // Courses type B.
+        // Courses type E.
         for ($i = 0; $i < 20; $i++) {
             $course = $this->getDataGenerator()->create_course();
 
@@ -106,7 +134,7 @@ class course_dispatcher_test extends \advanced_testcase {
         }
 
         // 40 courses whose creation date is greater than the criteria and the last modification date is greater than the criteria.
-        // Courses type C.
+        // Courses type F.
         for ($i = 0; $i < 40; $i++) {
             $course = $this->getDataGenerator()->create_course();
 
