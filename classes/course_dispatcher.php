@@ -82,7 +82,7 @@ class course_dispatcher {
         $sqlquery = "SELECT *
                      FROM {course}
                      WHERE timecreated <= ?
-                        AND timemodified >= ?
+                        AND timemodified <= ?
                         AND id <> 1";
 
         $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
