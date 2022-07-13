@@ -33,6 +33,8 @@ class course_dispatcher_test extends \advanced_testcase {
 
     /**
      * Test course dispatcher
+     *
+     * @covers ::get_courses_to_delete
      */
     public function test_course_dispatcher() {
 
@@ -134,7 +136,6 @@ class course_dispatcher_test extends \advanced_testcase {
             $DB->update_record('user_enrolments', $userenrol);
         }
 
-        // TODO: #58 Create type D courses for the course dispatcher test environment.
         // 10 courses whose creation date is less than the criteria and activities or resources were created in these courses
         // after the last modification date criteria. Courses type D.
         for ($i = 0; $i < 10; $i++) {
