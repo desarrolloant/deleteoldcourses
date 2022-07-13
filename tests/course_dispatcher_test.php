@@ -76,7 +76,7 @@ class course_dispatcher_test extends \advanced_testcase {
         // Course categories.
         for ($i = 1; $i <= $numberofcategoriesexcluded; $i++) {
             $excludedcategory = $this->getDataGenerator()->create_category(array("name" => "Excluded category " . strval($i)));
-            $configgenerator->update_setting('excluded_course_categories_' . $i, $excludedcategory->id);
+            $plugingenerator->update_setting('excluded_course_categories_' . $i, $excludedcategory->id);
             array_push($coursecategoriesexcluded, $excludedcategory);
         }
 
@@ -91,11 +91,11 @@ class course_dispatcher_test extends \advanced_testcase {
             $course = $this->getDataGenerator()->create_course();
 
             $course->timecreated = rand($mintimestamp, $creationtimecriteria);
-            $course->timemodified = rand($lastmodificationtimecriteria, $maxtimestamp);
+            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
             $DB->update_record('course', $course);
         };
 
-        // TODO: #56 20 courses whose creation date is less than the criteria and sections were added to these courses
+        // 20 courses whose creation date is less than the criteria and sections were added to these courses
         // after the last modification date criteria. Courses type B.
         for ($i = 0; $i < 20; $i++) {
             $course = $this->getDataGenerator()->create_course(
@@ -105,6 +105,7 @@ class course_dispatcher_test extends \advanced_testcase {
                 array('createsections' => true));
 
             $course->timecreated = rand($mintimestamp, $creationtimecriteria);
+            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
             $DB->update_record('course', $course);
 
             $sections = $DB->get_records('course_sections', array('course' => $course->id));
@@ -117,11 +118,25 @@ class course_dispatcher_test extends \advanced_testcase {
 
         // TODO: #57 Create type C courses for the course dispatcher test environment.
         // 20 courses whose creation date is less than the criteria and some participants enroll or unenroll in these courses
-        // before the last modification date criteria. Courses type C.
+        // after the last modification date criteria. Courses type C.
+        for ($i = 0; $i < 20; $i++) {
+            $course = $this->getDataGenerator()->create_course();
+            $course->timecreated = rand($mintimestamp, $creationtimecriteria);
+            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course', $course);
+
+            $user = $this->getDataGenerator()->create_user();
+
+            $this->getDataGenerator()->enrol_user($user->id, $course->id);
+
+            $userenrol = $DB->get_record('user_enrolments', array('userid' => $user->id));
+            $userenrol->timemodified = rand($lastmodificationtimecriteria, $maxtimestamp);
+            $DB->update_record('user_enrolments', $userenrol);
+        }
 
         // TODO: #58 Create type D courses for the course dispatcher test environment.
         // 10 courses whose creation date is less than the criteria and activities or resources were created in these courses
-        // before the last modification date criteria. Courses type D.
+        // after the last modification date criteria. Courses type D.
 
         // 20 courses whose creation date is greater than the criteria and the last modification date is less than the criteria.
         // Courses type E.
