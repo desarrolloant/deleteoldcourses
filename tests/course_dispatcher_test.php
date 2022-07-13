@@ -116,7 +116,7 @@ class course_dispatcher_test extends \advanced_testcase {
             }
         }
 
-        // TODO: #57 Create type C courses for the course dispatcher test environment.
+        // Create type C courses for the course dispatcher test environment.
         // 20 courses whose creation date is less than the criteria and some participants enroll or unenroll in these courses
         // after the last modification date criteria. Courses type C.
         for ($i = 0; $i < 20; $i++) {
@@ -137,6 +137,15 @@ class course_dispatcher_test extends \advanced_testcase {
         // TODO: #58 Create type D courses for the course dispatcher test environment.
         // 10 courses whose creation date is less than the criteria and activities or resources were created in these courses
         // after the last modification date criteria. Courses type D.
+        for ($i = 0; $i < 10; $i++) {
+            $course = $this->getDataGenerator()->create_course();
+            $course->timecreated = rand($mintimestamp, $creationtimecriteria);
+            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course', $course);
+
+            $assign = $this->getDataGenerator()->get_plugin_generator('mod_assign');
+            $assign->create_instance(array('course' => $course->id));
+        }
 
         // 20 courses whose creation date is greater than the criteria and the last modification date is less than the criteria.
         // Courses type E.
