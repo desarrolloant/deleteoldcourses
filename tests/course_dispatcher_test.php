@@ -32,11 +32,13 @@ defined('MOODLE_INTERNAL') || die();
 class course_dispatcher_test extends \advanced_testcase {
 
     /**
-     * Test course dispatcher
+     * Test get courses to delete
      *
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      * @covers ::get_courses_to_delete
      */
-    public function test_course_dispatcher() {
+    public function test_get_courses_to_delete() {
 
         global $DB;
 
@@ -44,7 +46,8 @@ class course_dispatcher_test extends \advanced_testcase {
 
         $numberofcategoriesexcluded = 4;
         $coursecategoriesexcluded = array();
-        $numberofcoursesexcluded = 85;
+        $totalcourses = 150;
+        $numberofcoursesexcluded = 135;
         $numberofcoursestodelete = 15;
 
         $creationtimecriteria = 1293771599; // Thursday, December 30th 2010 23:59:59 GMT-05:00.
@@ -172,6 +175,108 @@ class course_dispatcher_test extends \advanced_testcase {
         $coursestodelete = $coursedispatcher->get_courses_to_delete();
 
         $this->assertIsArray($coursestodelete);
-        $this->assertSame(15, count($coursestodelete));
+        $this->assertSame($numberofcoursestodelete, count($coursestodelete));
     }
+
+    /**
+     * Test have new sections method
+     *
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::have_new_sections
+     */
+    public function test_have_new_sections() {
+
+        $this->resetAfterTest(false);
+
+        // Test environment.
+        $course = $this->getDataGenerator()->create_course(
+            array('shortname' => 'TestingCourse',
+                  'fullname' => 'Testing Course',
+                  'numsections' => 2),
+            array('createsections' => true));
+
+        // Tests.
+        $coursedispatcher = new course_dispatcher();
+
+        $pasttimemodified = 1641013200;   // 2022-01-01 23:59:59
+
+        $havenewsections = $coursedispatcher->have_new_sections($course->id, $pasttimemodified);
+        $this->assertSame(true, $havenewsections);
+
+        $futuretimemodified = 1893474000; // 2030-01-01 23:59:59
+
+        $havenewsections = $coursedispatcher->have_new_sections($course->id, $futuretimemodified);
+        $this->assertSame(false, $havenewsections);
+    }
+
+    /**
+     * Test have new participants
+     *
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::have_new_participants
+     */
+    public function test_have_new_participants() {
+
+        $this->resetAfterTest(false);
+
+        $futuretimemodified = 1893474000; // 2030-01-01 23:59:59
+        $pasttimemodified = 1641013200;   // 2022-01-01 23:59:59
+
+        // Test environment.
+        $course = $this->getDataGenerator()->create_course(
+            array('shortname' => 'TestingCourse',
+                  'fullname' => 'Testing Course',
+                  'numsections' => 2),
+            array('createsections' => true));
+
+        $user = $this->getDataGenerator()->create_user();
+
+        $this->getDataGenerator()->enrol_user($user->id, $course->id);
+
+        // Tests.
+        $coursedispatcher = new course_dispatcher();
+
+        $havenewparticipants = $coursedispatcher->have_new_participants($course->id, $pasttimemodified);
+        $this->assertSame(true, $havenewparticipants);
+
+        $havenewparticipants = $coursedispatcher->have_new_participants($course->id, $futuretimemodified);
+        $this->assertSame(false, $havenewparticipants);
+    }
+
+    /**
+     * Test have new activity or resource modules
+     *
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::have_new_modules
+     */
+    public function test_have_new_modules() {
+        $this->resetAfterTest(true);
+
+        $futuretimemodified = 1893474000; // 2030-01-01 23:59:59
+        $pasttimemodified = 1641013200;   // 2022-01-01 23:59:59
+
+        // Test environment.
+        $course = $this->getDataGenerator()->create_course(
+            array('shortname' => 'TestingCourse',
+                  'fullname' => 'Testing Course',
+                  'numsections' => 2),
+            array('createsections' => true));
+
+        $assigngenerator = $this->getDataGenerator()->get_plugin_generator('mod_assign');
+        $instance = $assigngenerator->create_instance(['course' => $course->id]);
+
+        // Tests.
+        $coursedispatcher = new course_dispatcher();
+
+        $havenewparticipants = $coursedispatcher->have_new_modules($course->id, $pasttimemodified);
+        $this->assertSame(true, $havenewparticipants);
+
+        $havenewparticipants = $coursedispatcher->have_new_modules($course->id, $futuretimemodified);
+        $this->assertSame(false, $havenewparticipants);
+
+    }
+
 }
