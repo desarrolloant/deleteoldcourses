@@ -77,6 +77,13 @@ class course_dispatcher {
         $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
         $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
 
+        $numbercategoriesexcluded = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
+        $categoriesexcluded = array();
+
+        for ($i = 1; $i < $numbercategoriesexcluded + 1; $i++) {
+            array_push($categoriesexcluded, get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i));
+        }
+
         $coursestodelete = array();
 
         $sqlquery = "SELECT *
@@ -89,9 +96,27 @@ class course_dispatcher {
 
         if ($coursestodelete) {
             foreach ($coursestodelete as $key => $course) {
+
+                // Check category.
+                if (in_array($course->category, $categoriesexcluded)) {
+                    unset($coursestodelete[$key]);
+                };
+
                 $havenewsections = $this->have_new_sections($course->id, $timemodificationcriteria);
 
-                if (!$havenewsections) {
+                if ($havenewsections) {
+                    unset($coursestodelete[$key]);
+                }
+
+                $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
+
+                if ($havenewparticipants) {
+                    unset($coursestodelete[$key]);
+                }
+
+                $havenewmodules = $this->have_new_modules($course->id, $timecreatedcriteria);
+
+                if ($havenewmodules) {
                     unset($coursestodelete[$key]);
                 }
             }
@@ -169,7 +194,10 @@ class course_dispatcher {
 
         $havenewsections = false;
 
-        $sqlquery = "SELECT COUNT(id) FROM {course_sections} WHERE course = ? AND timemodified >= ?";
+        $sqlquery = "SELECT COUNT(id)
+                     FROM {course_sections} cs
+                     WHERE cs.course = ?
+                           AND cs.timemodified >= ?";
 
         $coursesections = $DB->count_records_sql($sqlquery, array($courseid, $timemodified));
 
