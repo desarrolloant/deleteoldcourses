@@ -42,12 +42,10 @@ class course_dispatcher_test extends \advanced_testcase {
 
         global $DB;
 
-        $this->resetAfterTest(false);
+        $this->resetAfterTest(true);
 
         $numberofcategoriesexcluded = 4;
         $coursecategoriesexcluded = array();
-        $totalcourses = 150;
-        $numberofcoursesexcluded = 135;
         $numberofcoursestodelete = 15;
 
         $creationtimecriteria = 1293771599; // Thursday, December 30th 2010 23:59:59 GMT-05:00.
@@ -57,8 +55,7 @@ class course_dispatcher_test extends \advanced_testcase {
 
         $plugingenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
 
-        // Test environment.
-        // Plugin Settings.
+        // Test environment. Plugin Settings.
         // Creation date: 31-12-2010. Timestamp local time: 1293771600.
         $plugingenerator->update_setting('year_creation_date', '2010');
         $plugingenerator->update_setting('month_creation_date', '12');
@@ -85,19 +82,41 @@ class course_dispatcher_test extends \advanced_testcase {
             array_push($coursecategoriesexcluded, $excludedcategory);
         }
 
-        // 25 courses that belgon to categories excluded from a plugin setting.
+        // 25 courses that belong to categories excluded from a plugin setting.
         for ($i = 0; $i < 25; $i++) {
-            $course = $this->getDataGenerator()->create_course(array("category" => $coursecategoriesexcluded[rand(0, 3)]->id));
-        }
-
-        // 15 courses whose creation date is less than the criteria and the modification date is greater than the criteria.
-        // Courses type A.
-        for ($i = 0; $i < 15; $i++) {
-            $course = $this->getDataGenerator()->create_course();
+            $course = $this->getDataGenerator()->create_course(
+                array("category" => $coursecategoriesexcluded[rand(0, 3)]->id,
+                      "numsections" => 0),
+                array('createsections' => false)
+            );
 
             $course->timecreated = rand($mintimestamp, $creationtimecriteria);
             $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
             $DB->update_record('course', $course);
+
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+
+            $DB->update_record('course_sections', $coursesection);
+        }
+
+        // 15 courses whose creation date is less than the timecreated criteria and the modification date is less than
+        // the last modification criteria.
+        // Courses type A.
+        for ($i = 0; $i < 15; $i++) {
+            $course = $this->getDataGenerator()->create_course(
+                array('numsections' => 0),
+                array('createsections' => false)
+            );
+
+            $course->timecreated = rand($mintimestamp, $creationtimecriteria);
+            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course', $course);
+
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+
+            $DB->update_record('course_sections', $coursesection);
         };
 
         // 20 courses whose creation date is less than the criteria and sections were added to these courses
@@ -125,13 +144,20 @@ class course_dispatcher_test extends \advanced_testcase {
         // 20 courses whose creation date is less than the criteria and some participants enroll or unenroll in these courses
         // after the last modification date criteria. Courses type C.
         for ($i = 0; $i < 20; $i++) {
-            $course = $this->getDataGenerator()->create_course();
+            $course = $this->getDataGenerator()->create_course(
+                array('numsections' => 0),
+                array('createsections' => false)
+            );
+
             $course->timecreated = rand($mintimestamp, $creationtimecriteria);
             $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
             $DB->update_record('course', $course);
 
-            $user = $this->getDataGenerator()->create_user();
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course_sections', $coursesection);
 
+            $user = $this->getDataGenerator()->create_user();
             $this->getDataGenerator()->enrol_user($user->id, $course->id);
 
             $userenrol = $DB->get_record('user_enrolments', array('userid' => $user->id));
@@ -142,10 +168,18 @@ class course_dispatcher_test extends \advanced_testcase {
         // 10 courses whose creation date is less than the criteria and activities or resources were created in these courses
         // after the last modification date criteria. Courses type D.
         for ($i = 0; $i < 10; $i++) {
-            $course = $this->getDataGenerator()->create_course();
+            $course = $this->getDataGenerator()->create_course(
+                array('numsections' => 0),
+                array('createsections' => false)
+            );
+
             $course->timecreated = rand($mintimestamp, $creationtimecriteria);
             $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
             $DB->update_record('course', $course);
+
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course_sections', $coursesection);
 
             $assign = $this->getDataGenerator()->get_plugin_generator('mod_assign');
             $assign->create_instance(array('course' => $course->id));
@@ -154,21 +188,35 @@ class course_dispatcher_test extends \advanced_testcase {
         // 20 courses whose creation date is greater than the criteria and the last modification date is less than the criteria.
         // Courses type E.
         for ($i = 0; $i < 20; $i++) {
-            $course = $this->getDataGenerator()->create_course();
+            $course = $this->getDataGenerator()->create_course(
+                array('numsections' => 0),
+                array('createsections' => false)
+            );
 
             $course->timecreated = rand($creationtimecriteria, $maxtimestamp);
             $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
             $DB->update_record('course', $course);
+
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course_sections', $coursesection);
         }
 
         // 40 courses whose creation date is greater than the criteria and the last modification date is greater than the criteria.
         // Courses type F.
         for ($i = 0; $i < 40; $i++) {
-            $course = $this->getDataGenerator()->create_course();
+            $course = $this->getDataGenerator()->create_course(
+                array('numsections' => 0),
+                array('createsections' => false)
+            );
 
             $course->timecreated = rand($creationtimecriteria, $maxtimestamp);
             $course->timemodified = rand($lastmodificationtimecriteria, $maxtimestamp);
             $DB->update_record('course', $course);
+
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course_sections', $coursesection);
         }
 
         $coursedispatcher = new course_dispatcher();
@@ -187,7 +235,7 @@ class course_dispatcher_test extends \advanced_testcase {
      */
     public function test_have_new_sections() {
 
-        $this->resetAfterTest(false);
+        $this->resetAfterTest(true);
 
         // Test environment.
         $course = $this->getDataGenerator()->create_course(
@@ -219,7 +267,7 @@ class course_dispatcher_test extends \advanced_testcase {
      */
     public function test_have_new_participants() {
 
-        $this->resetAfterTest(false);
+        $this->resetAfterTest(true);
 
         $futuretimemodified = 1893474000; // 2030-01-01 23:59:59
         $pasttimemodified = 1641013200;   // 2022-01-01 23:59:59
