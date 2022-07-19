@@ -87,6 +87,16 @@ class course_dispatcher {
 
         $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
 
+        if ($coursestodelete) {
+            foreach ($coursestodelete as $key => $course) {
+                $havenewsections = $this->have_new_sections($course->id, $timemodificationcriteria);
+
+                if (!$havenewsections) {
+                    unset($coursestodelete[$key]);
+                }
+            }
+        }
+
         return $coursestodelete;
     }
 
@@ -121,6 +131,13 @@ class course_dispatcher {
     }
 
     /**
+     * Get the value of categoriestoexclude.
+     */
+    public function get_categories_to_exclude() {
+        return $this->categoriestoexclude;
+    }
+
+    /**
      * set_categoriestoexclude
      *
      * @return array $categoriestoexclude
@@ -139,9 +156,78 @@ class course_dispatcher {
     }
 
     /**
-     * Get the value of categoriestoexclude.
+     * Returns true if the course have new sections after a modification date.
+     *
+     * @param  int  $courseid
+     * @param  int  $timemodified
+     * @return bool $havenewsections
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function get_categories_to_exclude() {
-        return $this->categoriestoexclude;
+    public function have_new_sections(int $courseid, int $timemodified) {
+        global $DB;
+
+        $havenewsections = false;
+
+        $sqlquery = "SELECT COUNT(id) FROM {course_sections} WHERE course = ? AND timemodified >= ?";
+
+        $coursesections = $DB->count_records_sql($sqlquery, array($courseid, $timemodified));
+
+        $havenewsections = ($coursesections) ? true : false;
+
+        return $havenewsections;
+    }
+
+    /**
+     * Returns true if the course have new students enrolled after a modification date.
+     *
+     * @param  int  $courseid
+     * @param  int  $timemodified
+     * @return bool $havenewparticipants
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     */
+    public function have_new_participants(int $courseid, int $timemodified) {
+        global $DB;
+
+        $havenewparticipants = false;
+
+        $sqlquery = "SELECT COUNT(ue.id)
+                     FROM {enrol} e
+                          INNER JOIN {user_enrolments} ue ON e.id = ue.enrolid
+                     WHERE e.courseid = ?
+                           AND ue.timemodified >= ?";
+
+        $enrolments = $DB->count_records_sql($sqlquery, array($courseid, $timemodified));
+
+        $havenewparticipants = ($enrolments) ? true : false;
+
+        return $havenewparticipants;
+    }
+
+    /**
+     * Returns true if the course have new activity or resource modules after a modification date.
+     *
+     * @param  int  $courseid
+     * @param  int  $timemodified
+     * @return bool $havenewmodules
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     */
+    public function have_new_modules(int $courseid, int $timemodified) {
+        global $DB;
+
+        $havenewmodules = false;
+
+        $sqlquery = "SELECT COUNT(cm.id)
+                     FROM {course_modules} cm
+                     WHERE cm.course = ?
+                           AND cm.added >= ?";
+
+        $modules = $DB->count_records_sql($sqlquery, array($courseid, $timemodified));
+
+        $havenewmodules = ($modules) ? true : false;
+
+        return $havenewmodules;
     }
 }
