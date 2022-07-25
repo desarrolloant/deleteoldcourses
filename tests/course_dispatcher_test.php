@@ -18,7 +18,6 @@
  * Unit tests for course_dispatcher class.
  *
  * @package    local_deleteoldcourses
- * @category   phpunit
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @author     Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
  * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
@@ -29,6 +28,15 @@ namespace local_deleteoldcourses;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Course dispatcher tests
+ *
+ * @package    local_deleteoldcourses
+ * @since      Moodle 3.10
+ * @author     Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class course_dispatcher_test extends \advanced_testcase {
 
     /**
@@ -327,4 +335,35 @@ class course_dispatcher_test extends \advanced_testcase {
 
     }
 
+    /**
+     * Test enqueue courses to delete
+     *
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::enqueue_courses_to_delete
+     */
+    public function test_enqueue_courses_to_delete() {
+
+        global $DB;
+
+        $this->resetAfterTest(true);
+
+        $course1 = $this->getDataGenerator()->create_course();
+        $course2 = $this->getDataGenerator()->create_course();
+        $user1 = $this->getDataGenerator()->create_user(array('email' => 'user1@example.com', 'username' => 'user1'));
+
+        $courses = array(
+            $course1,
+            $course2
+        );
+
+        // Tests.
+        $coursedispatcher = new course_dispatcher();
+        $coursedispatcher->enqueue_courses_to_delete($courses, $user1->id);
+
+        $this->assertCount(2, $DB->get_records('deleteoldcourses'));
+        $this->assertTrue($DB->record_exists('deleteoldcourses', array('courseid' => $course1->id)));
+        $this->assertTrue($DB->record_exists('deleteoldcourses', array('courseid' => $course2->id)));
+        $this->assertCount(2, $DB->get_records('deleteoldcourses', array('userid' => $user1->id)));
+    }
 }
