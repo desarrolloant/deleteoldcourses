@@ -79,7 +79,7 @@ class course_dispatcher {
      */
     public function get_courses_to_delete() {
 
-        global $DB;
+        global $DB, $USER;
 
         $datetimemanager = new datetime_manager();
         $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
@@ -94,7 +94,7 @@ class course_dispatcher {
 
         $coursestodelete = array();
 
-        $sqlquery = "SELECT id, shortname, fullname, timecreated
+        $sqlquery = "SELECT id, shortname, fullname, timecreated, category
                      FROM {course}
                      WHERE timecreated <= ?
                         AND timemodified <= ?
@@ -129,6 +129,9 @@ class course_dispatcher {
                 }
             }
         }
+
+        // Insert courses into deleteoldcourses table.
+        $this->enqueue_courses_to_delete($coursestodelete, $USER->id);
 
         return $coursestodelete;
     }
