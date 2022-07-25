@@ -31,7 +31,6 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
-use moodle_exception;
 use stdClass;
 use DateTime;
 
