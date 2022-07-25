@@ -32,6 +32,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
 
 use moodle_exception;
+use stdClass;
+use DateTime;
 
 /**
  * Course dispatcher class for Delete old courses.
@@ -41,14 +43,20 @@ use moodle_exception;
  * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_dispatcher {
 
-    protected int $timecreationcriteria;
-    protected int $timemodificationcriteria;
-    protected int $limitquery;
-    protected array $categoriestoexclude;
+    /** @var int  Time creation criteria for course elimination */
+    protected $timecreationcriteria;
+
+    /** @var int  Time creation  modification for course elimination */
+    protected $timemodificationcriteria;
+
+    /** @var int  Limit for query to get courses */
+    protected $limitquery;
+
+    /** @var array  Course categories to exclude */
+    protected $categoriestoexclude;
 
     /**
      * __construct.
@@ -86,7 +94,7 @@ class course_dispatcher {
 
         $coursestodelete = array();
 
-        $sqlquery = "SELECT *
+        $sqlquery = "SELECT id, shortname, fullname, timecreated
                      FROM {course}
                      WHERE timecreated <= ?
                         AND timemodified <= ?
@@ -157,6 +165,8 @@ class course_dispatcher {
 
     /**
      * Get the value of categoriestoexclude.
+     *
+     * @since  Moodle 3.10
      */
     public function get_categories_to_exclude() {
         return $this->categoriestoexclude;
@@ -257,5 +267,37 @@ class course_dispatcher {
         $havenewmodules = ($modules) ? true : false;
 
         return $havenewmodules;
+    }
+
+    /**
+     * Function that insert the courses to delete in courses_to_delete table.
+     *
+     * @param  array $courses Array containing the courses to delete.
+     * @param  int $userid ID of the user who queued the course.
+     * @return void
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     */
+    public function enqueue_courses_to_delete($courses, $userid) {
+        global $DB;
+
+        $date = new DateTime();
+
+        foreach ($courses as $course) {
+
+            $record = new stdClass();
+            $record->shortname = $course->shortname;
+            $record->fullname = $course->fullname;
+            $record->courseid = $course->id;
+            $record->userid = $userid;
+            // TODO #59.
+            $record->size = 100;
+            $record->coursecreatedat = $course->timecreated;
+            $record->timecreated = $date->getTimestamp();
+
+            if ($course) {
+                $DB->insert_record('deleteoldcourses', $record);
+            }
+        }
     }
 }
