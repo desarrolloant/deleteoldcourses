@@ -284,6 +284,7 @@ class course_dispatcher {
         global $DB;
 
         $date = new DateTime();
+        $utils = new utils();
 
         foreach ($courses as $course) {
 
@@ -292,8 +293,7 @@ class course_dispatcher {
             $record->fullname = $course->fullname;
             $record->courseid = $course->id;
             $record->userid = $userid;
-            // TODO #59.
-            $record->size = 100;
+            $record->size = $utils->calculate_course_size($course->id);
             $record->coursecreatedat = $course->timecreated;
             $record->timecreated = $date->getTimestamp();
 
