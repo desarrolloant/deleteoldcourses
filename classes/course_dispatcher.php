@@ -67,7 +67,6 @@ class course_dispatcher {
         $this->timecreationcriteria = $datemanager->date_config_to_timestamp('creation');
         $this->timemodificationcriteria = $datemanager->date_config_to_timestamp('last_modification');
         $this->limitquery = get_config('local_deleteoldcourses', 'limit_query');
-
     }
 
     /**
@@ -97,7 +96,9 @@ class course_dispatcher {
                      FROM {course}
                      WHERE timecreated <= ?
                         AND timemodified <= ?
-                        AND id <> 1";
+                        AND id <> 1
+                        AND id NOT IN (SELECT DISTINCT courseid
+                                       FROM {deleteoldcourses})";
 
         $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
 
