@@ -26,8 +26,6 @@
 
 namespace local_deleteoldcourses;
 
-use stdClass;
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
