@@ -53,6 +53,8 @@ $string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
 
 // Tasks.
 $string['task_delete_course'] = 'Tarea para eliminar cursos';
+$string['enqueue_courses_task'] = 'Encolar cursos a eliminar';
+
 
 // Deleted table.
 $string['sent_to_delete'] = 'Enviado para eliminar';

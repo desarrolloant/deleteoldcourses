@@ -34,5 +34,14 @@ $tasks = array(
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'
+    ),
+    array(
+        'classname' => 'local_deleteoldcourses\task\enqueue_courses_task',
+        'blocking' => 1,
+        'minute' => '0',
+        'hour' => '0',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
     )
 );
