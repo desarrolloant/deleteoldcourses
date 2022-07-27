@@ -28,6 +28,9 @@ namespace local_deleteoldcourses;
 
 defined('MOODLE_INTERNAL') || die();
 
+use stdClass;
+use DateTime;
+
 /**
  * Course dispatcher tests
  *
@@ -226,6 +229,115 @@ class course_dispatcher_test extends \advanced_testcase {
             $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
             $DB->update_record('course_sections', $coursesection);
         }
+
+        $coursedispatcher = new course_dispatcher();
+        $coursestodelete = $coursedispatcher->get_courses_to_delete();
+
+        $this->assertIsArray($coursestodelete);
+        $this->assertSame($numberofcoursestodelete, count($coursestodelete));
+    }
+
+    /**
+     * Test get courses to delete that are not in the delete table
+     *
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::get_courses_to_delete
+     */
+    public function test_get_courses_not_in_delete_table() {
+        global $DB, $USER;
+
+        $this->resetAfterTest(true);
+
+        $numberofcategoriesexcluded = 4;
+        $coursecategoriesexcluded = array();
+        $numberofcoursestodelete = 7;
+
+        $creationtimecriteria = 1293771599; // Thursday, December 30th 2010 23:59:59 GMT-05:00.
+        $lastmodificationtimecriteria = 1357016399; // Monday, December 31th 2012 23:59:59 GMT-05:00.
+        $mintimestamp = 1104555600; // Saturday, 1 january 2005 0:00:00 GMT-05:00.
+        $maxtimestamp = 2556161999; // Saturday, 31 december 2050 23:59:59 GMT-05:00.
+
+        $plugingenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
+
+        // Test environment. Plugin Settings.
+        // Creation date: 31-12-2010. Timestamp local time: 1293771600.
+        $plugingenerator->update_setting('year_creation_date', '2010');
+        $plugingenerator->update_setting('month_creation_date', '12');
+        $plugingenerator->update_setting('day_creation_date', '31');
+        $plugingenerator->update_setting('hour_creation_date', '23');
+        $plugingenerator->update_setting('minutes_creation_date', '59');
+        $plugingenerator->update_setting('seconds_creation_date', '59');
+
+        // Last modification date: 31-12-2012. Timestamp local time: 1357016399.
+        $plugingenerator->update_setting('year_last_modification_date', '2012');
+        $plugingenerator->update_setting('month_last_modification_date', '12');
+        $plugingenerator->update_setting('day_last_modification_date', '31');
+        $plugingenerator->update_setting('hour_last_modification_date', '23');
+        $plugingenerator->update_setting('minutes_last_modification_date', '59');
+        $plugingenerator->update_setting('seconds_last_modification_date', '59');
+
+        // Categories to exclude.
+        $plugingenerator->update_setting('number_of_categories_to_exclude', $numberofcategoriesexcluded);
+
+        // Course categories.
+        for ($i = 1; $i <= $numberofcategoriesexcluded; $i++) {
+            $excludedcategory = $this->getDataGenerator()->create_category(array("name" => "Excluded category " . strval($i)));
+            $plugingenerator->update_setting('excluded_course_categories_' . $i, $excludedcategory->id);
+            array_push($coursecategoriesexcluded, $excludedcategory);
+        }
+
+        // 7 courses whose creation date is less than the timecreated criteria and the modification date is less than
+        // the last modification criteria.
+        // Courses type A.
+        for ($i = 0; $i < 7; $i++) {
+            $course = $this->getDataGenerator()->create_course(
+                array('numsections' => 0),
+                array('createsections' => false)
+            );
+
+            $course->timecreated = rand($mintimestamp, $creationtimecriteria);
+            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course', $course);
+
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+
+            $DB->update_record('course_sections', $coursesection);
+        };
+
+        // 10 courses whose creation date is less than the timecreated criteria and the modification date is less than
+        // the last modification criteria.
+        // Courses type A.
+        for ($i = 0; $i < 10; $i++) {
+            $date = new DateTime();
+
+            $course = $this->getDataGenerator()->create_course(
+                array('numsections' => 0),
+                array('createsections' => false)
+            );
+
+            $course->timecreated = rand($mintimestamp, $creationtimecriteria);
+            $course->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+            $DB->update_record('course', $course);
+
+            $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
+            $coursesection->timemodified = rand($mintimestamp, $lastmodificationtimecriteria);
+
+            $DB->update_record('course_sections', $coursesection);
+
+            $record = new stdClass();
+            $record->shortname = $course->shortname;
+            $record->fullname = $course->fullname;
+            $record->courseid = $course->id;
+            $record->userid = $USER->id;
+            $record->size = 0;
+            $record->coursecreatedat = $course->timecreated;
+            $record->timecreated = $date->getTimestamp();
+
+            $DB->insert_record('deleteoldcourses', $record);
+
+        };
 
         $coursedispatcher = new course_dispatcher();
         $coursestodelete = $coursedispatcher->get_courses_to_delete();
