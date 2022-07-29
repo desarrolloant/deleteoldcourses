@@ -106,6 +106,7 @@ class course_dispatcher {
             foreach ($coursestodelete as $key => $course) {
 
                 // Check category.
+                // TODO: #64 Check child categories.
                 if (in_array($course->category, $categoriesexcluded)) {
                     unset($coursestodelete[$key]);
                 };
@@ -115,6 +116,8 @@ class course_dispatcher {
                 if ($havenewsections) {
                     unset($coursestodelete[$key]);
                 }
+
+                // TODO: #63 Check role change in courses.
 
                 $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
 
@@ -127,6 +130,8 @@ class course_dispatcher {
                 if ($havenewmodules) {
                     unset($coursestodelete[$key]);
                 }
+
+                // TODO: Check if the course has been backed up.
             }
         }
 
@@ -290,16 +295,15 @@ class course_dispatcher {
         foreach ($courses as $course) {
 
             $record = new stdClass();
-            $record->shortname = $course->shortname;
-            $record->fullname = $course->fullname;
             $record->courseid = $course->id;
             $record->userid = $userid;
-            $record->size = $utils->calculate_course_size($course->id);
-            $record->coursecreatedat = $course->timecreated;
+            $record->coursesize = $utils->calculate_course_size($course->id);
             $record->timecreated = $date->getTimestamp();
 
+            // TODO: #62 Change enqueue table.
+
             if ($course) {
-                $DB->insert_record('deleteoldcourses', $record);
+                $DB->insert_record('local_delcoursesuv_todelete', $record);
             }
         }
     }

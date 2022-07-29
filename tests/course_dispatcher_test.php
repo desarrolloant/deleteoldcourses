@@ -473,9 +473,9 @@ class course_dispatcher_test extends \advanced_testcase {
         $coursedispatcher = new course_dispatcher();
         $coursedispatcher->enqueue_courses_to_delete($courses, $user1->id);
 
-        $this->assertCount(2, $DB->get_records('deleteoldcourses'));
-        $this->assertTrue($DB->record_exists('deleteoldcourses', array('courseid' => $course1->id)));
-        $this->assertTrue($DB->record_exists('deleteoldcourses', array('courseid' => $course2->id)));
-        $this->assertCount(2, $DB->get_records('deleteoldcourses', array('userid' => $user1->id)));
+        $this->assertCount(2, $DB->get_records('local_delcoursesuv_todelete'));
+        $this->assertTrue($DB->record_exists('local_delcoursesuv_todelete', array('courseid' => $course1->id)));
+        $this->assertTrue($DB->record_exists('local_delcoursesuv_todelete', array('courseid' => $course2->id)));
+        $this->assertCount(2, $DB->get_records('local_delcoursesuv_todelete', array('userid' => $user1->id)));
     }
 }
