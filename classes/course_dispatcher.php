@@ -278,6 +278,30 @@ class course_dispatcher {
     }
 
     /**
+     * Returns true if a course belongs to an exlcuded category.
+     *
+     * @param  int  $courseid
+     * @param  array  $coursecategories
+     * @return bool $belongtocategory
+     * @since  Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     */
+    public function check_excluded_course_categories(int $courseid, array $coursecategories) {
+        global $DB;
+
+        $belongtocategory = false;
+
+        $categoryid = $DB->get_record('course', array('id' => $courseid), 'category')->category;
+        $categorypath = $DB->get_record('course_categories', array('id' => $categoryid), 'path')->path;
+
+        $pathroot = explode('/', substr($categorypath, 1))[0];
+
+        $belongtocategory = in_array($pathroot, $coursecategories);
+
+        return $belongtocategory;
+    }
+
+    /**
      * Function that insert the courses to delete in courses_to_delete table.
      *
      * @param  array $courses Array containing the courses to delete.
@@ -299,8 +323,6 @@ class course_dispatcher {
             $record->userid = $userid;
             $record->coursesize = $utils->calculate_course_size($course->id);
             $record->timecreated = $date->getTimestamp();
-
-            // TODO: #62 Change enqueue table.
 
             if ($course) {
                 $DB->insert_record('local_delcoursesuv_todelete', $record);
