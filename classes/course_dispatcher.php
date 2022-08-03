@@ -106,8 +106,7 @@ class course_dispatcher {
             foreach ($coursestodelete as $key => $course) {
 
                 // Check category.
-                // TODO: #64 Check child categories.
-                if (in_array($course->category, $categoriesexcluded)) {
+                if ($this->check_excluded_course_categories($course->id, $categoriesexcluded)) {
                     unset($coursestodelete[$key]);
                 };
 
@@ -116,8 +115,6 @@ class course_dispatcher {
                 if ($havenewsections) {
                     unset($coursestodelete[$key]);
                 }
-
-                // TODO: #63 Check role change in courses.
 
                 $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
 
