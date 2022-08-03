@@ -243,6 +243,56 @@ if ($ADMIN->fulltree) {
 
     // Must add the page after definiting all the settings!
     $settings->add($settingspage);
+
+    // Fourth settings tab: Client settings.
+    $settingspage = new admin_settingpage('client_settings',
+                                          new lang_string('client_settings_tab', 'local_deleteoldcourses'));
+
+    $settingspage->add(new admin_setting_heading(
+                        'local_deleteoldcourses/client_settings_heading',
+                        new lang_string('client_settings_heading', 'local_deleteoldcourses'),
+                        new lang_string('client_settings_heading_desc', 'local_deleteoldcourses')));
+
+    $settingspage->add(new admin_setting_configtext(
+                        'local_deleteoldcourses/url_to_service',
+                        new lang_string('url_to_service', 'local_deleteoldcourses'),
+                        new lang_string('url_to_service_desc', 'local_deleteoldcourses'),
+                        'https://campusvirtualhistoria.univalle.edu.co/moodle/webservice/rest/server.php',
+                        PARAM_TEXT,
+                        60
+                    ));
+
+    $settingspage->add(new admin_setting_configtext(
+                        'local_deleteoldcourses/function_name',
+                        new lang_string('function_name', 'local_deleteoldcourses'),
+                        new lang_string('function_name_desc', 'local_deleteoldcourses'),
+                        'core_course_get_courses_by_field',
+                        PARAM_TEXT,
+                        60
+                    ));
+
+    $options = array(
+        'id' => get_string('courseid', 'local_deleteoldcourses'),
+        'shortname' => get_string('course_shortname', 'local_deleteoldcourses')
+    );
+
+    $settingspage->add(new admin_setting_configselect(
+                        'local_deleteoldcourses/client_course_field',
+                        new lang_string('client_course_field', 'local_deleteoldcourses'),
+                        new lang_string('client_course_field_desc', 'local_deleteoldcourses'),
+                        1,
+                        $options
+                    ));
+
+    $settingspage->add(new admin_setting_configpasswordunmask(
+                        'local_deleteoldcourses/token_user',
+                        new lang_string('token_user', 'local_deleteoldcourses'),
+                        new lang_string('token_user_desc', 'local_deleteoldcourses'),
+                        ''
+    ));
+
+    // Must add the page after definiting all the settings!
+    $settings->add($settingspage);
 }
 
 $ADMIN->add('localplugins', $settings);

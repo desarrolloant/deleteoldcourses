@@ -113,6 +113,21 @@ $string['notification_settings_heading_desc'] = 'Configuraciones para notificaci
 $string['users_to_notify'] = 'Usuarios a notificar';
 $string['users_to_notify_desc'] = 'Ingrese, separados por comas, los nombres de usuario (username) de los usuarios a notificar.';
 
+// Client settings.
+$string['client_settings_tab'] = 'Cliente';
+$string['client_settings_heading'] = 'Cliente para servicio en Campus Virtual Historia';
+$string['client_settings_heading_desc'] = 'Parámetros del cliente para el servicio en Campus Virtual Historia';
+$string['url_to_service'] = 'URL del Campus Virtual Historia';
+$string['url_to_service_desc'] = 'URL a los servicios en Campus Virtual Historia';
+$string['function_name'] = 'Nombre de la función';
+$string['function_name_desc'] = 'Nombre de la función utilizada por el servicio';
+$string['client_course_field'] = 'Campo de la tabla cursos';
+$string['client_course_field_desc'] = 'Campo utilizado para filtrar los cursos en Campus Virtual Historia';
+$string['courseid'] = 'Identificador del curso';
+$string['course_shortname'] = 'Nombre corto del curso';
+$string['token_user'] = 'Clave privada del usuario autorizado';
+$string['token_user_desc'] = 'Se puede recuperar de la página de claves privadas del usuario';
+
 // Date settings.
 $string['january'] = 'Enero';
 $string['february'] = 'Febrero';

@@ -110,6 +110,21 @@ $string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlo
 $string['course_queue_size'] = 'Queue size of courses to delete';
 $string['course_queue_size_desc'] = 'Example: courses are deleted in a queue with a maximum size of 500 courses per execution.';
 
+// Client settings.
+$string['client_settings_tab'] = 'Client';
+$string['client_settings_heading'] = 'Client for Campus Virtual Historia service';
+$string['client_settings_heading_desc'] = 'Parameters for the client to Campus Virtual Historia service';
+$string['url_to_service'] = 'URL to Campus Virtual Historia';
+$string['url_to_service_desc'] = 'URL to services in Campus Virtual Historia';
+$string['function_name'] = 'Function name';
+$string['function_name_desc'] = 'Name of the function used by the web service';
+$string['client_course_field'] = 'Course table field';
+$string['client_course_field_desc'] = 'Used by the filter in the Campus Virtual Historia service';
+$string['courseid'] = 'Course ID';
+$string['course_shortname'] = 'Course shortname';
+$string['token_user'] = 'User token';
+$string['token_user_desc'] = 'Can be obtained from the user\'s private key page';
+
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
 $string['notification_settings_heading'] = 'Configuraciones para notificaciones';
