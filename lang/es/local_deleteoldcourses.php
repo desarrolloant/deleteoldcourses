@@ -54,7 +54,7 @@ $string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
 // Tasks.
 $string['task_delete_course'] = 'Tarea para eliminar cursos';
 $string['enqueue_courses_task'] = 'Encolar cursos a eliminar';
-
+$string['delete_courses_task'] = 'Eliminar cursos encolados';
 
 // Deleted table.
 $string['sent_to_delete'] = 'Enviado para eliminar';
@@ -142,7 +142,7 @@ $string['limit_query_is_empty'] = 'El limite de la consulta no puede estar vacio
 $string['message_to_send'] = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
 $string['message_to_send'] .= 'Resumen de la ejecución: \n';
 $string['message_to_send'] .= '<pre>';
-$string['message_to_send'] .= '- Cantidad de cursos borrados: {$a->deletedcourses}';
+$string['message_to_send'] .= '- Cantidad de cursos eliminados: {$a->deletedcourses}';
 $string['message_to_send'] .= '- Cantidad de cursos pendientes: {$a->pendingcourses}';
 $string['message_to_send'] .= '</pre>';
 $string['message_to_send'] .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';

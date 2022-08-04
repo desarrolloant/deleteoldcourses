@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Delete courses task.
+ * Course deleter class.
  *
  * @package    local_deleteoldcourses
  * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
@@ -23,56 +23,26 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_deleteoldcourses\task;
-
-use local_deleteoldcourses\course_deleter;
+namespace local_deleteoldcourses;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Delete courses task.
+ * Course deleter class.
  *
  * @package    local_deleteoldcourses
  * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class delete_courses_task extends \core\task\scheduled_task {
+class course_deleter {
 
     /**
-     * Return the name of the component.
-     *
-     * @return string The name of the component.
+     * course_deleter class constructor.
      */
-    public function get_component() {
-        return 'local_deleteoldcourses';
+    public function __construct() {
     }
 
-    /**
-     * Return the task's name as shown in admin screens.
-     *
-     * @return string
-     */
-    public function get_name() {
-        return get_string('delete_courses_task', 'local_deleteoldcourses');
-    }
-
-    /**
-     * Execute the task.
-     */
-    public function execute() {
-
-        $timenow = time();
-        $starttime = microtime();
-
-        mtrace("Update cron started at: " . date('r', $timenow) . "\n");
-
-        $coursedeleter = new course_deleter();
-        $coursedeleter->delete_courses();
-
-        mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");
-        mtrace('Memory used: ' . display_size(memory_get_usage())."\n");
-        $difftime = microtime_diff($starttime, microtime());
-        mtrace("Scheduled task took " . $difftime . " seconds to finish.\n");
+    public function delete_courses() {
     }
 }

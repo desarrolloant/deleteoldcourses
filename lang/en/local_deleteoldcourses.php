@@ -54,6 +54,7 @@ $string['course_remove_delete'] = 'Course was removed from delete list';
 // Tasks.
 $string['task_delete_course'] = 'Task for deleting courses';
 $string['enqueue_courses_task'] = 'Enqueue courses to delete';
+$string['delete_courses_task'] = 'Delete enqueued courses';
 
 // Deleted table.
 $string['sent_to_delete'] = 'Sent to delete';
