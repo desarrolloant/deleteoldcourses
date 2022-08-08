@@ -219,4 +219,21 @@ class renderer extends plugin_renderer_base {
         ob_end_clean();
         return $o;
     }
+
+    public function render_reports() {
+        $data = new stdClass();
+
+        $data->dictionary = array();
+        $obj = new stdClass();
+        $obj->criteria_creation_time = 123456;
+        $obj->criteria_lastmodification_time = 123456;
+        $obj->criteria_lastmodification_user = "Categoría 1, Categoría 2, Categoría 3, Categoría 4";
+        $obj->courses_queued_by_professors = 123;
+        $obj->automatically_courses_queued = 1234;
+        $obj->total_courses_queued = 12345;
+
+        array_push($data->dictionary, $obj);
+        $template = $this->render_from_template('local_deleteoldcourses/reports', $data);
+        return $template;
+    }
 }

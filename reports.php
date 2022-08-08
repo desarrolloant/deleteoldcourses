@@ -15,17 +15,21 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Report page for administrators.
  *
  * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @copyright  2022 Brayan Sanchez <brayan.sanchez.leon@correounivalle.edu.co>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
-$plugin->version   = 20201023100;
-$plugin->requires  = 2018120306.03;
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.0.1';
-$plugin->component = 'local_deleteoldcourses';
+require_login();
+
+if (isguestuser()) {
+    throw new moodle_exception('noguest');
+}
+
+$output = $PAGE->get_renderer('local_deleteoldcourses');
