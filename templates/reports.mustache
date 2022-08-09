@@ -20,3 +20,43 @@
     @template block_course_list_uv/course_list_uv
 }}
 
+<div class="dashboard">
+  <div class="title">
+    <h2>{{#str}}reports_heading, local_deleteoldcourses{{/str}}</h2>
+  </div>
+  <div class="criteria-desc">
+    <p>{{#str}}criteria_description, local_deleteoldcourses{{/str}}</p>
+  </div>
+  <div class="criteria">
+    {{#dictionary}}
+      <table class="criteria-table">
+        <tr>
+          <td>{{#str}}criteria_creation_time, local_deleteoldcourses{{/str}}</td>
+          <td>{{criteria_creation_time}}</td>
+        </tr>
+        <tr>
+          <td>{{#str}}criteria_lastmodification_time, local_deleteoldcourses{{/str}}</td>
+          <td>{{criteria_lastmodification_time}}</td>
+        </tr>
+        <tr>
+          <td>{{#str}}criteria_lastmodification_user, local_deleteoldcourses{{/str}}</td>
+          <td>{{criteria_lastmodification_user}}</td>
+        </tr>
+      </table>
+      <table class="course-table">
+        <tr>
+          <td>{{#str}}courses_queued_by_professors, local_deleteoldcourses{{/str}}</td>
+          <td>{{courses_queued_by_professors}}</td>
+        </tr>
+        <tr>
+          <td >{{#str}}automatically_courses_queued, local_deleteoldcourses{{/str}}</td>
+          <td>{{automatically_courses_queued}}</td>
+        </tr>
+        <tr>
+          <td>{{#str}}total_courses_queued, local_deleteoldcourses{{/str}}</td>
+          <td>{{total_courses_queued}}</td>
+        </tr>
+      </table>
+    {{/dictionary}}
+  </div>
+</div>

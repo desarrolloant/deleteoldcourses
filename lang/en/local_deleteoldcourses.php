@@ -154,3 +154,15 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Opción ingresada: {$a}. Opciones válidas: monthsoftheyear, daysofthemonth, hoursinaday o minutesinanhour';
+
+// Reports.
+$string['reports_heading'] = 'Dashboard';
+$string['criteria_description'] = 'Current elimination criteria';
+
+$string['criteria_creation_time'] = 'Criteria creation time';
+$string['criteria_lastmodification_time'] = 'Criteria last modification time';
+$string['criteria_lastmodification_user'] = 'Course category excluded';
+$string['courses_queued_by_professors'] = 'Courses queued by professors';
+$string['automatically_courses_queued'] = 'Courses queued automatically';
+$string['total_courses_queued'] = 'Total courses queued';
+

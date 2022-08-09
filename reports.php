@@ -32,4 +32,13 @@ if (isguestuser()) {
     throw new moodle_exception('noguest');
 }
 
+require_capability('local/deleteoldcourses:viewreport', context_system::instance());
+
+$PAGE->set_url('/local/deleteoldcourses/reports.php');
+$PAGE->set_pagelayout('admin');
+echo $OUTPUT->header();
+
 $output = $PAGE->get_renderer('local_deleteoldcourses');
+echo $output->render_reports();
+
+echo $OUTPUT->footer();
