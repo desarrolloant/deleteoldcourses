@@ -33,7 +33,10 @@ defined('MOODLE_INTERNAL') || die();
 
 class notifier {
 
+    /** @var string User list to notify */
     protected $userstonotify;
+
+    /** @var string Text to send by email */
     protected string $texttosend;
 
     /**
