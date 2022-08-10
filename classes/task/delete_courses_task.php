@@ -65,13 +65,13 @@ class delete_courses_task extends \core\task\scheduled_task {
         $timenow = time();
         $starttime = microtime();
 
-        mtrace("Update cron started at: " . date('r', $timenow) . "\n");
+        mtrace("Cron task started at: " . date('r', $timenow) . "\n");
 
         $coursedeleter = new course_deleter();
         $coursedeleter->delete_courses();
 
-        mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");
-        mtrace('Memory used: ' . display_size(memory_get_usage())."\n");
+        mtrace("\n" . 'Cron task finished at: ' . date('r', time()) . "\n");
+        mtrace('Memory used: ' . display_size(memory_get_usage()) . "\n");
         $difftime = microtime_diff($starttime, microtime());
         mtrace("Scheduled task took " . $difftime . " seconds to finish.\n");
     }

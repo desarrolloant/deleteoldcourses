@@ -212,9 +212,9 @@ if ($ADMIN->fulltree) {
     ));
 
     $settingspage->add(new admin_setting_configtext(
-        'local_deleteoldcourses/course_queue_size',
-        new lang_string('course_queue_size', 'local_deleteoldcourses'),
-        new lang_string('course_queue_size_desc', 'local_deleteoldcourses'),
+        'local_deleteoldcourses/task_queue_size',
+        new lang_string('task_queue_size', 'local_deleteoldcourses'),
+        new lang_string('task_queue_size_desc', 'local_deleteoldcourses'),
         500,
         PARAM_INT,
         5
