@@ -262,6 +262,13 @@ if ($ADMIN->fulltree) {
                         60
                     ));
 
+    $settingspage->add(new admin_setting_configpasswordunmask(
+                        'local_deleteoldcourses/user_token',
+                        new lang_string('user_token', 'local_deleteoldcourses'),
+                        new lang_string('user_token_desc', 'local_deleteoldcourses'),
+                        ''
+                    ));
+
     $settingspage->add(new admin_setting_configtext(
                         'local_deleteoldcourses/function_name',
                         new lang_string('function_name', 'local_deleteoldcourses'),
@@ -283,13 +290,6 @@ if ($ADMIN->fulltree) {
                         1,
                         $options
                     ));
-
-    $settingspage->add(new admin_setting_configpasswordunmask(
-                        'local_deleteoldcourses/token_user',
-                        new lang_string('token_user', 'local_deleteoldcourses'),
-                        new lang_string('token_user_desc', 'local_deleteoldcourses'),
-                        ''
-    ));
 
     // Must add the page after definiting all the settings!
     $settings->add($settingspage);
