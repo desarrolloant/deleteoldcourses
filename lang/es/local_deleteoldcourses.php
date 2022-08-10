@@ -55,7 +55,6 @@ $string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
 $string['task_delete_course'] = 'Tarea para eliminar cursos';
 $string['enqueue_courses_task'] = 'Encolar cursos a eliminar';
 
-
 // Deleted table.
 $string['sent_to_delete'] = 'Enviado para eliminar';
 $string['course_timedeleted'] = 'Fecha de eliminación';
@@ -125,8 +124,8 @@ $string['client_course_field'] = 'Campo de la tabla cursos';
 $string['client_course_field_desc'] = 'Campo utilizado para filtrar los cursos en Campus Virtual Historia';
 $string['courseid'] = 'Identificador del curso';
 $string['course_shortname'] = 'Nombre corto del curso';
-$string['token_user'] = 'Clave privada del usuario autorizado';
-$string['token_user_desc'] = 'Se puede recuperar de la página de claves privadas del usuario';
+$string['user_token'] = 'Clave privada del usuario autorizado';
+$string['user_token_desc'] = 'Se puede recuperar de la página de claves privadas del usuario';
 
 // Date settings.
 $string['january'] = 'Enero';
@@ -165,3 +164,8 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Entered input: {$a}. Valid inputs: monthsoftheyear, daysofthemonth, hoursinaday or minutesinanhour';
+$string['invalid_format'] = 'Formato de retorno invalido.';
+$string['empty_url_to_service'] = 'Cliente CVH: URL al servicio vacía.';
+$string['empty_return_format'] = 'Cliente CVH: Formato de retorno vacío.';
+$string['empty_user_token'] = 'Cliente CVH: Token de usuario vacío.';
+$string['clientcvh_invalid_parameters'] = 'Cliente CVH: El segundo parámetro del método request() debe ser un arreglo.';

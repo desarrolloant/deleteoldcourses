@@ -122,8 +122,8 @@ $string['client_course_field'] = 'Course table field';
 $string['client_course_field_desc'] = 'Used by the filter in the Campus Virtual Historia service';
 $string['courseid'] = 'Course ID';
 $string['course_shortname'] = 'Course shortname';
-$string['token_user'] = 'User token';
-$string['token_user_desc'] = 'Can be obtained from the user\'s private key page';
+$string['user_token'] = 'User token';
+$string['user_token_desc'] = 'Can be obtained from the user\'s private key page';
 
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
@@ -169,3 +169,8 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Opción ingresada: {$a}. Opciones válidas: monthsoftheyear, daysofthemonth, hoursinaday o minutesinanhour';
+$string['invalid_format'] = 'Invalid return format.';
+$string['empty_url_to_service'] = 'CVH Client: Empty URL to service.';
+$string['empty_return_format'] = 'CVH Client: Empty return format.';
+$string['empty_user_token'] = 'CVH Client: Empty user token.';
+$string['clientcvh_invalid_parameters'] = 'CVH Client: The second parameter of request() should be an array.';
