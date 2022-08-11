@@ -37,8 +37,15 @@ class CVH_client_test extends \advanced_testcase {
 
     /**
      * Test CVH Client class instantiation.
+     *
+     * @return void
+     * @since Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::construct
      */
-    public function test_cvh_client() {
+    public function test_cvh_client_default(): void {
+
+        $this->resetAfterTest(true);
 
         $this->set_cvhclient();
 
@@ -47,34 +54,81 @@ class CVH_client_test extends \advanced_testcase {
         $this->assertSame('json', $cvhclient->get_returnformat());
 
         $this->expectException(moodle_exception::class);
-        $this->expectExceptionMessage('Invalid return format.');
+        $this->expectExceptionMessage('CVH Client: Request method invalid.');
         $this->set_cvhclient('dummy');
+
+        $this->expectException(moodle_exception::class);
+        $this->expectExceptionMessage('CVH Client: Invalid return format.');
+        $this->set_cvhclient('get', 'dummy');
+    }
+
+    /**
+     * Test CVH Client class instantiation with 1 parameter.
+     *
+     * @return void
+     * @since Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::construct
+     */
+    public function test_cvh_client_one_parameter(): void {
+
+        $this->resetAfterTest(true);
+
+        $this->expectException(moodle_exception::class);
+        $this->expectExceptionMessage('CVH Client: Request method invalid.');
+        $this->set_cvhclient('dummy');
+    }
+
+    /**
+     * Test CVH Client class instantiation with 2 parameter.
+     *
+     * @return void
+     * @since Moodle 3.10
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::construct
+     */
+    public function test_cvh_client_two_parameters(): void {
+
+        $this->resetAfterTest(true);
+
+        $this->expectException(moodle_exception::class);
+        $this->expectExceptionMessage('CVH Client: Invalid return format.');
+        $this->set_cvhclient('get', 'dummy');
     }
 
     /**
      * Test request function.
      *
+     * @return void
      * @since Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::check_course
+     * @covers ::request
      */
-    public function test_request() {
+    public function test_request(): void {
+
+        $this->resetAfterTest(true);
 
         $this->set_cvhclient();
 
         $this->assertInstanceOf(CVH_client::class, $this->get_cvhclient());
 
-        // This course exists in Campus Virtual Historia.
-        $course1 = $this->getDataGenerator()->create_course();
-        $checkresult = $this->cvhclient->request();
-        $this->assertIsBool($checkresult);
-        $this->assertSame(true, $checkresult);
+        $function = get_config('local_deleteoldcourses', 'function_name');
 
-        // This course not exists in Campus Virtual Historia.
-        $course2 = $this->getDataGenerator()->create_course();
-        $checkresult = $this->cvhclient->request();
-        $this->assertIsBool($checkresult);
-        $this->assertSame(false, $checkresult);
+        $parameters = array(
+            'shortname' => '01-201238M-50-202011051'
+        );
+
+        $response = $this->get_cvhclient()->request($function, $parameters);
+
+        $this->assertJson($response);
+
+        $parameters = array(
+            'shortname' => 'dummy'
+        );
+
+        $response = $this->get_cvhclient()->request($function, $parameters);
+
+        $this->assertJson($response);
     }
 
     /**
@@ -83,7 +137,7 @@ class CVH_client_test extends \advanced_testcase {
      * @return CVH_client
      * @since Moodle 3.10
      */
-    public function get_cvhclient() {
+    public function get_cvhclient(): CVH_client {
         return $this->cvhclient;
     }
 
@@ -94,10 +148,14 @@ class CVH_client_test extends \advanced_testcase {
      * @return CVH_client_test
      * @since Moodle 3.10
      */
-    public function set_cvhclient($returnformat = null) {
+    public function set_cvhclient($method = null, $returnformat = null): CVH_client_test {
 
-        if ($returnformat) {
-            $this->cvhclient = new CVH_client($returnformat);
+        if ($method) {
+            $this->cvhclient = new CVH_client($method);
+
+            if ($returnformat) {
+                $this->cvhclient = new CVH_client($method, $returnformat);
+            }
         } else {
             $this->cvhclient = new CVH_client();
         }
@@ -105,8 +163,20 @@ class CVH_client_test extends \advanced_testcase {
         return $this;
     }
 
-    protected function setUp(): void
-    {
+    /**
+     * Set up the test environment.
+     *
+     * @return void
+     * @since Moodle 3.10
+     */
+    protected function setUp(): void {
 
+        $configgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
+
+        $configgenerator->update_setting('url_to_service',
+                          'https://campusvirtualhistoria.univalle.edu.co/moodle/webservice/rest/server.php');
+        $configgenerator->update_setting('token_user',
+                          'de4549d7a1d8aaa27ed4abfb213339f1');
+        $configgenerator->update_setting('function_name', 'core_course_get_courses_by_field');
     }
 }
