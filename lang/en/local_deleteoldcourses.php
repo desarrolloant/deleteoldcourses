@@ -169,8 +169,11 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Opción ingresada: {$a}. Opciones válidas: monthsoftheyear, daysofthemonth, hoursinaday o minutesinanhour';
-$string['invalid_format'] = 'Invalid return format.';
+$string['invalid_return_format'] = 'CVH Client: Invalid return format.';
 $string['empty_url_to_service'] = 'CVH Client: Empty URL to service.';
 $string['empty_return_format'] = 'CVH Client: Empty return format.';
 $string['empty_user_token'] = 'CVH Client: Empty user token.';
 $string['clientcvh_invalid_parameters'] = 'CVH Client: The second parameter of request() should be an array.';
+$string['empty_function_name'] = 'CVH Client: The function name setting is empty.';
+$string['request_error'] = 'CVH Client: Request error.';
+$string['request_method_invalid'] = 'CVH Client: Request method invalid.';
