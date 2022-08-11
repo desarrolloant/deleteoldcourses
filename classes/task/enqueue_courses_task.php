@@ -26,7 +26,7 @@
 
 namespace local_deleteoldcourses\task;
 
-use local_deleteoldcourses\course_dispatcher;
+use local_deleteoldcourses\course_enqueuer;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -69,8 +69,8 @@ class enqueue_courses_task extends \core\task\scheduled_task {
 
         mtrace("Update cron started at: " . date('r', $timenow) . "\n");
 
-        $coursedispatcher = new course_dispatcher();
-        $coursedispatcher->get_courses_to_delete();
+        $coursedispatcher = new course_enqueuer();
+        $coursedispatcher->get_courses_to_enqueue();
 
         // Enqueue courses completed.
         mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");

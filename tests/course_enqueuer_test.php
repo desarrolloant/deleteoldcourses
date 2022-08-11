@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for course_dispatcher class.
+ * Unit tests for course_enqueuer class.
  *
  * @package    local_deleteoldcourses
  * @author     Iader E. García Gómez <iadergg@gmail.com>
@@ -33,7 +33,7 @@ use DateTime;
 use core_course_category;
 
 /**
- * Course dispatcher tests
+ * Course enqueuer tests
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -41,16 +41,16 @@ use core_course_category;
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_dispatcher_test extends \advanced_testcase {
+class course_enqueuer_test extends \advanced_testcase {
 
     /**
      * Test get courses to delete
      *
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::get_courses_to_delete
+     * @covers ::get_courses_to_enqueue
      */
-    public function test_get_courses_to_delete() {
+    public function test_get_courses_to_enqueue() {
 
         global $DB;
 
@@ -152,7 +152,7 @@ class course_dispatcher_test extends \advanced_testcase {
             }
         }
 
-        // Create type C courses for the course dispatcher test environment.
+        // Create type C courses for the course enqueuer test environment.
         // 20 courses whose creation date is less than the criteria and some participants enroll or unenroll in these courses
         // after the last modification date criteria. Courses type C.
         for ($i = 0; $i < 20; $i++) {
@@ -231,19 +231,19 @@ class course_dispatcher_test extends \advanced_testcase {
             $DB->update_record('course_sections', $coursesection);
         }
 
-        $coursedispatcher = new course_dispatcher();
-        $coursestodelete = $coursedispatcher->get_courses_to_delete();
+        $courseenqueuer = new course_enqueuer();
+        $coursestodelete = $courseenqueuer->get_courses_to_enqueue();
 
         $this->assertIsArray($coursestodelete);
         $this->assertSame($numberofcoursestodelete, count($coursestodelete));
     }
 
     /**
-     * Test get courses to delete that are not in the delete table
+     * Test get courses to enqueue that are not in the delete table
      *
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::get_courses_to_delete
+     * @covers ::get_courses_to_enqueue
      */
     public function test_get_courses_not_in_delete_table() {
         global $DB, $USER;
@@ -336,12 +336,12 @@ class course_dispatcher_test extends \advanced_testcase {
             $record->coursecreatedat = $course->timecreated;
             $record->timecreated = $date->getTimestamp();
 
-            $DB->insert_record('deleteoldcourses', $record);
+            $DB->insert_record('local_delcoursesuv_todelete', $record);
 
         };
 
-        $coursedispatcher = new course_dispatcher();
-        $coursestodelete = $coursedispatcher->get_courses_to_delete();
+        $courseenqueuer = new course_enqueuer();
+        $coursestodelete = $courseenqueuer->get_courses_to_enqueue();
 
         $this->assertIsArray($coursestodelete);
         $this->assertSame($numberofcoursestodelete, count($coursestodelete));
@@ -366,16 +366,16 @@ class course_dispatcher_test extends \advanced_testcase {
             array('createsections' => true));
 
         // Tests.
-        $coursedispatcher = new course_dispatcher();
+        $courseenqueuer = new course_enqueuer();
 
         $pasttimemodified = 1641013200;   // 2022-01-01 23:59:59
 
-        $havenewsections = $coursedispatcher->have_new_sections($course->id, $pasttimemodified);
+        $havenewsections = $courseenqueuer->have_new_sections($course->id, $pasttimemodified);
         $this->assertSame(true, $havenewsections);
 
         $futuretimemodified = 1893474000; // 2030-01-01 23:59:59
 
-        $havenewsections = $coursedispatcher->have_new_sections($course->id, $futuretimemodified);
+        $havenewsections = $courseenqueuer->have_new_sections($course->id, $futuretimemodified);
         $this->assertSame(false, $havenewsections);
     }
 
@@ -405,12 +405,12 @@ class course_dispatcher_test extends \advanced_testcase {
         $this->getDataGenerator()->enrol_user($user->id, $course->id);
 
         // Tests.
-        $coursedispatcher = new course_dispatcher();
+        $courseenqueuer = new course_enqueuer();
 
-        $havenewparticipants = $coursedispatcher->have_new_participants($course->id, $pasttimemodified);
+        $havenewparticipants = $courseenqueuer->have_new_participants($course->id, $pasttimemodified);
         $this->assertSame(true, $havenewparticipants);
 
-        $havenewparticipants = $coursedispatcher->have_new_participants($course->id, $futuretimemodified);
+        $havenewparticipants = $courseenqueuer->have_new_participants($course->id, $futuretimemodified);
         $this->assertSame(false, $havenewparticipants);
     }
 
@@ -438,12 +438,12 @@ class course_dispatcher_test extends \advanced_testcase {
         $instance = $assigngenerator->create_instance(['course' => $course->id]);
 
         // Tests.
-        $coursedispatcher = new course_dispatcher();
+        $courseenqueuer = new course_enqueuer();
 
-        $havenewparticipants = $coursedispatcher->have_new_modules($course->id, $pasttimemodified);
+        $havenewparticipants = $courseenqueuer->have_new_modules($course->id, $pasttimemodified);
         $this->assertSame(true, $havenewparticipants);
 
-        $havenewparticipants = $coursedispatcher->have_new_modules($course->id, $futuretimemodified);
+        $havenewparticipants = $courseenqueuer->have_new_modules($course->id, $futuretimemodified);
         $this->assertSame(false, $havenewparticipants);
     }
 
@@ -468,8 +468,8 @@ class course_dispatcher_test extends \advanced_testcase {
         $coursecategories = array($categoryid);
 
         // Tests.
-        $coursedispatcher = new course_dispatcher();
-        $result = $coursedispatcher->check_excluded_course_categories($course->id, $coursecategories);
+        $courseenqueuer = new course_enqueuer();
+        $result = $courseenqueuer->check_excluded_course_categories($course->id, $coursecategories);
 
         $this->assertIsBool($result);
         $this->assertSame(true, $result);
@@ -498,8 +498,8 @@ class course_dispatcher_test extends \advanced_testcase {
         );
 
         // Tests.
-        $coursedispatcher = new course_dispatcher();
-        $coursedispatcher->enqueue_courses_to_delete($courses, $user1->id);
+        $courseenqueuer = new course_enqueuer();
+        $courseenqueuer->enqueue_courses_to_delete($courses, $user1->id);
 
         $this->assertCount(2, $DB->get_records('local_delcoursesuv_todelete'));
         $this->assertTrue($DB->record_exists('local_delcoursesuv_todelete', array('courseid' => $course1->id)));

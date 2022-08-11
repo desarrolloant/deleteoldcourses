@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Course dispatcher class.
+ * Course enqueuer class.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -35,7 +35,7 @@ use stdClass;
 use DateTime;
 
 /**
- * Course dispatcher class for Delete old courses.
+ * Course enqueuer class for Delete old courses.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -43,7 +43,7 @@ use DateTime;
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  */
-class course_dispatcher {
+class course_enqueuer {
 
     /** @var int  Time creation criteria for course elimination */
     protected $timecreationcriteria;
@@ -70,12 +70,12 @@ class course_dispatcher {
     }
 
     /**
-     * Get courses to delete according to elimination criteria.
+     * Get courses to enqueue according to elimination criteria.
      *
      * @return array $courses
      * @since  Moodle 3.10
      */
-    public function get_courses_to_delete() {
+    public function get_courses_to_enqueue() {
 
         global $DB, $USER;
 
@@ -98,7 +98,7 @@ class course_dispatcher {
                         AND timemodified <= ?
                         AND id <> 1
                         AND id NOT IN (SELECT DISTINCT courseid
-                                       FROM {deleteoldcourses})";
+                                       FROM {local_delcoursesuv_todelete})";
 
         $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
 
