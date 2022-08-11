@@ -54,6 +54,7 @@ $string['course_remove_delete'] = 'Course was removed from delete list';
 // Tasks.
 $string['task_delete_course'] = 'Task for deleting courses';
 $string['enqueue_courses_task'] = 'Enqueue courses to delete';
+$string['delete_courses_task'] = 'Delete enqueued courses';
 
 // Deleted table.
 $string['sent_to_delete'] = 'Sent to delete';
@@ -107,8 +108,8 @@ $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la elimin
 $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
 $string['limit_query'] = 'Limite de la consulta';
 $string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
-$string['course_queue_size'] = 'Queue size of courses to delete';
-$string['course_queue_size_desc'] = 'Example: courses are deleted in a queue with a maximum size of 500 courses per execution.';
+$string['task_queue_size'] = 'Task queue size';
+$string['task_queue_size_desc'] = 'Example: 500 courses are deleted per task, even though there are 2000 courses in the queue.';
 
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
