@@ -52,13 +52,20 @@ class CVH_client {
      */
     const METHOD_GET = 'get';
 
+    /**
+     * The constant that defines the request method using POST
+     * @access public
+     */
+    const METHOD_POST = 'post';
+
+
     /** @var string URL to Campus Virtual Historia services */
     private $urltoservice;
 
     /** @var string User token to access services */
     private $usertoken;
 
-    /** @var string User token to access services */
+    /** @var string Method to use in request */
     private $method;
 
     /** @var string Return format */
@@ -73,17 +80,22 @@ class CVH_client {
     public function __construct($method = self::METHOD_GET, $returnformat = self::RETURN_JSON) {
         $this->urltoservice = get_config('local_deleteoldcourses', 'url_to_service');
         $this->usertoken = get_config('local_deleteoldcourses', 'token_user');
+
+        if (!is_null($method) && $method <> self::METHOD_GET && $method <> self::METHOD_POST) {
+            throw new moodle_exception('request_method_invalid', 'local_deleteoldcourses');
+        }
+
         $this->method = $method;
 
         if (!is_null($returnformat) && $returnformat <> 'json' && $returnformat <> 'xml' && $returnformat <> 'array') {
-            throw new moodle_exception('invalid_format', 'local_deleteoldcourses');
+            throw new moodle_exception('invalid_return_format', 'local_deleteoldcourses');
         }
 
         $this->returnformat = $returnformat;
     }
 
     /**
-     * Get the value of return.
+     * Get the value of return format.
      *
      * @return int $usertoken
      * @since  Moodle 3.10
@@ -96,9 +108,13 @@ class CVH_client {
      * Make the request
      *
      * @param string $function Function name that will be used by the service.
-     * @param array $parameters Parameters array.
+     * @param array $parameters Parameters array. field => value.
+     *                          Example:
+     *                                  [
+     *                                    'shortname' => '01-201238M-50-202011051'
+     *                                  ]
      * @param $method Request method
-     * @return mixed $response
+     * @return string $result
      */
     public function request($function = '', $parameters = null, $method = self::METHOD_GET) {
 
@@ -120,13 +136,26 @@ class CVH_client {
             }
         }
 
-        $function = get_config('local_delelteoldcourses', 'function_name');
-
         if (empty($function)) {
-            print_r('test');
+            throw new moodle_exception('empty_function_name', 'local_deleteoldcourses');
         }
 
-        $moodlerequest = file_get_contents();
+        $requesturl = $this->urltoservice .
+                      '?wstoken=' . $this->usertoken .
+                      '&wsfunction=' . $function .
+                      '&moodlewsrestformat=' . $this->returnformat;
 
+        foreach ($parameters as $key => $parameter) {
+            $requesturl .= '&field=' . $key;
+            $requesturl .= '&value=' . $parameter;
+        }
+
+        $moodleresponse = file_get_contents($requesturl);;
+
+        if (!$moodleresponse) {
+            throw new moodle_exception('request_error', 'local_deleteoldcourses');
+        }
+
+        return $moodleresponse;
     }
 }
