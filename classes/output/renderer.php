@@ -220,6 +220,12 @@ class renderer extends plugin_renderer_base {
         return $o;
     }
 
+    /**
+     * Returns HTML template for reports.php.
+     * It uses an array in case there are more objects to render.
+     *
+     * @return string $template
+     */
     public function render_reports() {
         $data = new stdClass();
 

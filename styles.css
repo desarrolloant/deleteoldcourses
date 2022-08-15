@@ -13,26 +13,29 @@
 #id_s_local_deleteoldcourses_minutes_last_modification_date,
 #id_s_local_deleteoldcourses_seconds_last_modification_date,
 #id_s_local_deleteoldcourses_number_of_categories_to_exclude {
-    width: 10em;
+  width: 10em;
 }
 
-/* Report styles */
+/**
+* Reports style.
+*/
 .criteria {
-    display: flex;
-    justify-content: space-between;
-    width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  width: 1200px;
 }
 
-.criteria-table tr, .criteria-table td, .course-table tr, .course-table td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    width: 270px;
+.criteria-table tr,
+.criteria-table td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 270px;
 }
 
-.criteria-table tr, .course-table tr {
-    height: 60px;
+.criteria-table tr {
+  height: 60px;
 }
 
-.criteria-table td, .course-table td {
-    padding: 5px;
+.criteria-table td {
+  padding: 5px;
 }

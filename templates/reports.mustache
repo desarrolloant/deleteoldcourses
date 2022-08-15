@@ -20,11 +20,11 @@
     @template block_course_list_uv/course_list_uv
 }}
 
-<div class="dashboard">
-  <div class="title">
+<div id="dashboard">
+  <div id="dashboard-title">
     <h2>{{#str}}reports_heading, local_deleteoldcourses{{/str}}</h2>
   </div>
-  <div class="criteria-desc">
+  <div id="criteria-desc">
     <p>{{#str}}criteria_description, local_deleteoldcourses{{/str}}</p>
   </div>
   <div class="criteria">
@@ -43,13 +43,13 @@
           <td>{{criteria_lastmodification_user}}</td>
         </tr>
       </table>
-      <table class="course-table">
+      <table class="criteria-table">
         <tr>
           <td>{{#str}}courses_queued_by_professors, local_deleteoldcourses{{/str}}</td>
           <td>{{courses_queued_by_professors}}</td>
         </tr>
         <tr>
-          <td >{{#str}}automatically_courses_queued, local_deleteoldcourses{{/str}}</td>
+          <td>{{#str}}automatically_courses_queued, local_deleteoldcourses{{/str}}</td>
           <td>{{automatically_courses_queued}}</td>
         </tr>
         <tr>

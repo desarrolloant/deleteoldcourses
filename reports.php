@@ -23,8 +23,6 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
-require_once($CFG->libdir . '/adminlib.php');
 
 require_login();
 
@@ -32,13 +30,16 @@ if (isguestuser()) {
     throw new moodle_exception('noguest');
 }
 
+$context = context_system::instance();
+$PAGE->set_context($context);
+$PAGE->set_url(new moodle_url('/local/deleteoldcourses/reports.php'));
+$PAGE->set_pagelayout('admin');
+$PAGE->set_title($SITE->fullname);
+$PAGE->set_heading(get_string('pluginname', 'local_deleteoldcourses'));
+$output = $PAGE->get_renderer('local_deleteoldcourses');
+
 require_capability('local/deleteoldcourses:viewreport', context_system::instance());
 
-$PAGE->set_url('/local/deleteoldcourses/reports.php');
-$PAGE->set_pagelayout('admin');
 echo $OUTPUT->header();
-
-$output = $PAGE->get_renderer('local_deleteoldcourses');
 echo $output->render_reports();
-
 echo $OUTPUT->footer();
