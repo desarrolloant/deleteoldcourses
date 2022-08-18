@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Implement Campus Virtual Historia Client
+ * Implement Campus Virtual Historia Web Service Client
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -31,14 +31,14 @@ use moodle_exception;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Campus Virtual Historia Client
+ * Campus Virtual Historia Web Service Client
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  */
-class CVH_client {
+class cvh_wsclient {
 
     /**
      * The constant that defines the JSON return format

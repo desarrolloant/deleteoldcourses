@@ -30,27 +30,27 @@ use moodle_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
-class CVH_client_test extends \advanced_testcase {
+class cvh_wsclient_test extends \advanced_testcase {
 
-    /** @var CVH_client Object client for connection to Campus Virtual Historia */
-    private CVH_client $cvhclient;
+    /** @var cvh_wsclient $cvhwsclient Object client for connection to Campus Virtual Historia */
+    private cvh_wsclient $cvhwsclient;
 
     /**
-     * Test CVH Client class instantiation.
+     * Test CVH WS Client class instantiation.
      *
      * @return void
      * @since Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      * @covers ::construct
      */
-    public function test_cvh_client_default(): void {
+    public function test_cvh_wsclient_default(): void {
 
         $this->resetAfterTest(true);
 
         $this->set_cvhclient();
 
         $cvhclient = $this->get_cvhclient();
-        $this->assertInstanceOf(CVH_client::class, $this->get_cvhclient());
+        $this->assertInstanceOf(cvh_wsclient::class, $this->get_cvhclient());
         $this->assertSame('json', $cvhclient->get_returnformat());
 
         $this->expectException(moodle_exception::class);
@@ -134,30 +134,30 @@ class CVH_client_test extends \advanced_testcase {
     /**
      * Get cvhclient instance
      *
-     * @return CVH_client
+     * @return cvh_wsclient
      * @since Moodle 3.10
      */
-    public function get_cvhclient(): CVH_client {
-        return $this->cvhclient;
+    public function get_cvhclient(): cvh_wsclient {
+        return $this->cvhwsclient;
     }
 
     /**
      * Set instance of cvhclient
      *
      * @param string $returnformat Reponse format. Default JSON.
-     * @return CVH_client_test
+     * @return cvh_wsclient_test
      * @since Moodle 3.10
      */
-    public function set_cvhclient($method = null, $returnformat = null): CVH_client_test {
+    public function set_cvhclient($method = null, $returnformat = null): cvh_wsclient_test {
 
         if ($method) {
-            $this->cvhclient = new CVH_client($method);
+            $this->cvhclient = new cvh_wsclient($method);
 
             if ($returnformat) {
-                $this->cvhclient = new CVH_client($method, $returnformat);
+                $this->cvhclient = new cvh_wsclient($method, $returnformat);
             }
         } else {
-            $this->cvhclient = new CVH_client();
+            $this->cvhclient = new cvh_wsclient();
         }
 
         return $this;
