@@ -54,6 +54,7 @@ $string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
 // Tasks.
 $string['task_delete_course'] = 'Tarea para eliminar cursos';
 $string['enqueue_courses_task'] = 'Encolar cursos a eliminar';
+$string['delete_courses_task'] = 'Eliminar cursos encolados';
 
 // Deleted table.
 $string['sent_to_delete'] = 'Enviado para eliminar';
@@ -102,8 +103,8 @@ $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la elimin
 $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
 $string['limit_query'] = 'Limite de la consulta';
 $string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
-$string['course_queue_size'] = 'Tamaño de la cola de cursos a eliminar';
-$string['course_queue_size_desc'] = 'Ejemplo: los cursos son eliminados en una cola de tamaño máximo de 500 cursos por ejecución.';
+$string['task_queue_size'] = 'Tamaño de la cola en la tarea';
+$string['task_queue_size_desc'] = 'Ejemplo: 500 cursos son eliminados por tarea, aunque hallan 2000 cursos en la cola.';
 
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
@@ -156,7 +157,7 @@ $string['limit_query_is_empty'] = 'El limite de la consulta no puede estar vacio
 $string['message_to_send'] = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
 $string['message_to_send'] .= 'Resumen de la ejecución: \n';
 $string['message_to_send'] .= '<pre>';
-$string['message_to_send'] .= '- Cantidad de cursos borrados: {$a->deletedcourses}';
+$string['message_to_send'] .= '- Cantidad de cursos eliminados: {$a->deletedcourses}';
 $string['message_to_send'] .= '- Cantidad de cursos pendientes: {$a->pendingcourses}';
 $string['message_to_send'] .= '</pre>';
 $string['message_to_send'] .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
