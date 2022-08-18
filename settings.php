@@ -278,19 +278,6 @@ if ($ADMIN->fulltree) {
                         60
                     ));
 
-    $options = array(
-        'id' => get_string('courseid', 'local_deleteoldcourses'),
-        'shortname' => get_string('course_shortname', 'local_deleteoldcourses')
-    );
-
-    $settingspage->add(new admin_setting_configselect(
-                        'local_deleteoldcourses/ws_client_course_field',
-                        new lang_string('ws_client_course_field', 'local_deleteoldcourses'),
-                        new lang_string('ws_client_course_field_desc', 'local_deleteoldcourses'),
-                        1,
-                        $options
-                    ));
-
     // Must add the page after definiting all the settings!
     $settings->add($settingspage);
 }
