@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for CVH_client class.
+ * Unit tests for cvh_wsclient class.
  *
  * @package    local_deleteoldcourses
  * @category   phpunit
@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class cvh_wsclient_test extends \advanced_testcase {
 
-    /** @var cvh_wsclient $cvhwsclient Object client for connection to Campus Virtual Historia */
+    /** @var cvh_wsclient Object client for connection to Campus Virtual Historia */
     private cvh_wsclient $cvhwsclient;
 
     /**
@@ -47,19 +47,19 @@ class cvh_wsclient_test extends \advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        $this->set_cvhclient();
+        $this->set_cvhwsclient();
 
-        $cvhclient = $this->get_cvhclient();
-        $this->assertInstanceOf(cvh_wsclient::class, $this->get_cvhclient());
-        $this->assertSame('json', $cvhclient->get_returnformat());
+        $cvhwsclient = $this->get_cvhwsclient();
+        $this->assertInstanceOf(cvh_wsclient::class, $this->get_cvhwsclient());
+        $this->assertSame('json', $cvhwsclient->get_returnformat());
 
         $this->expectException(moodle_exception::class);
         $this->expectExceptionMessage('CVH Client: Request method invalid.');
-        $this->set_cvhclient('dummy');
+        $this->set_cvhwsclient('dummy');
 
         $this->expectException(moodle_exception::class);
         $this->expectExceptionMessage('CVH Client: Invalid return format.');
-        $this->set_cvhclient('get', 'dummy');
+        $this->set_cvhwsclient('get', 'dummy');
     }
 
     /**
@@ -70,13 +70,13 @@ class cvh_wsclient_test extends \advanced_testcase {
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      * @covers ::construct
      */
-    public function test_cvh_client_one_parameter(): void {
+    public function test_cvh_wsclient_one_parameter(): void {
 
         $this->resetAfterTest(true);
 
         $this->expectException(moodle_exception::class);
         $this->expectExceptionMessage('CVH Client: Request method invalid.');
-        $this->set_cvhclient('dummy');
+        $this->set_cvhwsclient('dummy');
     }
 
     /**
@@ -87,13 +87,13 @@ class cvh_wsclient_test extends \advanced_testcase {
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      * @covers ::construct
      */
-    public function test_cvh_client_two_parameters(): void {
+    public function test_cvh_wsclient_two_parameters(): void {
 
         $this->resetAfterTest(true);
 
         $this->expectException(moodle_exception::class);
         $this->expectExceptionMessage('CVH Client: Invalid return format.');
-        $this->set_cvhclient('get', 'dummy');
+        $this->set_cvhwsclient('get', 'dummy');
     }
 
     /**
@@ -108,9 +108,9 @@ class cvh_wsclient_test extends \advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        $this->set_cvhclient();
+        $this->set_cvhwsclient();
 
-        $this->assertInstanceOf(CVH_client::class, $this->get_cvhclient());
+        $this->assertInstanceOf(cvh_wsclient::class, $this->get_cvhwsclient());
 
         $function = get_config('local_deleteoldcourses', 'function_name');
 
@@ -118,7 +118,7 @@ class cvh_wsclient_test extends \advanced_testcase {
             'shortname' => '01-201238M-50-202011051'
         );
 
-        $response = $this->get_cvhclient()->request($function, $parameters);
+        $response = $this->get_cvhwsclient()->request($function, $parameters);
 
         $this->assertJson($response);
 
@@ -126,38 +126,38 @@ class cvh_wsclient_test extends \advanced_testcase {
             'shortname' => 'dummy'
         );
 
-        $response = $this->get_cvhclient()->request($function, $parameters);
+        $response = $this->get_cvhwsclient()->request($function, $parameters);
 
         $this->assertJson($response);
     }
 
     /**
-     * Get cvhclient instance
+     * Get cvhwsclient instance
      *
      * @return cvh_wsclient
      * @since Moodle 3.10
      */
-    public function get_cvhclient(): cvh_wsclient {
+    public function get_cvhwsclient(): cvh_wsclient {
         return $this->cvhwsclient;
     }
 
     /**
-     * Set instance of cvhclient
+     * Set instance of cvhwsclient
      *
      * @param string $returnformat Reponse format. Default JSON.
      * @return cvh_wsclient_test
      * @since Moodle 3.10
      */
-    public function set_cvhclient($method = null, $returnformat = null): cvh_wsclient_test {
+    public function set_cvhwsclient($method = null, $returnformat = null): cvh_wsclient_test {
 
         if ($method) {
-            $this->cvhclient = new cvh_wsclient($method);
+            $this->cvhwsclient = new cvh_wsclient($method);
 
             if ($returnformat) {
-                $this->cvhclient = new cvh_wsclient($method, $returnformat);
+                $this->cvhwsclient = new cvh_wsclient($method, $returnformat);
             }
         } else {
-            $this->cvhclient = new cvh_wsclient();
+            $this->cvhwsclient = new cvh_wsclient();
         }
 
         return $this;

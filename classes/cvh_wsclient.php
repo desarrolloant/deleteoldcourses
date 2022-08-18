@@ -59,8 +59,8 @@ class cvh_wsclient {
     const METHOD_POST = 'post';
 
 
-    /** @var string URL to Campus Virtual Historia services */
-    private $urltoservice;
+    /** @var string URL to Campus Virtual Historia web services */
+    private $wsurl;
 
     /** @var string User token to access services */
     private $usertoken;
@@ -78,7 +78,7 @@ class cvh_wsclient {
      * @param string $returntoformat Response format. Default JSON.
      */
     public function __construct($method = self::METHOD_GET, $returnformat = self::RETURN_JSON) {
-        $this->urltoservice = get_config('local_deleteoldcourses', 'url_to_service');
+        $this->wsurl = get_config('local_deleteoldcourses', 'url_to_service');
         $this->usertoken = get_config('local_deleteoldcourses', 'token_user');
 
         if (!is_null($method) && $method <> self::METHOD_GET && $method <> self::METHOD_POST) {
@@ -118,7 +118,7 @@ class cvh_wsclient {
      */
     public function request($function = '', $parameters = null, $method = self::METHOD_GET) {
 
-        if (empty($this->urltoservice)) {
+        if (empty($this->wsurl)) {
             throw new moodle_exception('empty_url_to_service', 'local_deleteoldcourses');
         }
 
@@ -140,7 +140,7 @@ class cvh_wsclient {
             throw new moodle_exception('empty_function_name', 'local_deleteoldcourses');
         }
 
-        $requesturl = $this->urltoservice .
+        $requesturl = $this->wsurl .
                       '?wstoken=' . $this->usertoken .
                       '&wsfunction=' . $function .
                       '&moodlewsrestformat=' . $this->returnformat;
