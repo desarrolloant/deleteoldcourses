@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for cvh_wsclient class.
+ * Unit tests for cvh_ws_client class.
  *
  * @package    local_deleteoldcourses
  * @category   phpunit
@@ -30,10 +30,10 @@ use moodle_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
-class cvh_wsclient_test extends \advanced_testcase {
+class cvh_ws_client_test extends \advanced_testcase {
 
-    /** @var cvh_wsclient Object client for connection to Campus Virtual Historia */
-    private cvh_wsclient $cvhwsclient;
+    /** @var cvh_ws_client Object client for connection to Campus Virtual Historia */
+    private cvh_ws_client $cvhwsclient;
 
     /**
      * Test CVH WS Client class instantiation.
@@ -50,7 +50,7 @@ class cvh_wsclient_test extends \advanced_testcase {
         $this->set_cvhwsclient();
 
         $cvhwsclient = $this->get_cvhwsclient();
-        $this->assertInstanceOf(cvh_wsclient::class, $this->get_cvhwsclient());
+        $this->assertInstanceOf(cvh_ws_client::class, $this->get_cvhwsclient());
         $this->assertSame('json', $cvhwsclient->get_returnformat());
 
         $this->expectException(moodle_exception::class);
@@ -110,15 +110,15 @@ class cvh_wsclient_test extends \advanced_testcase {
 
         $this->set_cvhwsclient();
 
-        $this->assertInstanceOf(cvh_wsclient::class, $this->get_cvhwsclient());
+        $this->assertInstanceOf(cvh_ws_client::class, $this->get_cvhwsclient());
 
-        $function = get_config('local_deleteoldcourses', 'function_name');
+        $wsfunction = get_config('local_deleteoldcourses', 'ws_function_name');
 
         $parameters = array(
             'shortname' => '01-201238M-50-202011051'
         );
 
-        $response = $this->get_cvhwsclient()->request($function, $parameters);
+        $response = $this->get_cvhwsclient()->request($wsfunction, $parameters);
 
         $this->assertJson($response);
 
@@ -126,7 +126,7 @@ class cvh_wsclient_test extends \advanced_testcase {
             'shortname' => 'dummy'
         );
 
-        $response = $this->get_cvhwsclient()->request($function, $parameters);
+        $response = $this->get_cvhwsclient()->request($wsfunction, $parameters);
 
         $this->assertJson($response);
     }
@@ -134,10 +134,10 @@ class cvh_wsclient_test extends \advanced_testcase {
     /**
      * Get cvhwsclient instance
      *
-     * @return cvh_wsclient
+     * @return cvh_ws_client
      * @since Moodle 3.10
      */
-    public function get_cvhwsclient(): cvh_wsclient {
+    public function get_cvhwsclient(): cvh_ws_client {
         return $this->cvhwsclient;
     }
 
@@ -145,19 +145,19 @@ class cvh_wsclient_test extends \advanced_testcase {
      * Set instance of cvhwsclient
      *
      * @param string $returnformat Reponse format. Default JSON.
-     * @return cvh_wsclient_test
+     * @return cvh_ws_client_test
      * @since Moodle 3.10
      */
-    public function set_cvhwsclient($method = null, $returnformat = null): cvh_wsclient_test {
+    public function set_cvhwsclient($method = null, $returnformat = null): cvh_ws_client_test {
 
         if ($method) {
-            $this->cvhwsclient = new cvh_wsclient($method);
+            $this->cvhwsclient = new cvh_ws_client($method);
 
             if ($returnformat) {
-                $this->cvhwsclient = new cvh_wsclient($method, $returnformat);
+                $this->cvhwsclient = new cvh_ws_client($method, $returnformat);
             }
         } else {
-            $this->cvhwsclient = new cvh_wsclient();
+            $this->cvhwsclient = new cvh_ws_client();
         }
 
         return $this;
@@ -173,10 +173,10 @@ class cvh_wsclient_test extends \advanced_testcase {
 
         $configgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
 
-        $configgenerator->update_setting('url_to_service',
+        $configgenerator->update_setting('ws_url',
                           'https://campusvirtualhistoria.univalle.edu.co/moodle/webservice/rest/server.php');
-        $configgenerator->update_setting('token_user',
+        $configgenerator->update_setting('ws_user_token',
                           'de4549d7a1d8aaa27ed4abfb213339f1');
-        $configgenerator->update_setting('function_name', 'core_course_get_courses_by_field');
+        $configgenerator->update_setting('ws_function_name', 'core_course_get_courses_by_field');
     }
 }

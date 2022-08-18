@@ -38,7 +38,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  */
-class cvh_wsclient {
+class cvh_ws_client {
 
     /**
      * The constant that defines the JSON return format
@@ -63,10 +63,7 @@ class cvh_wsclient {
     private $wsurl;
 
     /** @var string User token to access services */
-    private $usertoken;
-
-    /** @var string Method to use in request */
-    private $method;
+    private $wsusertoken;
 
     /** @var string Return format */
     private $returnformat;
@@ -78,8 +75,8 @@ class cvh_wsclient {
      * @param string $returntoformat Response format. Default JSON.
      */
     public function __construct($method = self::METHOD_GET, $returnformat = self::RETURN_JSON) {
-        $this->wsurl = get_config('local_deleteoldcourses', 'url_to_service');
-        $this->usertoken = get_config('local_deleteoldcourses', 'token_user');
+        $this->wsurl = get_config('local_deleteoldcourses', 'ws_url');
+        $this->wsusertoken = get_config('local_deleteoldcourses', 'ws_user_token');
 
         if (!is_null($method) && $method <> self::METHOD_GET && $method <> self::METHOD_POST) {
             throw new moodle_exception('request_method_invalid', 'local_deleteoldcourses');
@@ -97,7 +94,7 @@ class cvh_wsclient {
     /**
      * Get the value of return format.
      *
-     * @return int $usertoken
+     * @return string $returnformat
      * @since  Moodle 3.10
      */
     public function get_returnformat() {
@@ -119,11 +116,11 @@ class cvh_wsclient {
     public function request($function = '', $parameters = null, $method = self::METHOD_GET) {
 
         if (empty($this->wsurl)) {
-            throw new moodle_exception('empty_url_to_service', 'local_deleteoldcourses');
+            throw new moodle_exception('empty_ws_url', 'local_deleteoldcourses');
         }
 
-        if (empty($this->usertoken)) {
-            throw new moodle_exception('empty_user_token', 'local_deleteoldcourses');
+        if (empty($this->wsusertoken)) {
+            throw new moodle_exception('empty_ws_user_token', 'local_deleteoldcourses');
         }
 
         if (empty($this->returnformat)) {
@@ -137,11 +134,11 @@ class cvh_wsclient {
         }
 
         if (empty($function)) {
-            throw new moodle_exception('empty_function_name', 'local_deleteoldcourses');
+            throw new moodle_exception('empty_ws_function_name', 'local_deleteoldcourses');
         }
 
         $requesturl = $this->wsurl .
-                      '?wstoken=' . $this->usertoken .
+                      '?wstoken=' . $this->wsusertoken .
                       '&wsfunction=' . $function .
                       '&moodlewsrestformat=' . $this->returnformat;
 
@@ -150,7 +147,7 @@ class cvh_wsclient {
             $requesturl .= '&value=' . $parameter;
         }
 
-        $moodleresponse = file_get_contents($requesturl);;
+        $moodleresponse = file_get_contents($requesturl);
 
         if (!$moodleresponse) {
             throw new moodle_exception('request_error', 'local_deleteoldcourses');

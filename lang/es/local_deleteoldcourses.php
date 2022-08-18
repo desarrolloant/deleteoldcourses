@@ -114,19 +114,19 @@ $string['users_to_notify'] = 'Usuarios a notificar';
 $string['users_to_notify_desc'] = 'Ingrese, separados por comas, los nombres de usuario (username) de los usuarios a notificar.';
 
 // Client settings.
-$string['client_settings_tab'] = 'Cliente';
-$string['client_settings_heading'] = 'Cliente para servicio en Campus Virtual Historia';
-$string['client_settings_heading_desc'] = 'Parámetros del cliente para el servicio en Campus Virtual Historia';
-$string['url_to_service'] = 'URL del Campus Virtual Historia';
-$string['url_to_service_desc'] = 'URL a los servicios en Campus Virtual Historia';
-$string['function_name'] = 'Nombre de la función';
-$string['function_name_desc'] = 'Nombre de la función utilizada por el servicio';
-$string['client_course_field'] = 'Campo de la tabla cursos';
-$string['client_course_field_desc'] = 'Campo utilizado para filtrar los cursos en Campus Virtual Historia';
+$string['ws_client_settings_tab'] = 'Cliente';
+$string['ws_client_settings_heading'] = 'Cliente para servicio en Campus Virtual Historia';
+$string['ws_client_settings_heading_desc'] = 'Parámetros del cliente para el servicio en Campus Virtual Historia';
+$string['ws_url'] = 'URL del Campus Virtual Historia';
+$string['ws_url_desc'] = 'URL a los servicios en Campus Virtual Historia';
+$string['ws_function_name'] = 'Nombre de la función';
+$string['ws_function_name_desc'] = 'Nombre de la función utilizada por el servicio';
+$string['ws_client_course_field'] = 'Campo de la tabla cursos';
+$string['ws_client_course_field_desc'] = 'Campo utilizado para filtrar los cursos en Campus Virtual Historia';
 $string['courseid'] = 'Identificador del curso';
 $string['course_shortname'] = 'Nombre corto del curso';
-$string['user_token'] = 'Clave privada del usuario autorizado';
-$string['user_token_desc'] = 'Se puede recuperar de la página de claves privadas del usuario';
+$string['ws_user_token'] = 'Clave privada del usuario autorizado';
+$string['ws_user_token_desc'] = 'Se puede recuperar de la página de claves privadas del usuario';
 
 // Date settings.
 $string['january'] = 'Enero';
@@ -166,10 +166,10 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Entered input: {$a}. Valid inputs: monthsoftheyear, daysofthemonth, hoursinaday or minutesinanhour';
 $string['invalid_return_format'] = 'Cliente CVH: Formato de retorno invalido.';
-$string['empty_url_to_service'] = 'Cliente CVH: URL al servicio vacía.';
+$string['empty_ws_url'] = 'Cliente CVH: URL al servicio vacía.';
 $string['empty_return_format'] = 'Cliente CVH: Formato de retorno vacío.';
-$string['empty_user_token'] = 'Cliente CVH: Token de usuario vacío.';
+$string['empty_ws_user_token'] = 'Cliente CVH: Token de usuario vacío.';
 $string['clientcvh_invalid_parameters'] = 'Cliente CVH: El segundo parámetro del método request() debe ser un arreglo.';
-$string['empty_function_name'] = 'Cliente CVH: El nombre de la función está vacío.';
+$string['empty_ws_function_name'] = 'Cliente CVH: El nombre de la función está vacío.';
 $string['request_error'] = 'Cliente CVH: Error en la petición.';
 $string['request_method_invalid'] = 'Cliente CVH: Método de la petición invalido.';
