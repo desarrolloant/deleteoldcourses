@@ -111,6 +111,19 @@ $string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlo
 $string['task_queue_size'] = 'Task queue size';
 $string['task_queue_size_desc'] = 'Example: 500 courses are deleted per task, even though there are 2000 courses in the queue.';
 
+// Client settings.
+$string['ws_client_settings_tab'] = 'Client';
+$string['ws_client_settings_heading'] = 'Client for Campus Virtual Historia service';
+$string['ws_client_settings_heading_desc'] = 'Parameters for the client to Campus Virtual Historia service';
+$string['ws_url'] = 'URL to Campus Virtual Historia';
+$string['ws_url_desc'] = 'URL to Campus Virtual Historia';
+$string['ws_function_name'] = 'Function name';
+$string['ws_function_name_desc'] = 'Name of the function used by the web service';
+$string['courseid'] = 'Course ID';
+$string['course_shortname'] = 'Course shortname';
+$string['ws_user_token'] = 'User token';
+$string['ws_user_token_desc'] = 'Can be obtained from the user\'s private key page';
+
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
 $string['notification_settings_heading'] = 'Configuraciones para notificaciones';
@@ -155,3 +168,11 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Opción ingresada: {$a}. Opciones válidas: monthsoftheyear, daysofthemonth, hoursinaday o minutesinanhour';
+$string['invalid_return_format'] = 'CVH Client: Invalid return format.';
+$string['empty_ws_url'] = 'CVH Client: Empty URL to service.';
+$string['empty_return_format'] = 'CVH Client: Empty return format.';
+$string['empty_ws_user_token'] = 'CVH Client: Empty user token.';
+$string['clientcvh_invalid_parameters'] = 'CVH Client: The second parameter of request() should be an array.';
+$string['empty_ws_function_name'] = 'CVH Client: The function name setting is empty.';
+$string['request_error'] = 'CVH Client: Request error.';
+$string['request_method_invalid'] = 'CVH Client: Request method invalid.';

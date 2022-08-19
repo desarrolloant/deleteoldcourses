@@ -17,8 +17,9 @@
 /**
  * Version information.
  *
- * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @package    local_deleteoldcourses>
+ * @copyright  2020 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
