@@ -97,14 +97,14 @@ class cvh_ws_client_test extends \advanced_testcase {
     }
 
     /**
-     * Test request function.
+     * Test request to service function.
      *
      * @return void
      * @since Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::request
+     * @covers ::request_to_service
      */
-    public function test_request(): void {
+    public function test_request_to_service(): void {
 
         $this->resetAfterTest(true);
 
@@ -118,7 +118,7 @@ class cvh_ws_client_test extends \advanced_testcase {
             'shortname' => '01-201238M-50-202011051'
         );
 
-        $response = $this->get_cvhwsclient()->request($wsfunction, $parameters);
+        $response = $this->get_cvhwsclient()->request_to_service($wsfunction, $parameters);
 
         $this->assertJson($response);
 
@@ -126,7 +126,7 @@ class cvh_ws_client_test extends \advanced_testcase {
             'shortname' => 'dummy'
         );
 
-        $response = $this->get_cvhwsclient()->request($wsfunction, $parameters);
+        $response = $this->get_cvhwsclient()->request_to_service($wsfunction, $parameters);
 
         $this->assertJson($response);
     }
@@ -174,7 +174,7 @@ class cvh_ws_client_test extends \advanced_testcase {
         $configgenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
 
         $configgenerator->update_setting('ws_url',
-                          'https://campusvirtualhistoria.univalle.edu.co/moodle/webservice/rest/server.php');
+                          'https://campusvirtualhistoria.univalle.edu.co/moodle');
         $configgenerator->update_setting('ws_user_token',
                           'de4549d7a1d8aaa27ed4abfb213339f1');
         $configgenerator->update_setting('ws_function_name', 'core_course_get_courses_by_field');

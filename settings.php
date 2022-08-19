@@ -257,7 +257,7 @@ if ($ADMIN->fulltree) {
                         'local_deleteoldcourses/ws_url',
                         new lang_string('ws_url', 'local_deleteoldcourses'),
                         new lang_string('ws_url_desc', 'local_deleteoldcourses'),
-                        'https://campusvirtualhistoria.univalle.edu.co/moodle/webservice/rest/server.php',
+                        'https://campusvirtualhistoria.univalle.edu.co/moodle',
                         PARAM_TEXT,
                         60
                     ));

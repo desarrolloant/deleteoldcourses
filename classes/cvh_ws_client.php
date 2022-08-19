@@ -41,23 +41,28 @@ defined('MOODLE_INTERNAL') || die();
 class cvh_ws_client {
 
     /**
-     * The constant that defines the JSON return format
+     * The constant that defines the JSON return format.
      * @access public
      */
     const RETURN_JSON = 'json';
 
     /**
-     * The constant that defines the request method using GET
+     * The constant that defines the request method using GET.
      * @access public
      */
     const METHOD_GET = 'get';
 
     /**
-     * The constant that defines the request method using POST
+     * The constant that defines the request method using POST.
      * @access public
      */
     const METHOD_POST = 'post';
 
+    /**
+     * The constant that defines the path to services in Moodle.
+     * @access public
+     */
+    const PATH_TO_SERVICES = '/webservice/rest/server.php';
 
     /** @var string URL to Campus Virtual Historia web services */
     private $wsurl;
@@ -102,7 +107,7 @@ class cvh_ws_client {
     }
 
     /**
-     * Make the request
+     * Make the request to service
      *
      * @param string $function Function name that will be used by the service.
      * @param array $parameters Parameters array. field => value.
@@ -113,7 +118,7 @@ class cvh_ws_client {
      * @param $method Request method
      * @return string $result
      */
-    public function request($function = '', $parameters = null, $method = self::METHOD_GET) {
+    public function request_to_service($function = '', $parameters = null, $method = self::METHOD_GET) {
 
         if (empty($this->wsurl)) {
             throw new moodle_exception('empty_ws_url', 'local_deleteoldcourses');
@@ -138,6 +143,7 @@ class cvh_ws_client {
         }
 
         $requesturl = $this->wsurl .
+                      self::PATH_TO_SERVICES .
                       '?wstoken=' . $this->wsusertoken .
                       '&wsfunction=' . $function .
                       '&moodlewsrestformat=' . $this->returnformat;
