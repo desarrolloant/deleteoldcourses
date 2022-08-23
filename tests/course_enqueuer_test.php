@@ -30,7 +30,6 @@ defined('MOODLE_INTERNAL') || die();
 
 use stdClass;
 use DateTime;
-use core_course_category;
 
 /**
  * Course enqueuer tests
