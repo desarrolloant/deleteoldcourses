@@ -19,33 +19,49 @@
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
- * @author     <camilo.mezu@correounivalle.edu.co>
- * @author     <juanfe.ores@gmail.com>
+ * @author     Camilo J. Mezú Mina <camilo.mezu@correounivalle.edu.co>
+ * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die();
-
 class report_manager {
 
-    /**
-     * report_manager class constructor.
-     */
-    public function __construct() {
-    }
-
-    // LINE TO DELETE: Report #1. Criterios de eliminación actuales: fecha de creación, fecha de la última modificación, categorías excluidas.
     /**
      * Get current course deletion criteria settings: course creation date, course last modification date, and excluded categories.
      *
      * @return array course deletion criteria settings
+     * E.g.
+     *      Array(
+     *              'creationdate' => [
+     *                                  'yearcreationdate' => 2010,
+     *                                  'monthcreationdate' => 12,
+     *                                  'daycreationdate' => 31,
+     *                                  'hourcreationdate' => 23,
+     *                                  'minutescreationdate' => 59,
+     *                                  'secondscreationdate => 59,
+     *              ],
+     *              'lastmodificationdate' => [
+     *                                  'yearlastmodificationdate' => 2012,
+     *                                  'monthlastmodificationdate' => 12,
+     *                                  'daylastmodificationdate' => 31,
+     *                                  'hourlastmodificationdate' => 23,
+     *                                  'minuteslastmodificationdate' => 59,
+     *                                  'secondslastmodificationdate' => 59
+     *              ],
+     *              'excludedcategories' => [
+     *                                  '189000' => 'Excluded category 1',
+     *                                  '189001' => 'Excluded category 2',
+     *                                  '189002' => 'Excluded category 3',
+     *              ]
+     *      );
      */
     public function get_course_deletion_criteria_settings(): array {
+
         global $DB;
-        // TODO: get course deletion criterias from plugin settings.
+
         $creationdate = [
             'yearcreationdate'    => get_config('local_deleteoldcourses', 'year_creation_date'),
             'monthcreationdate'   => get_config('local_deleteoldcourses', 'month_creation_date'),
@@ -64,50 +80,45 @@ class report_manager {
             'secondslastmodificationdate' => get_config('local_deleteoldcourses', 'seconds_last_modification_date')
         ];
 
-        $numberofcategoriestoexclude = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
-        $categoriestoexclude = [];
-        for ($i = 1; $i <= $numberofcategoriestoexclude; $i++) {
+        $numberofexcludedcategories = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
+        $excludedcategories = [];
+
+        for ($i = 1; $i <= $numberofexcludedcategories; $i++) {
             $categorynumber = get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i);
             $categorydata = $DB->get_record('course_categories', ['id' => $categorynumber], 'id, name');
-            $categoriestoexclude[$categorydata->id] = $categorydata->name;
+            $excludedcategories[$categorydata->id] = $categorydata->name;
         }
 
         $deletioncriteriasettings = [
             'creationdate'         => $creationdate,
             'lastmodificationdate' => $lastmodificationdate,
-            'categoriestoexclude'  => $categoriestoexclude
+            'excludedcategories'   => $excludedcategories
         ];
 
         return $deletioncriteriasettings;
     }
 
-    // LINE TO DELETE: Report #2. Cantidad de cursos encolados por profesores.
     /**
-     * Get total number of enqueued courses by teachers.
+     * Get total number of enqueued courses.
      *
+     * @param string $bywhom optional parameter for 'teachers' or 'admin', all by default
      * @return int number of courses
      */
-    public function get_total_enqueued_courses_by_teachers(): int {
-        // TODO: count courses from todelete table filtering those not enqueued by the admin.
+    public function get_total_enqueued_courses($bywhom = null): int {
+
         global $DB;
-        $adminid = 2;
-        return $DB->count_records_select('local_delcoursesuv_todelete', 'id != ?', [$adminid]);
+
+        if ($bywhom == 'teachers') {
+            return $DB->count_records_select('local_delcoursesuv_todelete', 'userid != ?', [2]);
+        }
+
+        if ($bywhom == 'admin') {
+            return $DB->count_records_select('local_delcoursesuv_todelete', 'userid = ?', [2]);
+        }
+
+        return $DB->count_records('local_delcoursesuv_todelete');
     }
 
-    // LINE TO DELETE: Report #3. Cantidad de cursos encolados automáticamente.
-    /**
-     * Get total number of enqueued courses automatically.
-     *
-     * @return int number of courses
-     */
-    public function get_total_enqueued_courses_automatically(): int {
-        // TODO: count courses from todelete table filtering those enqueued by the admin.
-        global $DB;
-        $adminid = 2;
-        return $DB->count_records('local_delcoursesuv_todelete', ['userid' => $adminid]);
-    }
-
-    // LINE TO DELETE: Report #4. Total de cursos eliminados en un periodo de tiempo.
     /**
      * Get total number of deleted courses during a time period.
      *
@@ -116,32 +127,46 @@ class report_manager {
      * @return int number of courses
      */
     public function get_total_deleted_courses_during_time_period($startdate, $enddate): int {
-        // TODO: count deleted courses from deleted table filtering by a time period.
+
         global $DB;
-        return $DB->count_records_select("local_delcoursesuv_deleted", 'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]);
+        return $DB->count_records_select("local_delcoursesuv_deleted",
+                                            'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]);
     }
 
-    // LINE TO DELETE: Report #5. Total de cursos pendientes de eliminación.
     /**
-     * Get total number of enqueued courses.
-     *
-     * @return int number of courses
-     */
-    public function get_total_enqueued_courses(): int {
-        // TODO: count enqueued courses from todelete table.
-        global $DB;
-        return $DB->count_records('local_delcoursesuv_todelete');
-    }
-
-    // LINE TO DELETE: Report #6. Cantidad de cursos por facultad o unidad académica a eliminar (opcional)
-    /**
-     * Get total enqueued courses grouped by faculty.
+     * Get total enqueued courses grouped by faculty and in descending sorted.
      *
      * @return array enqueued courses grouped by faculty
+     *  E.g.
+     *      array(
+     *              [
+     *                  'category' => 'Category name 5',
+     *                  'courses' => 6,
+     *              ],
+     *              [
+     *                  'category' => 'Category name 2',
+     *                  'courses' => 3,
+     *              ],
+     *              [
+     *                  'category' => 'Category name 3',
+     *                  'courses' => 1,
+     *              ]
+     *      );
      */
-    public function get_total_enqueued_courses_by_faculty() {
-        // TODO: count enqueued courses from todelete table grouping them by faculty.
-        // {..todelete} x {course} x {course_category} --> Group by faculty + Aggregate by courseid
-        return;
+    public function get_total_enqueued_courses_grouped_by_faculty() {
+
+        global $DB;
+
+        $sqlquery = "SELECT cc.name category, COUNT(ldt.id) courses
+                FROM {local_delcoursesuv_todelete} ldt
+                INNER JOIN {course} c on ldt.courseid = c.id
+                INNER JOIN {course_categories} cc on c.category = cc.id
+                GROUP BY cc.name
+                ORDER BY COUNT(ldt.id) DESC";
+
+        $result = $DB->get_records_sql($sqlquery);
+        $result = array_values($result);
+
+        return $result;
     }
 }
