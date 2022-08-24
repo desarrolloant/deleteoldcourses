@@ -102,33 +102,47 @@ class course_enqueuer {
 
         $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
 
+        $cwhwsclient = new cvh_ws_client();
+        $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
+
         if ($coursestodelete) {
             foreach ($coursestodelete as $key => $course) {
 
-                // Check category.
+                // Check course category.
                 if ($this->check_excluded_course_categories($course->id, $categoriesexcluded)) {
                     unset($coursestodelete[$key]);
                 };
 
+                // Check if the course have new sections.
                 $havenewsections = $this->have_new_sections($course->id, $timemodificationcriteria);
 
                 if ($havenewsections) {
                     unset($coursestodelete[$key]);
                 }
 
+                // Check if the course have new participants.
                 $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
 
                 if ($havenewparticipants) {
                     unset($coursestodelete[$key]);
                 }
 
+                // Check if the course have new modules.
                 $havenewmodules = $this->have_new_modules($course->id, $timecreatedcriteria);
 
                 if ($havenewmodules) {
                     unset($coursestodelete[$key]);
                 }
 
-                // TODO: Check if the course has been backed up.
+                // Check if the course exists in Campus Virtual Historia.
+                $parameterstorequest = array('shortname' => $course->shortname);
+
+                $response = $cwhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
+                $response = json_decode($response);
+
+                if (empty($response->courses)) {
+                    unset($coursestodelete[$key]);
+                }
             }
         }
 
