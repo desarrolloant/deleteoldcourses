@@ -34,6 +34,7 @@ use DateTime;
 /**
  * Course enqueuer tests
  *
+ * @group local_deleteoldcourses
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
  * @author     Iader E. García Gómez <iadergg@gmail.com>
@@ -114,8 +115,6 @@ class course_enqueuer_test extends \advanced_testcase {
      * @covers ::get_courses_to_enqueue
      */
     public function test_get_courses_to_enqueue() {
-
-        global $DB;
 
         $this->resetAfterTest(true);
 
@@ -237,7 +236,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
         global $DB;
 
-        $this->resetAfterTest(false);
+        $this->resetAfterTest(true);
 
         // $excludedcategories = $this->create_excluded_course_categories(self::NUMBER_OF_CATEGORIES_TO_EXCLUDE);
         // $this->create_courses_in_excluded_categories($excludedcategories, self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA, self::LAST_MODIFICATION_TIME_CRITERIA);

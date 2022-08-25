@@ -27,6 +27,16 @@ namespace local_deleteoldcourses;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Unit test for course_deleter class.
+ *
+ * @group      local_deleteoldcourses
+ * @package    local_deleteoldcourses
+ * @since      Moodle 3.10
+ * @author     Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class course_deleter_test extends \advanced_testcase {
 
     private course_deleter $coursedeleter;
