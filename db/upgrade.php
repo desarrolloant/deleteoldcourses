@@ -136,7 +136,8 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         // Rename fields usershortname and userfullname to username and userfirstname respectively.
         $tabledeleted = new xmldb_table('local_delcoursesuv_deleted');
         $fieldusershortname = new xmldb_field('usershortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, 'userid');
-        $fielduserfullname = new xmldb_field('userfullname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, 'usershortname');
+        $fielduserfullname = new xmldb_field('userfullname', XMLDB_TYPE_CHAR,
+                                             '255', null, XMLDB_NOTNULL, null, null, 'usershortname');
 
         // Launch rename fields.
         $dbman->rename_field($tabledeleted, $fieldusershortname, 'username');
@@ -151,6 +152,21 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
 
         // Deleteoldcourses savepoint reached.
         upgrade_plugin_savepoint(true, 2022080500, 'local', 'deleteoldcourses');
+    }
+
+    if ($oldversion < 2022082501) {
+
+        // Define field manual to be added to local_delcoursesuv_todelete.
+        $table = new xmldb_table('local_delcoursesuv_todelete');
+        $field = new xmldb_field('manual', XMLDB_TYPE_BINARY, null, null, XMLDB_NOTNULL, null, null, 'timecreated');
+
+        // Conditionally launch add field manual.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022082501, 'local', 'deleteoldcourses');
     }
 
     return true;
