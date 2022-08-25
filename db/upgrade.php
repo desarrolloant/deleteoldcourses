@@ -154,11 +154,20 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         upgrade_plugin_savepoint(true, 2022080500, 'local', 'deleteoldcourses');
     }
 
-    if ($oldversion < 2022082501) {
+    if ($oldversion < 2022082502) {
 
         // Define field manual to be added to local_delcoursesuv_todelete.
         $table = new xmldb_table('local_delcoursesuv_todelete');
-        $field = new xmldb_field('manual', XMLDB_TYPE_BINARY, null, null, XMLDB_NOTNULL, null, null, 'timecreated');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
+
+        // Conditionally launch add field manual.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field manual to be added to local_delcoursesuv_deleted.
+        $table = new xmldb_table('local_delcoursesuv_deleted');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
 
         // Conditionally launch add field manual.
         if (!$dbman->field_exists($table, $field)) {
@@ -166,7 +175,7 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         }
 
         // Deleteoldcourses savepoint reached.
-        upgrade_plugin_savepoint(true, 2022082501, 'local', 'deleteoldcourses');
+        upgrade_plugin_savepoint(true, 2022082502, 'local', 'deleteoldcourses');
     }
 
     return true;
