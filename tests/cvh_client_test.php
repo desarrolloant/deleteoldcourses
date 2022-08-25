@@ -30,6 +30,16 @@ use moodle_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Unit tests for cvh_ws_client class.
+ *
+ * @group      local_deleteoldcourses
+ * @package    local_deleteoldcourses
+ * @category   phpunit
+ * @author     Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class cvh_ws_client_test extends \advanced_testcase {
 
     /** @var cvh_ws_client Object client for connection to Campus Virtual Historia */

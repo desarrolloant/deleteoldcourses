@@ -102,7 +102,7 @@ class course_enqueuer {
 
         $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
 
-        $cwhwsclient = new cvh_ws_client();
+        $cvhwsclient = new cvh_ws_client();
         $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
 
         if ($coursestodelete) {
@@ -137,7 +137,7 @@ class course_enqueuer {
                 // Check if the course exists in Campus Virtual Historia.
                 $parameterstorequest = array('shortname' => $course->shortname);
 
-                $response = $cwhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
+                $response = $cvhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
                 $response = json_decode($response);
 
                 if (empty($response->courses)) {

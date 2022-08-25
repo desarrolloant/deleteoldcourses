@@ -30,8 +30,9 @@ use context_course;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Util tests
+ * Unit tests for utils class
  *
+ * @group      local_deleteoldcourses
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
  * @author     Iader E. García Gómez <iadergg@gmail.com>

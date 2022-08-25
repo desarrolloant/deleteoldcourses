@@ -34,6 +34,7 @@ use DateTime;
 /**
  * Course enqueuer tests
  *
+ * @group local_deleteoldcourses
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
  * @author     Iader E. García Gómez <iadergg@gmail.com>
@@ -114,8 +115,6 @@ class course_enqueuer_test extends \advanced_testcase {
      * @covers ::get_courses_to_enqueue
      */
     public function test_get_courses_to_enqueue() {
-
-        global $DB;
 
         $this->resetAfterTest(true);
 
