@@ -98,7 +98,8 @@ class course_deleter_test extends \advanced_testcase {
             $deletedcourse = $DB->get_record('local_delcoursesuv_deleted', ['courseid' => $originalcoursesbackupdata[$i]->id],
                                         'courseshortname, coursefullname, coursetimecreated, coursesize, coursetimesenttodelete,
                                         username, userfirstname, userlastname, useremail');
-            $userdata = $DB->get_record('user', ['id' => $coursetoenqueuebackupdata[$i]->userid], 'username, firstname, lastname, email');
+            $userdata = $DB->get_record('user', ['id' => $coursetoenqueuebackupdata[$i]->userid],
+                                        'username, firstname, lastname, email');
 
             $this->assertSame($deletedcourse->courseshortname, $originalcoursesbackupdata[$i]->shortname);
             $this->assertSame($deletedcourse->coursefullname, $originalcoursesbackupdata[$i]->fullname);

@@ -75,7 +75,7 @@ class course_enqueuer {
      * @return array $courses
      * @since  Moodle 3.10
      */
-    public function get_courses_to_enqueue() {
+    public function get_courses_to_enqueue():array {
 
         global $DB, $USER;
 
@@ -158,7 +158,7 @@ class course_enqueuer {
      * @return int $timecreationcriteria
      * @since  Moodle 3.10
      */
-    public function get_timecreation_criteria() {
+    public function get_timecreation_criteria():int {
         return $this->timecreationcriteria;
     }
 
@@ -168,7 +168,7 @@ class course_enqueuer {
      * @return int $timemodificationcriteria
      * @since  Moodle 3.10
      */
-    public function get_timemodification_criteria() {
+    public function get_timemodification_criteria():int {
         return $this->timemodificationcriteria;
     }
 
@@ -185,19 +185,20 @@ class course_enqueuer {
     /**
      * Get the value of categoriestoexclude.
      *
+     * @return array Array with categories to exclude.
      * @since  Moodle 3.10
      */
-    public function get_categories_to_exclude() {
+    public function get_categories_to_exclude():array {
         return $this->categoriestoexclude;
     }
 
     /**
      * set_categoriestoexclude
      *
-     * @return array $categoriestoexclude
+     * @return void
      * @since  Moodle 3.10
      */
-    public function set_categoriestoexclude() {
+    public function set_categoriestoexclude():void {
 
         $categoriestoexclude = array();
         $numbercategoriestoexclude = intval(get_config('local_deleteoldcourses', 'number_of_categories_to_exclude'));
@@ -218,7 +219,7 @@ class course_enqueuer {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function have_new_sections(int $courseid, int $timemodified) {
+    public function have_new_sections(int $courseid, int $timemodified):bool {
         global $DB;
 
         $havenewsections = false;
@@ -244,7 +245,7 @@ class course_enqueuer {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function have_new_participants(int $courseid, int $timemodified) {
+    public function have_new_participants(int $courseid, int $timemodified):bool {
         global $DB;
 
         $havenewparticipants = false;
@@ -271,7 +272,7 @@ class course_enqueuer {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function have_new_modules(int $courseid, int $timemodified) {
+    public function have_new_modules(int $courseid, int $timemodified):bool {
         global $DB;
 
         $havenewmodules = false;
@@ -297,7 +298,7 @@ class course_enqueuer {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function check_excluded_course_categories(int $courseid, array $coursecategories) {
+    public function check_excluded_course_categories(int $courseid, array $coursecategories):bool {
         global $DB;
 
         $belongtocategory = false;
@@ -317,11 +318,13 @@ class course_enqueuer {
      *
      * @param  array $courses Array containing the courses to delete.
      * @param  int $userid ID of the user who queued the course.
+     * @param  bool $manual Indicates if the register was made manually or automatically.
+     *                      False for automatically enqueue or true for manual enqueue.
      * @return void
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function enqueue_courses_to_delete($courses, $userid) {
+    public function enqueue_courses_to_delete($courses, $userid, $manual = true):void {
         global $DB;
 
         $date = new DateTime();
@@ -334,6 +337,7 @@ class course_enqueuer {
             $record->userid = $userid;
             $record->coursesize = $utils->calculate_course_size($course->id);
             $record->timecreated = $date->getTimestamp();
+            $record->manual = $manual;
 
             if ($course) {
                 $DB->insert_record('local_delcoursesuv_todelete', $record);

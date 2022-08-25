@@ -20,12 +20,13 @@
  * @package    local_deleteoldcourses>
  * @copyright  2020 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co
+ * @author     2022 Iader E. Garcia Gomez <iadergg@gmail.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022080500;
+$plugin->version   = 2022082502;
 $plugin->requires  = 2018120306.03;
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = 'v1.0.1';

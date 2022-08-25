@@ -238,10 +238,6 @@ class course_enqueuer_test extends \advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        // $excludedcategories = $this->create_excluded_course_categories(self::NUMBER_OF_CATEGORIES_TO_EXCLUDE);
-        // $this->create_courses_in_excluded_categories($excludedcategories, self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA, self::LAST_MODIFICATION_TIME_CRITERIA);
-        // $this->assertCount(100, $DB->get_records_sql('SELECT * FROM {course} WHERE id <> ?', array('1')));
-
         $categoryid = get_config('local_deleteoldcourses', 'excluded_course_categories_1');
         $course = $DB->get_record_sql('SELECT * FROM {course} WHERE category = ? LIMIT 1', array($categoryid));
 
@@ -279,7 +275,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
         // Tests.
         $courseenqueuer = new course_enqueuer();
-        $courseenqueuer->enqueue_courses_to_delete($courses, $user1->id);
+        $courseenqueuer->enqueue_courses_to_delete($courses, $user1->id, false);
 
         $this->assertCount(4, $DB->get_records('local_delcoursesuv_todelete'));
         $this->assertTrue($DB->record_exists('local_delcoursesuv_todelete', array('courseid' => $course1->id)));
@@ -480,6 +476,7 @@ class course_enqueuer_test extends \advanced_testcase {
             $record->size = 0;
             $record->coursecreatedat = $course->timecreated;
             $record->timecreated = $date->getTimestamp();
+            $record->manual = false;
 
             $DB->insert_record('local_delcoursesuv_todelete', $record);
         };
