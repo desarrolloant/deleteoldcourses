@@ -82,6 +82,7 @@ class course_enqueuer {
         $datetimemanager = new datetime_manager();
         $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
         $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
+        $limitquery = get_config('local_deleteoldcourses', 'limity_query');
 
         $numbercategoriesexcluded = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
         $categoriesexcluded = array();
