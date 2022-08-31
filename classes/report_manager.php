@@ -86,7 +86,7 @@ class report_manager {
         for ($i = 1; $i <= $numberofexcludedcategories; $i++) {
             $categorynumber = get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i);
             $categorydata = $DB->get_record('course_categories', ['id' => $categorynumber], 'id, name');
-            $excludedcategories[$categorydata->id] = $categorydata->name;
+            array_push($excludedcategories, ['id' => $categorydata->id, 'name' => $categorydata->name]);
         }
 
         $deletioncriteriasettings = [
@@ -99,21 +99,17 @@ class report_manager {
     }
 
     /**
-     * Get total number of enqueued courses.
+     * Get total number of enqueued courses (optionally by enqueue type).
      *
-     * @param string $bywhom optional parameter for 'teachers' or 'admin', all by default
+     * @param bool $manuallyenqueued how courses were enqueued (true: manually, false: automatically, and null: all)
      * @return int number of courses
      */
-    public function get_total_enqueued_courses($bywhom = null): int {
+    public function get_total_enqueued_courses($manuallyenqueued = null): int {
 
         global $DB;
 
-        if ($bywhom == 'teachers') {
-            return $DB->count_records_select('local_delcoursesuv_todelete', 'userid != ?', [2]);
-        }
-
-        if ($bywhom == 'admin') {
-            return $DB->count_records_select('local_delcoursesuv_todelete', 'userid = ?', [2]);
+        if (!is_null($manuallyenqueued)) {
+            return $DB->count_records_select('local_delcoursesuv_todelete', 'manual = ?', [(int)$manuallyenqueued]);
         }
 
         return $DB->count_records('local_delcoursesuv_todelete');
@@ -140,28 +136,31 @@ class report_manager {
      *  E.g.
      *      array(
      *              [
-     *                  'category' => 'Category name 5',
-     *                  'courses' => 6,
+     *                  'categoryid' => '1',
+     *                  'categoryname' => 'Category name 5',
+     *                  'totalcourses' => 6,
      *              ],
      *              [
-     *                  'category' => 'Category name 2',
-     *                  'courses' => 3,
+     *                  'categoryid' => '2',
+     *                  'categoryname' => 'Category name 2',
+     *                  'totalcourses' => 3,
      *              ],
      *              [
-     *                  'category' => 'Category name 3',
-     *                  'courses' => 1,
+     *                  'categoryid' => '3',
+     *                  'categoryname' => 'Category name 3',
+     *                  'totalcourses' => 1,
      *              ]
      *      );
      */
-    public function get_total_enqueued_courses_grouped_by_faculty() {
+    public function get_total_enqueued_courses_grouped_by_faculty(): array {
 
         global $DB;
 
-        $sqlquery = "SELECT cc.name category, COUNT(ldt.id) courses
+        $sqlquery = "SELECT cc.id categoryid, cc.name categoryname, COUNT(ldt.id) totalcourses
                 FROM {local_delcoursesuv_todelete} ldt
                 INNER JOIN {course} c on ldt.courseid = c.id
                 INNER JOIN {course_categories} cc on c.category = cc.id
-                GROUP BY cc.name
+                GROUP BY cc.id, cc.name
                 ORDER BY COUNT(ldt.id) DESC";
 
         $result = $DB->get_records_sql($sqlquery);
