@@ -99,9 +99,10 @@ class course_enqueuer {
                         AND timemodified <= ?
                         AND id <> 1
                         AND id NOT IN (SELECT DISTINCT courseid
-                                       FROM {local_delcoursesuv_todelete})";
+                                       FROM {local_delcoursesuv_todelete})
+                     LIMIT ?";
 
-        $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
+        $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria, $limitquery));
 
         $cvhwsclient = new cvh_ws_client();
         $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
