@@ -154,6 +154,7 @@ class cvh_ws_client_test extends \advanced_testcase {
     /**
      * Set instance of cvhwsclient
      *
+     * @param string $method Method for the request.
      * @param string $returnformat Reponse format. Default JSON.
      * @return cvh_ws_client_test
      * @since Moodle 3.10
