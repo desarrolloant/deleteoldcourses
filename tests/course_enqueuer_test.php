@@ -107,6 +107,9 @@ class course_enqueuer_test extends \advanced_testcase {
     /** @var int Number of courses that will be deleted that have already been queued. Courses Type G. **/
     const NUMBER_OF_COURSES_TO_DELETE_QUEUED = 2;
 
+    /** @var int Limit query for the query enqueuer **/
+    const LIMIT_QUERY = 500;
+
     /**
      * Test get courses to delete
      *
@@ -116,13 +119,18 @@ class course_enqueuer_test extends \advanced_testcase {
      */
     public function test_get_courses_to_enqueue() {
 
+        global $DB;
+
         $this->resetAfterTest(true);
 
         $courseenqueuer = new course_enqueuer();
         $coursestodelete = $courseenqueuer->get_courses_to_enqueue();
 
-        $this->assertIsArray($coursestodelete);
-        $this->assertSame(self::NUMBER_OF_COURSES_TO_DELETE, count($coursestodelete));
+        $this->assertIsInt($coursestodelete);
+
+        $numberofcoursestodelete = $DB->count_records('local_delcoursesuv_todelete');
+
+        $this->assertSame(self::NUMBER_OF_COURSES_TO_DELETE, $numberofcoursestodelete);
     }
 
     /**
@@ -350,6 +358,9 @@ class course_enqueuer_test extends \advanced_testcase {
         // Create courses type G.
         $this->create_courses_to_delete_queued(self::NUMBER_OF_COURSES_TO_DELETE_QUEUED);
 
+        // Criteria: Categories to exclude.
+        $plugingenerator->update_setting('limity_query', self::LIMIT_QUERY);
+
         $plugingenerator->update_setting('ws_url',
                           'https://campusvirtualhistoria.univalle.edu.co/moodle');
         $plugingenerator->update_setting('ws_user_token',
@@ -492,7 +503,7 @@ class course_enqueuer_test extends \advanced_testcase {
     private function create_courses_with_sections_added($numberofcourses): void {
         global $DB;
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < $numberofcourses; $i++) {
             $course = $this->getDataGenerator()->create_course(
                 array('shortname' => 'TestingCourse ' . $i,
                       'fullname' => 'Testing Course ' . $i,
