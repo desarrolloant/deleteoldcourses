@@ -326,28 +326,28 @@ class course_enqueuer {
      *
      * @param  array $courses Array containing the courses to delete.
      * @param  int $userid ID of the user who queued the course.
-     * @param  int $manual Indicates if the register was made manually or automatically.
-     *                     0 for automatically enqueue or 1 for manual enqueue.
+     * @param  bool $manuallyqueued Indicates if the register was made manually or automatically.
+     *                              False for automatically enqueue or true for manual enqueue.
      * @return void
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function enqueue_courses_to_delete($courses, $userid, $manual = 1):void {
+    public function enqueue_courses_to_delete($courses, $userid, $manuallyqueued = true):void {
         global $DB;
 
         $date = new DateTime();
         $utils = new utils();
 
         foreach ($courses as $course) {
+
+            $record = new stdClass();
+            $record->courseid = $course->id;
+            $record->userid = $userid;
+            $record->coursesize = $utils->calculate_course_size($course->id);
+            $record->timecreated = $date->getTimestamp();
+            $record->manuallyqueued = $manuallyqueued;
+
             if ($course) {
-
-                $record = new stdClass();
-                $record->courseid = $course->id;
-                $record->userid = $userid;
-                $record->coursesize = $utils->calculate_course_size($course->id);
-                $record->timecreated = $date->getTimestamp();
-                $record->manual = $manual;
-
                 $DB->insert_record('local_delcoursesuv_todelete', $record);
             }
         }

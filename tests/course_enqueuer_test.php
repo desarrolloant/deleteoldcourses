@@ -487,7 +487,7 @@ class course_enqueuer_test extends \advanced_testcase {
             $record->size = 0;
             $record->coursecreatedat = $course->timecreated;
             $record->timecreated = $date->getTimestamp();
-            $record->manual = false;
+            $record->manuallyqueued = false;
 
             $DB->insert_record('local_delcoursesuv_todelete', $record);
         };
