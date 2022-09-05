@@ -72,10 +72,10 @@ class course_enqueuer {
     /**
      * Get courses to enqueue according to elimination criteria.
      *
-     * @return array $courses
+     * @return void
      * @since  Moodle 3.10
      */
-    public function get_courses_to_enqueue():array {
+    public function get_courses_to_enqueue(int $courseidtostart = 0) {
 
         global $DB, $USER;
 
@@ -91,67 +91,74 @@ class course_enqueuer {
             array_push($categoriesexcluded, get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i));
         }
 
-        $coursestodelete = array();
+        $coursestocheck = array();
 
         $sqlquery = "SELECT id, shortname, fullname, timecreated, category
-                     FROM {course}
-                     WHERE timecreated <= ?
+                    FROM {course}
+                    WHERE timecreated <= ?
                         AND timemodified <= ?
                         AND id <> 1
                         AND id NOT IN (SELECT DISTINCT courseid
-                                       FROM {local_delcoursesuv_todelete})
-                     LIMIT ?";
+                                        FROM {local_delcoursesuv_todelete})
+                        AND id > ?
+                    ORDER BY id ASC
+                    LIMIT ?";
 
-        $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria, $limitquery));
+        $coursestocheck = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria,
+                                                                 $courseidtostart, $limitquery));
+
+        if (empty($coursestocheck)) {
+            return 1;
+        }
+
+        $courseidtostart = end($coursestocheck)->id;
 
         $cvhwsclient = new cvh_ws_client();
         $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
 
-        if ($coursestodelete) {
-            foreach ($coursestodelete as $key => $course) {
+        foreach ($coursestocheck as $key => $course) {
 
-                // Check course category.
-                if ($this->check_excluded_course_categories($course->id, $categoriesexcluded)) {
-                    unset($coursestodelete[$key]);
-                };
+            // Check course category.
+            if ($this->check_excluded_course_categories($course->id, $categoriesexcluded)) {
+                unset($coursestocheck[$key]);
+            };
 
-                // Check if the course have new sections.
-                $havenewsections = $this->have_new_sections($course->id, $timemodificationcriteria);
+            // Check if the course have new sections.
+            $havenewsections = $this->have_new_sections($course->id, $timemodificationcriteria);
 
-                if ($havenewsections) {
-                    unset($coursestodelete[$key]);
-                }
+            if ($havenewsections) {
+                unset($coursestocheck[$key]);
+            }
 
-                // Check if the course have new participants.
-                $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
+            // Check if the course have new participants.
+            $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
 
-                if ($havenewparticipants) {
-                    unset($coursestodelete[$key]);
-                }
+            if ($havenewparticipants) {
+                unset($coursestocheck[$key]);
+            }
 
-                // Check if the course have new modules.
-                $havenewmodules = $this->have_new_modules($course->id, $timecreatedcriteria);
+            // Check if the course have new modules.
+            $havenewmodules = $this->have_new_modules($course->id, $timecreatedcriteria);
 
-                if ($havenewmodules) {
-                    unset($coursestodelete[$key]);
-                }
+            if ($havenewmodules) {
+                unset($coursestocheck[$key]);
+            }
 
-                // Check if the course exists in Campus Virtual Historia.
-                $parameterstorequest = array('shortname' => $course->shortname);
+            // Check if the course exists in Campus Virtual Historia.
+            $parameterstorequest = array('shortname' => $course->shortname);
 
-                $response = $cvhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
-                $response = json_decode($response);
+            $response = $cvhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
+            $response = json_decode($response);
 
-                if (empty($response->courses)) {
-                    unset($coursestodelete[$key]);
-                }
+            if (empty($response->courses)) {
+                unset($coursestocheck[$key]);
             }
         }
 
         // Insert courses into deleteoldcourses table.
-        $this->enqueue_courses_to_delete($coursestodelete, $USER->id);
+        $this->enqueue_courses_to_delete($coursestocheck, $USER->id);
 
-        return $coursestodelete;
+        $this->get_courses_to_enqueue($courseidtostart);
     }
 
     /**
