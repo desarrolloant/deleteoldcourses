@@ -75,7 +75,7 @@ class course_enqueuer {
      * @return int
      * @since  Moodle 3.10
      */
-    public function get_courses_to_enqueue():int {
+    public function get_courses_to_enqueue(int $courseidtostart = 0):int {
 
         global $DB, $USER;
 
@@ -91,7 +91,7 @@ class course_enqueuer {
             array_push($categoriesexcluded, get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i));
         }
 
-        $coursestodelete = array();
+        $coursestocheck = array();
 
         $sqlquery = "SELECT id, shortname, fullname, timecreated, category
                     FROM {course}
@@ -100,44 +100,54 @@ class course_enqueuer {
                         AND id <> 1
                         AND id NOT IN (SELECT DISTINCT courseid
                                         FROM {local_delcoursesuv_todelete})
+                        AND id > ?
                     ORDER BY id ASC
                     LIMIT ?";
 
-        $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria, $limitquery));
+        $coursestocheck = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria,
+                                                                 $courseidtostart, $limitquery));
+        print_r(count($coursestocheck) . "/n");
+
+        if (count($coursestocheck) == 0) {
+            print_r($coursestocheck);
+        }
+
+        if (empty($coursestocheck)) {
+            print_r("Arreglo vacio");
+            return 1;
+        }
+
+        $courseidtostart = end($coursestocheck)->id;
 
         $cvhwsclient = new cvh_ws_client();
         $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
 
-        if (!$coursestodelete) {
-            return 1;
-        }
-
-        foreach ($coursestodelete as $key => $course) {
+        foreach ($coursestocheck as $key => $course) {
 
             // Check course category.
             if ($this->check_excluded_course_categories($course->id, $categoriesexcluded)) {
-                unset($coursestodelete[$key]);
+                unset($coursestocheck[$key]);
             };
 
             // Check if the course have new sections.
             $havenewsections = $this->have_new_sections($course->id, $timemodificationcriteria);
 
             if ($havenewsections) {
-                unset($coursestodelete[$key]);
+                unset($coursestocheck[$key]);
             }
 
             // Check if the course have new participants.
             $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
 
             if ($havenewparticipants) {
-                unset($coursestodelete[$key]);
+                unset($coursestocheck[$key]);
             }
 
             // Check if the course have new modules.
             $havenewmodules = $this->have_new_modules($course->id, $timecreatedcriteria);
 
             if ($havenewmodules) {
-                unset($coursestodelete[$key]);
+                unset($coursestocheck[$key]);
             }
 
             // Check if the course exists in Campus Virtual Historia.
@@ -147,15 +157,14 @@ class course_enqueuer {
             $response = json_decode($response);
 
             if (empty($response->courses)) {
-                unset($coursestodelete[$key]);
+                unset($coursestocheck[$key]);
             }
 
-
             // Insert courses into deleteoldcourses table.
-            $this->enqueue_courses_to_delete($coursestodelete, $USER->id);
+            $this->enqueue_courses_to_delete($coursestocheck, $USER->id);
         }
 
-        $this->get_courses_to_enqueue();
+        $this->get_courses_to_enqueue($courseidtostart);
     }
 
     /**
@@ -311,8 +320,6 @@ class course_enqueuer {
 
         $categoryid = $DB->get_record('course', array('id' => $courseid), 'category')->category;
         $categorypath = $DB->get_record('course_categories', array('id' => $categoryid), 'path')->path;
-
-        // TODO: Fix course category validation.
 
         $pathroot = explode('/', substr($categorypath, 1))[0];
 
