@@ -72,10 +72,10 @@ class course_enqueuer {
     /**
      * Get courses to enqueue according to elimination criteria.
      *
-     * @return int
+     * @return void
      * @since  Moodle 3.10
      */
-    public function get_courses_to_enqueue(int $courseidtostart = 0):int {
+    public function get_courses_to_enqueue(int $courseidtostart = 0) {
 
         global $DB, $USER;
 
@@ -106,14 +106,8 @@ class course_enqueuer {
 
         $coursestocheck = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria,
                                                                  $courseidtostart, $limitquery));
-        print_r(count($coursestocheck) . "/n");
-
-        if (count($coursestocheck) == 0) {
-            print_r($coursestocheck);
-        }
 
         if (empty($coursestocheck)) {
-            print_r("Arreglo vacio");
             return 1;
         }
 
@@ -159,10 +153,10 @@ class course_enqueuer {
             if (empty($response->courses)) {
                 unset($coursestocheck[$key]);
             }
-
-            // Insert courses into deleteoldcourses table.
-            $this->enqueue_courses_to_delete($coursestocheck, $USER->id);
         }
+
+        // Insert courses into deleteoldcourses table.
+        $this->enqueue_courses_to_delete($coursestocheck, $USER->id);
 
         $this->get_courses_to_enqueue($courseidtostart);
     }

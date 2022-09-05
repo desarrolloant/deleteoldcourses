@@ -121,16 +121,14 @@ class course_enqueuer_test extends \advanced_testcase {
 
         global $DB;
 
-        $this->resetAfterTest(true);
+        $this->resetAfterTest(false);
 
         $courseenqueuer = new course_enqueuer();
-        $coursestodelete = $courseenqueuer->get_courses_to_enqueue();
+        $courseenqueuer->get_courses_to_enqueue();
 
-        $this->assertIsInt($coursestodelete);
+        $numberofcoursestodelete = $DB->count_records_sql('SELECT COUNT(*) FROM {local_delcoursesuv_todelete}');
 
-        $numberofcoursestodelete = $DB->count_records('local_delcoursesuv_todelete');
-
-        $this->assertSame(self::NUMBER_OF_COURSES_TO_DELETE, $numberofcoursestodelete);
+        $this->assertSame(self::NUMBER_OF_COURSES_TO_DELETE + self::NUMBER_OF_COURSES_TO_DELETE_QUEUED, $numberofcoursestodelete);
     }
 
     /**
