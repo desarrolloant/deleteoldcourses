@@ -178,5 +178,25 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         upgrade_plugin_savepoint(true, 2022082502, 'local', 'deleteoldcourses');
     }
 
+    if ($oldversion < 2022090101) {
+
+        // Rename field manual on table local_delcoursesuv_todelete to NEWNAMEGOESHERE.
+        $table = new xmldb_table('local_delcoursesuv_todelete');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
+
+        // Launch rename field manual.
+        $dbman->rename_field($table, $field, 'manuallyqueued');
+
+        // Rename field manual on table local_delcoursesuv_deleted to NEWNAMEGOESHERE.
+        $table = new xmldb_table('local_delcoursesuv_deleted');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
+
+        // Launch rename field manual.
+        $dbman->rename_field($table, $field, 'manuallyqueued');
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022090101, 'local', 'deleteoldcourses');
+    }
+
     return true;
 }
