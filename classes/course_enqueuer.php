@@ -79,6 +79,13 @@ class course_enqueuer {
 
         global $DB, $USER;
 
+        $maxcourseid = $DB->get_record_sql('SELECT MAX(id) maxid FROM {course}')->maxid;
+        $courseidtostart = 0;
+
+        if ($maxcourseid <= $courseidtostart) {
+            return 1;
+        }
+
         $datetimemanager = new datetime_manager();
         $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
         $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
@@ -107,9 +114,7 @@ class course_enqueuer {
         $coursestocheck = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria,
                                                                  $courseidtostart, $limitquery));
 
-        if (empty($coursestocheck)) {
-            return 1;
-        }
+
 
         $courseidtostart = end($coursestocheck)->id;
 
