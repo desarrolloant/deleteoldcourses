@@ -178,7 +178,7 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         upgrade_plugin_savepoint(true, 2022082502, 'local', 'deleteoldcourses');
     }
 
-    if ($oldversion < 2002090101) {
+    if ($oldversion < 2022090101) {
 
         // Rename field manual on table local_delcoursesuv_todelete to NEWNAMEGOESHERE.
         $table = new xmldb_table('local_delcoursesuv_todelete');
@@ -195,7 +195,7 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         $dbman->rename_field($table, $field, 'manuallyqueued');
 
         // Deleteoldcourses savepoint reached.
-        upgrade_plugin_savepoint(true, 2002090101, 'local', 'deleteoldcourses');
+        upgrade_plugin_savepoint(true, 2022090101, 'local', 'deleteoldcourses');
     }
 
     return true;
