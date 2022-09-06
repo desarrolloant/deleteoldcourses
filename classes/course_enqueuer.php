@@ -165,7 +165,7 @@ class course_enqueuer {
         }
 
         // Insert courses into deleteoldcourses table.
-        $this->enqueue_courses_to_delete($coursestocheck, $USER->id);
+        $this->enqueue_courses_to_delete($coursestocheck, $USER->id, 0);
 
         $this->get_courses_to_enqueue($courseidtostart);
     }
@@ -340,7 +340,7 @@ class course_enqueuer {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function enqueue_courses_to_delete($courses, $userid, $manuallyqueued = true):void {
+    public function enqueue_courses_to_delete($courses, $userid, $manuallyqueued = 1):void {
         global $DB;
 
         $date = new DateTime();
