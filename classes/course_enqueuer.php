@@ -72,12 +72,12 @@ class course_enqueuer {
     /**
      * Get courses to enqueue according to elimination criteria.
      *
-     * @param  int $courseidinit Course ID for init course to check query
-     * @param  int $coursesexcludedbycategory Counter for courses excluded by course categories criteria
-     * @param  int $coursesexcludednewsections Counter for courses excluded by "new sections" criteria.
+     * @param  int $courseidinit                   Course ID for init course to check query.
+     * @param  int $coursesexcludedbycategory      Counter for courses excluded by course categories criteria
+     * @param  int $coursesexcludednewsections     Counter for courses excluded by "new sections" criteria.
      * @param  int $coursesexcludednewparticipants Counter for courses excluded by "new participants" criteria.
-     * @param  int $coursesexcludednewmodules Counter for courses excluded by "new modules" criteria.
-     * @param  int $coursesexcludedcvh Counter for courses excluded by "exists in CVH" criteria.
+     * @param  int $coursesexcludednewmodules      Counter for courses excluded by "new modules" criteria.
+     * @param  int $coursesexcludedcvh             Counter for courses excluded by "exists in CVH" criteria.
      * @return void
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      * @since  Moodle 3.10
@@ -369,7 +369,7 @@ class course_enqueuer {
      * @param  array $courses Array containing the courses to delete.
      * @param  int $userid ID of the user who queued the course.
      * @param  bool $manuallyqueued Indicates if the register was made manually or automatically.
-     *                              False for automatically enqueue or true for manual enqueue.
+     *                              0 for automatically enqueue or 1 for manual enqueue.
      * @return void
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
