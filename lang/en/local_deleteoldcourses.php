@@ -55,6 +55,16 @@ $string['course_remove_delete'] = 'Course was removed from delete list';
 $string['task_delete_course'] = 'Task for deleting courses';
 $string['enqueue_courses_task'] = 'Enqueue courses to delete';
 $string['delete_courses_task'] = 'Delete enqueued courses';
+$string['number_courses_excluded_by_categories'] = 'Cantidad de cursos excluidos por el criterio "Categorías de curso excluidas": {$a}';
+$string['number_courses_excluded_by_new_sections'] = 'Cantidad de cursos excluidos por el criterio "Nuevas secciones añadidas": {$a} ';
+$string['number_courses_excluded_by_new_participants'] = 'Cantidad de cursos excluidos por el criterio "Nuevos participantes añadidos": {$a}';
+$string['number_courses_excluded_by_new_modules'] = 'Cantidad de cursos excluidos por el criterio "Nuevos módulos añadidos": {$a}';
+$string['number_courses_excluded_by_cvh'] = 'Cantidad de cursos excluidos por el criterio "Campus Virtual Historia": {$a}';
+$string['course_excluded_by_categories'] = 'Curso excluido por el criterio "Categorías de curso excluidas": {$a->shortname} {$a->coursecategory}';
+$string['course_excluded_by_new_sections'] = 'Curso excluido por el criterio "Nuevas secciones añadidas": {$a->shortname} {$a->coursecategory}';
+$string['course_excluded_by_new_participants'] = 'Curso excluido por el criterio "Nuevos participantes añadidos": {$a->shortname} {$a->coursecategory}';
+$string['course_excluded_by_new_modules'] = 'Curso excluido por el criterio "Nuevos módulos añadidos": {$a->shortname} {$a->coursecategory}';
+$string['course_excluded_by_cvh'] = 'Cursos excluido por el criterio "Campus Virtual Historia": {$a->shortname} {$a->coursecategory}';
 
 // Deleted table.
 $string['sent_to_delete'] = 'Sent to delete';
