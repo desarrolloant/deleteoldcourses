@@ -114,9 +114,14 @@ class course_enqueuer {
         $coursestocheck = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria,
                                                                  $courseidtostart, $limitquery));
 
-
-
-        $courseidtostart = end($coursestocheck)->id;
+        $courseidtostart = $DB->get_record_sql('SELECT MAX(id) maxid
+                                                FROM
+                                                  (SELECT id
+                                                  FROM {course}
+                                                  WHERE id > ?
+                                                  GROUP BY id
+                                                  ORDER BY id ASC
+                                                  LIMIT ?) batch', array($courseidtostart, $limitquery))->maxid;
 
         $cvhwsclient = new cvh_ws_client();
         $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
