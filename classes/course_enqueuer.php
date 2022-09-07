@@ -72,17 +72,25 @@ class course_enqueuer {
     /**
      * Get courses to enqueue according to elimination criteria.
      *
-     * @param  int $courseidinit                   Course ID for init course to check query.
-     * @param  int $coursesexcludedbycategory      Counter for courses excluded by course categories criteria
-     * @param  int $coursesexcludednewsections     Counter for courses excluded by "new sections" criteria.
-     * @param  int $coursesexcludednewparticipants Counter for courses excluded by "new participants" criteria.
-     * @param  int $coursesexcludednewmodules      Counter for courses excluded by "new modules" criteria.
-     * @param  int $coursesexcludedcvh             Counter for courses excluded by "exists in CVH" criteria.
+     * @param  int   $courseidinit                   Course ID for init course to check query.
+     * @param  int   $timecreatedcriteria            Timestamp for creation date criteria.
+     * @param  int   $timemodificationcriteria       Timestamp for modification date criteria.
+     * @param  int   $limitquery                     Limit for SQL Query.
+     * @param  array $categoriesexcluded             Array with course categories excluded.
+     * @param  int   $coursesexcludedbycategory      Counter for courses excluded by course categories criteria.
+     * @param  int   $coursesexcludednewsections     Counter for courses excluded by "new sections" criteria.
+     * @param  int   $coursesexcludednewparticipants Counter for courses excluded by "new participants" criteria.
+     * @param  int   $coursesexcludednewmodules      Counter for courses excluded by "new modules" criteria.
+     * @param  int   $coursesexcludedcvh             Counter for courses excluded by "exists in CVH" criteria.
      * @return void
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      * @since  Moodle 3.10
      */
     public function get_courses_to_enqueue(int $courseidinit = 0,
+                                           int $timecreatedcriteria,
+                                           int $timemodificationcriteria,
+                                           int $limitquery,
+                                           array $categoriesexcluded,
                                            int &$coursesexcludedbycategory = 0,
                                            int &$coursesexcludednewsections = 0,
                                            int &$coursesexcludednewparticipants = 0,
@@ -91,34 +99,9 @@ class course_enqueuer {
 
         global $DB, $USER;
 
-        $maxcourseid = $DB->get_record_sql('SELECT MAX(id) maxid FROM {course}')->maxid;
-
-        if ($maxcourseid <= $courseidinit) {
-            mtrace(get_string('number_courses_excluded_by_categories' , 'local_deleteoldcourses', $coursesexcludedbycategory));
-            mtrace(get_string('number_courses_excluded_by_new_sections', 'local_deleteoldcourses', $coursesexcludednewsections));
-            mtrace(get_string('number_courses_excluded_by_new_participants',
-                              'local_deleteoldcourses', $coursesexcludednewparticipants));
-            mtrace(get_string('number_courses_excluded_by_new_modules', 'local_deleteoldcourses',
-                              $coursesexcludednewmodules));
-            mtrace(get_string('number_courses_excluded_by_cvh', 'local_deleteoldcourses', $coursesexcludedcvh));
-            return 1;
-        }
-
-        $datetimemanager = new datetime_manager();
-        $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
-        $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
-        $limitquery = get_config('local_deleteoldcourses', 'limit_query');
-
-        $numbercategoriesexcluded = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
-        $categoriesexcluded = array();
-
-        for ($i = 1; $i < $numbercategoriesexcluded + 1; $i++) {
-            array_push($categoriesexcluded, get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i));
-        }
-
         $coursestocheck = array();
 
-        $sqlquery = "SELECT id, shortname, fullname, timecreated, category
+        $sqlquery = "SELECT id, shortname, idnumber, fullname, timecreated, category
                     FROM {course}
                     WHERE timecreated <= ?
                         AND timemodified <= ?
@@ -132,13 +115,19 @@ class course_enqueuer {
         $coursestocheck = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria,
                                                                  $courseidinit, $limitquery));
 
-        $courseidinit = $DB->get_record_sql('SELECT MAX(id) maxid
-                                                FROM
-                                                  (SELECT id
-                                                  FROM {course}
-                                                  WHERE id > ?
-                                                  ORDER BY id ASC
-                                                  LIMIT ?) batch', array($courseidinit, $limitquery))->maxid;
+        // Update courseidinit.
+        if (empty($coursestocheck)) {
+            mtrace(get_string('number_courses_excluded_by_categories' , 'local_deleteoldcourses', $coursesexcludedbycategory));
+            mtrace(get_string('number_courses_excluded_by_new_sections', 'local_deleteoldcourses', $coursesexcludednewsections));
+            mtrace(get_string('number_courses_excluded_by_new_participants',
+                              'local_deleteoldcourses', $coursesexcludednewparticipants));
+            mtrace(get_string('number_courses_excluded_by_new_modules', 'local_deleteoldcourses',
+                              $coursesexcludednewmodules));
+            mtrace(get_string('number_courses_excluded_by_cvh', 'local_deleteoldcourses', $coursesexcludedcvh));
+            return 1;
+        }
+
+        $courseidinit = end($coursestocheck)->id;
 
         $cvhwsclient = new cvh_ws_client();
         $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
@@ -184,23 +173,34 @@ class course_enqueuer {
             }
 
             // Check if the course exists in Campus Virtual Historia.
-            $parameterstorequest = array('shortname' => $course->shortname);
 
-            $response = $cvhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
-            $response = json_decode($response);
+            $parameterstorequest = array('idnumber' => $course->idnumber);
 
-            if (empty($response->courses)) {
-                mtrace(get_string('course_excluded_by_cvh', 'local_deleteoldcourses',
+            $idnumberresponse = $cvhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
+            $idnumberresponse = json_decode($idnumberresponse);
+
+            if (empty($idnumberresponse->courses)) {
+
+                $parameterstorequest = array('shortname' => $course->shortname);
+
+                $shortnameresponse = $cvhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
+                $shortnameresponse = json_decode($shortnameresponse);
+
+                if (empty($shortnameresponse->courses)) {
+
+                    mtrace(get_string('course_excluded_by_cvh', 'local_deleteoldcourses',
                                   array('shortname' => $course->shortname, 'coursecategory' => $course->category)));
-                $coursesexcludedcvh += 1;
-                unset($coursestocheck[$key]);
+                    $coursesexcludedcvh += 1;
+                    unset($coursestocheck[$key]);
+                }
             }
         }
 
         // Insert courses into deleteoldcourses table.
         $this->enqueue_courses_to_delete($coursestocheck, $USER->id, 0);
 
-        $this->get_courses_to_enqueue($courseidinit, $coursesexcludedbycategory, $coursesexcludednewsections,
+        $this->get_courses_to_enqueue($courseidinit, $timecreatedcriteria, $timemodificationcriteria, $limitquery,
+                                      $categoriesexcluded, $coursesexcludedbycategory, $coursesexcludednewsections,
                                       $coursesexcludednewparticipants, $coursesexcludednewmodules, $coursesexcludedcvh);
     }
 
