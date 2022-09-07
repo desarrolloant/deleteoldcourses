@@ -29,6 +29,17 @@ namespace local_deleteoldcourses;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Unit tests for datetime_manager class.
+ *
+ * @group      local_deleteoldcourses
+ * @package    local_deleteoldcourses
+ * @category   phpunit
+ * @author     Iader E. García Gómez <iadergg@gmail.com>
+ * @author     Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
+ * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class datetime_manager_test extends \advanced_testcase {
 
     private datetime_manager $datetimemanager;

@@ -16,6 +16,10 @@
   width: 10em;
 }
 
+#id_s_local_deleteoldcourses_ws_client_course_field {
+    width: 20em;
+}
+
 /**
 * Reports style.
 */

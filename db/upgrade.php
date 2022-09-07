@@ -44,34 +44,34 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         $tabledeleteoldcoursesdeleted = new xmldb_table('deleteoldcourses_deleted');
 
         // Adding fields to tables deleteoldcourses.
-        $sizefield = $tabledeleteoldcourses->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
-        $coursecreatedatfield = $tabledeleteoldcourses->add_field('coursecreatedat',
+        $fieldsize = $tabledeleteoldcourses->add_field('size', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, false, '-1');
+        $fieldcoursecreatedat = $tabledeleteoldcourses->add_field('coursecreatedat',
                                                                     XMLDB_TYPE_INTEGER,
                                                                     '10',
                                                                     null,
                                                                     XMLDB_NOTNULL,
                                                                     false,
                                                                     '0');
-        $dbman->add_field($tabledeleteoldcourses, $sizefield);
-        $dbman->add_field($tabledeleteoldcourses, $coursecreatedatfield);
+        $dbman->add_field($tabledeleteoldcourses, $fieldsize);
+        $dbman->add_field($tabledeleteoldcourses, $fieldcoursecreatedat);
 
         // Adding fields to tables deleteoldcourses_deleted.
-        $sizefield = $tabledeleteoldcoursesdeleted->add_field('size',
+        $fieldsize = $tabledeleteoldcoursesdeleted->add_field('size',
                                                                 XMLDB_TYPE_INTEGER,
                                                                 '10',
                                                                 null,
                                                                 XMLDB_NOTNULL,
                                                                 false,
                                                                 '-1');
-        $coursecreatedatfield = $tabledeleteoldcoursesdeleted->add_field('coursecreatedat',
+        $fieldcoursecreatedat = $tabledeleteoldcoursesdeleted->add_field('coursecreatedat',
                                                                             XMLDB_TYPE_INTEGER,
                                                                             '10',
                                                                             null,
                                                                             XMLDB_NOTNULL,
                                                                             false,
                                                                             '0');
-        $dbman->add_field($tabledeleteoldcoursesdeleted, $sizefield);
-        $dbman->add_field($tabledeleteoldcoursesdeleted, $coursecreatedatfield);
+        $dbman->add_field($tabledeleteoldcoursesdeleted, $fieldsize);
+        $dbman->add_field($tabledeleteoldcoursesdeleted, $fieldcoursecreatedat);
 
         upgrade_plugin_savepoint(true, 20201005100, 'local', 'deleteoldcourses');
     }
@@ -79,56 +79,123 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
     if ($oldversion < 2022060600) {
 
         // Define table local_delcoursesuv_todelete to be created.
-        $todeletetable = new xmldb_table('local_delcoursesuv_todelete');
+        $tabletodelete = new xmldb_table('local_delcoursesuv_todelete');
 
         // Adding fields to table local_delcoursesuv_todelete.
-        $todeletetable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $todeletetable->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $todeletetable->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $todeletetable->add_field('coursesize', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '-1');
-        $todeletetable->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $tabletodelete->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $tabletodelete->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $tabletodelete->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $tabletodelete->add_field('coursesize', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '-1');
+        $tabletodelete->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table local_delcoursesuv_todelete.
-        $todeletetable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-        $todeletetable->add_key('fk_courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
-        $todeletetable->add_key('fk_userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+        $tabletodelete->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $tabletodelete->add_key('fk_courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
+        $tabletodelete->add_key('fk_userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
 
         // Conditionally launch create table for local_delcoursesuv_todelete.
-        if (!$dbman->table_exists($todeletetable)) {
-            $dbman->create_table($todeletetable);
+        if (!$dbman->table_exists($tabletodelete)) {
+            $dbman->create_table($tabletodelete);
         }
 
         // Define table local_delcoursesuv_deleted to be created.
-        $deletedtable = new xmldb_table('local_delcoursesuv_deleted');
+        $tabledeleted = new xmldb_table('local_delcoursesuv_deleted');
 
         // Adding fields to table local_delcoursesuv_deleted.
-        $deletedtable->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $deletedtable->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $deletedtable->add_field('courseshortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $deletedtable->add_field('coursefullname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $deletedtable->add_field('coursesize', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '-1');
-        $deletedtable->add_field('coursetimecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $deletedtable->add_field('coursetimesenttodelete', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
-        $deletedtable->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
-        $deletedtable->add_field('usershortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $deletedtable->add_field('userfullname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $deletedtable->add_field('useremail', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $deletedtable->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $tabledeleted->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $tabledeleted->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $tabledeleted->add_field('courseshortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $tabledeleted->add_field('coursefullname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $tabledeleted->add_field('coursesize', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '-1');
+        $tabledeleted->add_field('coursetimecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $tabledeleted->add_field('coursetimesenttodelete', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $tabledeleted->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $tabledeleted->add_field('usershortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $tabledeleted->add_field('userfullname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $tabledeleted->add_field('useremail', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $tabledeleted->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table local_delcoursesuv_deleted.
-        $deletedtable->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $tabledeleted->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
         // Adding indexes to table local_delcoursesuv_deleted.
-        $deletedtable->add_index('courseid', XMLDB_INDEX_UNIQUE, ['courseid']);
-        $deletedtable->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
+        $tabledeleted->add_index('courseid', XMLDB_INDEX_UNIQUE, ['courseid']);
+        $tabledeleted->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
 
         // Conditionally launch create table for local_delcoursesuv_deleted.
-        if (!$dbman->table_exists($deletedtable)) {
-            $dbman->create_table($deletedtable);
+        if (!$dbman->table_exists($tabledeleted)) {
+            $dbman->create_table($tabledeleted);
         }
 
         // Deleteoldcourses savepoint reached.
         upgrade_plugin_savepoint(true, 2022060600, 'local', 'deleteoldcourses');
+    }
+
+    if ($oldversion < 2022080500) {
+
+        // Rename fields usershortname and userfullname to username and userfirstname respectively.
+        $tabledeleted = new xmldb_table('local_delcoursesuv_deleted');
+        $fieldusershortname = new xmldb_field('usershortname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, 'userid');
+        $fielduserfullname = new xmldb_field('userfullname', XMLDB_TYPE_CHAR,
+                                             '255', null, XMLDB_NOTNULL, null, null, 'usershortname');
+
+        // Launch rename fields.
+        $dbman->rename_field($tabledeleted, $fieldusershortname, 'username');
+        $dbman->rename_field($tabledeleted, $fielduserfullname, 'userfirstname');
+
+        // Define field userlastname to be added to local_delcoursesuv_deleted.
+        $fielduserlastname = new xmldb_field('userlastname', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null, null);
+        // Conditionally launch add field userlastname.
+        if (!$dbman->field_exists($tabledeleted, $fielduserlastname)) {
+            $dbman->add_field($tabledeleted, $fielduserlastname);
+        }
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022080500, 'local', 'deleteoldcourses');
+    }
+
+    if ($oldversion < 2022082502) {
+
+        // Define field manual to be added to local_delcoursesuv_todelete.
+        $table = new xmldb_table('local_delcoursesuv_todelete');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
+
+        // Conditionally launch add field manual.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field manual to be added to local_delcoursesuv_deleted.
+        $table = new xmldb_table('local_delcoursesuv_deleted');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
+
+        // Conditionally launch add field manual.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022082502, 'local', 'deleteoldcourses');
+    }
+
+    if ($oldversion < 2022090101) {
+
+        // Rename field manual on table local_delcoursesuv_todelete to NEWNAMEGOESHERE.
+        $table = new xmldb_table('local_delcoursesuv_todelete');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
+
+        // Launch rename field manual.
+        $dbman->rename_field($table, $field, 'manuallyqueued');
+
+        // Rename field manual on table local_delcoursesuv_deleted to NEWNAMEGOESHERE.
+        $table = new xmldb_table('local_delcoursesuv_deleted');
+        $field = new xmldb_field('manual', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'timecreated');
+
+        // Launch rename field manual.
+        $dbman->rename_field($table, $field, 'manuallyqueued');
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022090101, 'local', 'deleteoldcourses');
     }
 
     return true;

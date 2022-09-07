@@ -54,7 +54,7 @@ $string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
 // Tasks.
 $string['task_delete_course'] = 'Tarea para eliminar cursos';
 $string['enqueue_courses_task'] = 'Encolar cursos a eliminar';
-
+$string['delete_courses_task'] = 'Eliminar cursos encolados';
 
 // Deleted table.
 $string['sent_to_delete'] = 'Enviado para eliminar';
@@ -103,8 +103,8 @@ $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la elimin
 $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
 $string['limit_query'] = 'Limite de la consulta';
 $string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
-$string['course_queue_size'] = 'Tamaño de la cola de cursos a eliminar';
-$string['course_queue_size_desc'] = 'Ejemplo: los cursos son eliminados en una cola de tamaño máximo de 500 cursos por ejecución.';
+$string['task_queue_size'] = 'Tamaño de la cola en la tarea';
+$string['task_queue_size_desc'] = 'Ejemplo: 500 cursos son eliminados por tarea, aunque hallan 2000 cursos en la cola.';
 
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
@@ -112,6 +112,19 @@ $string['notification_settings_heading'] = 'Configuraciones para notificaciones'
 $string['notification_settings_heading_desc'] = 'Configuraciones para notificaciones sobre eliminación de cursos.';
 $string['users_to_notify'] = 'Usuarios a notificar';
 $string['users_to_notify_desc'] = 'Ingrese, separados por comas, los nombres de usuario (username) de los usuarios a notificar.';
+
+// Client settings.
+$string['ws_client_settings_tab'] = 'Cliente';
+$string['ws_client_settings_heading'] = 'Cliente para servicio en Campus Virtual Historia';
+$string['ws_client_settings_heading_desc'] = 'Parámetros del cliente para el servicio en Campus Virtual Historia';
+$string['ws_url'] = 'URL del Campus Virtual Historia';
+$string['ws_url_desc'] = 'URL del Campus Virtual Historia';
+$string['ws_function_name'] = 'Nombre de la función';
+$string['ws_function_name_desc'] = 'Nombre de la función utilizada por el servicio';
+$string['courseid'] = 'Identificador del curso';
+$string['course_shortname'] = 'Nombre corto del curso';
+$string['ws_user_token'] = 'Clave privada del usuario autorizado';
+$string['ws_user_token_desc'] = 'Se puede recuperar de la página de claves privadas del usuario';
 
 // Date settings.
 $string['january'] = 'Enero';
@@ -142,7 +155,7 @@ $string['limit_query_is_empty'] = 'El limite de la consulta no puede estar vacio
 $string['message_to_send'] = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
 $string['message_to_send'] .= 'Resumen de la ejecución: \n';
 $string['message_to_send'] .= '<pre>';
-$string['message_to_send'] .= '- Cantidad de cursos borrados: {$a->deletedcourses}';
+$string['message_to_send'] .= '- Cantidad de cursos eliminados: {$a->deletedcourses}';
 $string['message_to_send'] .= '- Cantidad de cursos pendientes: {$a->pendingcourses}';
 $string['message_to_send'] .= '</pre>';
 $string['message_to_send'] .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
@@ -150,11 +163,18 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Entered input: {$a}. Valid inputs: monthsoftheyear, daysofthemonth, hoursinaday or minutesinanhour';
+$string['invalid_return_format'] = 'Cliente CVH: Formato de retorno invalido.';
+$string['empty_ws_url'] = 'Cliente CVH: URL al servicio vacía.';
+$string['empty_return_format'] = 'Cliente CVH: Formato de retorno vacío.';
+$string['empty_ws_user_token'] = 'Cliente CVH: Token de usuario vacío.';
+$string['clientcvh_invalid_parameters'] = 'Cliente CVH: El segundo parámetro del método request() debe ser un arreglo.';
+$string['empty_ws_function_name'] = 'Cliente CVH: El nombre de la función está vacío.';
+$string['request_error'] = 'Cliente CVH: Error en la petición.';
+$string['request_method_invalid'] = 'Cliente CVH: Método de la petición invalido.';
 
 // Reports.
 $string['reports_heading'] = 'Dashboard';
 $string['criteria_description'] = 'Criterios de eliminación actuales';
-
 $string['criteria_creation_time'] = 'Fecha de creación de los cursos';
 $string['criteria_lastmodification_time'] = 'Fecha de la última modificación de los cursos';
 $string['criteria_lastmodification_user'] = 'Categorías de curso excluidas';

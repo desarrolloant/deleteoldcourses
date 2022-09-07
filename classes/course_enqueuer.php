@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Course dispatcher class.
+ * Course enqueuer class.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -35,7 +35,7 @@ use stdClass;
 use DateTime;
 
 /**
- * Course dispatcher class for Delete old courses.
+ * Course enqueuer class for Delete old courses.
  *
  * @package    local_deleteoldcourses
  * @since      Moodle 3.10
@@ -43,7 +43,7 @@ use DateTime;
  * @author     Iader E. García Gómez <iadergg@gmail.com>
  * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  */
-class course_dispatcher {
+class course_enqueuer {
 
     /** @var int  Time creation criteria for course elimination */
     protected $timecreationcriteria;
@@ -70,12 +70,12 @@ class course_dispatcher {
     }
 
     /**
-     * Get courses to delete according to elimination criteria.
+     * Get courses to enqueue according to elimination criteria.
      *
      * @return array $courses
      * @since  Moodle 3.10
      */
-    public function get_courses_to_delete() {
+    public function get_courses_to_enqueue():array {
 
         global $DB, $USER;
 
@@ -98,37 +98,51 @@ class course_dispatcher {
                         AND timemodified <= ?
                         AND id <> 1
                         AND id NOT IN (SELECT DISTINCT courseid
-                                       FROM {deleteoldcourses})";
+                                       FROM {local_delcoursesuv_todelete})";
 
         $coursestodelete = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria));
+
+        $cvhwsclient = new cvh_ws_client();
+        $wsfunctionname = get_config('local_deleteoldcourses', 'ws_function_name');
 
         if ($coursestodelete) {
             foreach ($coursestodelete as $key => $course) {
 
-                // Check category.
+                // Check course category.
                 if ($this->check_excluded_course_categories($course->id, $categoriesexcluded)) {
                     unset($coursestodelete[$key]);
                 };
 
+                // Check if the course have new sections.
                 $havenewsections = $this->have_new_sections($course->id, $timemodificationcriteria);
 
                 if ($havenewsections) {
                     unset($coursestodelete[$key]);
                 }
 
+                // Check if the course have new participants.
                 $havenewparticipants = $this->have_new_participants($course->id, $timemodificationcriteria);
 
                 if ($havenewparticipants) {
                     unset($coursestodelete[$key]);
                 }
 
+                // Check if the course have new modules.
                 $havenewmodules = $this->have_new_modules($course->id, $timecreatedcriteria);
 
                 if ($havenewmodules) {
                     unset($coursestodelete[$key]);
                 }
 
-                // TODO: Check if the course has been backed up.
+                // Check if the course exists in Campus Virtual Historia.
+                $parameterstorequest = array('shortname' => $course->shortname);
+
+                $response = $cvhwsclient->request_to_service($wsfunctionname, $parameterstorequest);
+                $response = json_decode($response);
+
+                if (empty($response->courses)) {
+                    unset($coursestodelete[$key]);
+                }
             }
         }
 
@@ -144,7 +158,7 @@ class course_dispatcher {
      * @return int $timecreationcriteria
      * @since  Moodle 3.10
      */
-    public function get_timecreation_criteria() {
+    public function get_timecreation_criteria():int {
         return $this->timecreationcriteria;
     }
 
@@ -154,7 +168,7 @@ class course_dispatcher {
      * @return int $timemodificationcriteria
      * @since  Moodle 3.10
      */
-    public function get_timemodification_criteria() {
+    public function get_timemodification_criteria():int {
         return $this->timemodificationcriteria;
     }
 
@@ -171,19 +185,20 @@ class course_dispatcher {
     /**
      * Get the value of categoriestoexclude.
      *
+     * @return array Array with categories to exclude.
      * @since  Moodle 3.10
      */
-    public function get_categories_to_exclude() {
+    public function get_categories_to_exclude():array {
         return $this->categoriestoexclude;
     }
 
     /**
      * set_categoriestoexclude
      *
-     * @return array $categoriestoexclude
+     * @return void
      * @since  Moodle 3.10
      */
-    public function set_categoriestoexclude() {
+    public function set_categoriestoexclude():void {
 
         $categoriestoexclude = array();
         $numbercategoriestoexclude = intval(get_config('local_deleteoldcourses', 'number_of_categories_to_exclude'));
@@ -204,7 +219,7 @@ class course_dispatcher {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function have_new_sections(int $courseid, int $timemodified) {
+    public function have_new_sections(int $courseid, int $timemodified):bool {
         global $DB;
 
         $havenewsections = false;
@@ -230,7 +245,7 @@ class course_dispatcher {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function have_new_participants(int $courseid, int $timemodified) {
+    public function have_new_participants(int $courseid, int $timemodified):bool {
         global $DB;
 
         $havenewparticipants = false;
@@ -257,7 +272,7 @@ class course_dispatcher {
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function have_new_modules(int $courseid, int $timemodified) {
+    public function have_new_modules(int $courseid, int $timemodified):bool {
         global $DB;
 
         $havenewmodules = false;
@@ -277,25 +292,23 @@ class course_dispatcher {
     /**
      * Returns true if a course belongs to an exlcuded category.
      *
-     * @param  int  $courseid
-     * @param  array  $coursecategories
+     * @param  int  $courseid Course ID to check
+     * @param  array  $coursecategoriesexcluded Course categories excluded array
      * @return bool $belongtocategory
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function check_excluded_course_categories(int $courseid, array $coursecategories) {
+    public function check_excluded_course_categories(int $courseid, array $coursecategoriesexcluded):bool {
         global $DB;
-
-        $belongtocategory = false;
 
         $categoryid = $DB->get_record('course', array('id' => $courseid), 'category')->category;
         $categorypath = $DB->get_record('course_categories', array('id' => $categoryid), 'path')->path;
 
-        $pathroot = explode('/', substr($categorypath, 1))[0];
+        $coursecategoriespath = explode('/', substr($categorypath, 1));
 
-        $belongtocategory = in_array($pathroot, $coursecategories);
+        $coursecategoriesintersection = array_intersect($coursecategoriesexcluded, $coursecategoriespath);
 
-        return $belongtocategory;
+        return !empty($coursecategoriesintersection);
     }
 
     /**
@@ -303,11 +316,13 @@ class course_dispatcher {
      *
      * @param  array $courses Array containing the courses to delete.
      * @param  int $userid ID of the user who queued the course.
+     * @param  bool $manuallyqueued Indicates if the register was made manually or automatically.
+     *                              False for automatically enqueue or true for manual enqueue.
      * @return void
      * @since  Moodle 3.10
      * @author Iader E. Garcia Gomez <iadergg@gmail.com>
      */
-    public function enqueue_courses_to_delete($courses, $userid) {
+    public function enqueue_courses_to_delete($courses, $userid, $manuallyqueued = true):void {
         global $DB;
 
         $date = new DateTime();
@@ -320,6 +335,7 @@ class course_dispatcher {
             $record->userid = $userid;
             $record->coursesize = $utils->calculate_course_size($course->id);
             $record->timecreated = $date->getTimestamp();
+            $record->manuallyqueued = $manuallyqueued;
 
             if ($course) {
                 $DB->insert_record('local_delcoursesuv_todelete', $record);

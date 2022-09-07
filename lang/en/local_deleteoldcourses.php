@@ -54,6 +54,7 @@ $string['course_remove_delete'] = 'Course was removed from delete list';
 // Tasks.
 $string['task_delete_course'] = 'Task for deleting courses';
 $string['enqueue_courses_task'] = 'Enqueue courses to delete';
+$string['delete_courses_task'] = 'Delete enqueued courses';
 
 // Deleted table.
 $string['sent_to_delete'] = 'Sent to delete';
@@ -107,8 +108,21 @@ $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la elimin
 $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
 $string['limit_query'] = 'Limite de la consulta';
 $string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
-$string['course_queue_size'] = 'Queue size of courses to delete';
-$string['course_queue_size_desc'] = 'Example: courses are deleted in a queue with a maximum size of 500 courses per execution.';
+$string['task_queue_size'] = 'Task queue size';
+$string['task_queue_size_desc'] = 'Example: 500 courses are deleted per task, even though there are 2000 courses in the queue.';
+
+// Client settings.
+$string['ws_client_settings_tab'] = 'Client';
+$string['ws_client_settings_heading'] = 'Client for Campus Virtual Historia service';
+$string['ws_client_settings_heading_desc'] = 'Parameters for the client to Campus Virtual Historia service';
+$string['ws_url'] = 'URL to Campus Virtual Historia';
+$string['ws_url_desc'] = 'URL to Campus Virtual Historia';
+$string['ws_function_name'] = 'Function name';
+$string['ws_function_name_desc'] = 'Name of the function used by the web service';
+$string['courseid'] = 'Course ID';
+$string['course_shortname'] = 'Course shortname';
+$string['ws_user_token'] = 'User token';
+$string['ws_user_token_desc'] = 'Can be obtained from the user\'s private key page';
 
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
@@ -154,15 +168,21 @@ $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendient
 
 // Moodle exceptions.
 $string['invalid_input_datetimetype'] = 'Opción ingresada: {$a}. Opciones válidas: monthsoftheyear, daysofthemonth, hoursinaday o minutesinanhour';
+$string['invalid_return_format'] = 'CVH Client: Invalid return format.';
+$string['empty_ws_url'] = 'CVH Client: Empty URL to service.';
+$string['empty_return_format'] = 'CVH Client: Empty return format.';
+$string['empty_ws_user_token'] = 'CVH Client: Empty user token.';
+$string['clientcvh_invalid_parameters'] = 'CVH Client: The second parameter of request() should be an array.';
+$string['empty_ws_function_name'] = 'CVH Client: The function name setting is empty.';
+$string['request_error'] = 'CVH Client: Request error.';
+$string['request_method_invalid'] = 'CVH Client: Request method invalid.';
 
 // Reports.
 $string['reports_heading'] = 'Dashboard';
 $string['criteria_description'] = 'Current elimination criteria';
-
 $string['criteria_creation_time'] = 'Criteria creation time';
 $string['criteria_lastmodification_time'] = 'Criteria last modification time';
 $string['criteria_lastmodification_user'] = 'Course category excluded';
 $string['courses_queued_by_professors'] = 'Courses queued by professors';
 $string['automatically_courses_queued'] = 'Courses queued automatically';
 $string['total_courses_queued'] = 'Total courses queued';
-

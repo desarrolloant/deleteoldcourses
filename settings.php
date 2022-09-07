@@ -212,9 +212,9 @@ if ($ADMIN->fulltree) {
     ));
 
     $settingspage->add(new admin_setting_configtext(
-        'local_deleteoldcourses/course_queue_size',
-        new lang_string('course_queue_size', 'local_deleteoldcourses'),
-        new lang_string('course_queue_size_desc', 'local_deleteoldcourses'),
+        'local_deleteoldcourses/task_queue_size',
+        new lang_string('task_queue_size', 'local_deleteoldcourses'),
+        new lang_string('task_queue_size_desc', 'local_deleteoldcourses'),
         500,
         PARAM_INT,
         5
@@ -239,6 +239,43 @@ if ($ADMIN->fulltree) {
                        '',
                        PARAM_TEXT,
                        50
+                    ));
+
+    // Must add the page after definiting all the settings!
+    $settings->add($settingspage);
+
+    // Fourth settings tab: Client settings.
+    $settingspage = new admin_settingpage('ws_client_settings',
+                                          new lang_string('ws_client_settings_tab', 'local_deleteoldcourses'));
+
+    $settingspage->add(new admin_setting_heading(
+                        'local_deleteoldcourses/ws_client_settings_heading',
+                        new lang_string('ws_client_settings_heading', 'local_deleteoldcourses'),
+                        new lang_string('ws_client_settings_heading_desc', 'local_deleteoldcourses')));
+
+    $settingspage->add(new admin_setting_configtext(
+                        'local_deleteoldcourses/ws_url',
+                        new lang_string('ws_url', 'local_deleteoldcourses'),
+                        new lang_string('ws_url_desc', 'local_deleteoldcourses'),
+                        'https://campusvirtualhistoria.univalle.edu.co/moodle',
+                        PARAM_TEXT,
+                        60
+                    ));
+
+    $settingspage->add(new admin_setting_configpasswordunmask(
+                        'local_deleteoldcourses/ws_user_token',
+                        new lang_string('ws_user_token', 'local_deleteoldcourses'),
+                        new lang_string('ws_user_token_desc', 'local_deleteoldcourses'),
+                        ''
+                    ));
+
+    $settingspage->add(new admin_setting_configtext(
+                        'local_deleteoldcourses/ws_function_name',
+                        new lang_string('ws_function_name', 'local_deleteoldcourses'),
+                        new lang_string('ws_function_name_desc', 'local_deleteoldcourses'),
+                        'core_course_get_courses_by_field',
+                        PARAM_TEXT,
+                        60
                     ));
 
     // Must add the page after definiting all the settings!
