@@ -35,27 +35,27 @@ class report_manager {
      * @return array course deletion criteria settings
      * E.g.
      *      Array(
-     *              'creationdate' => [
-     *                                  'yearcreationdate' => 2010,
-     *                                  'monthcreationdate' => 12,
-     *                                  'daycreationdate' => 31,
-     *                                  'hourcreationdate' => 23,
-     *                                  'minutescreationdate' => 59,
-     *                                  'secondscreationdate => 59,
-     *              ],
-     *              'lastmodificationdate' => [
-     *                                  'yearlastmodificationdate' => 2012,
-     *                                  'monthlastmodificationdate' => 12,
-     *                                  'daylastmodificationdate' => 31,
-     *                                  'hourlastmodificationdate' => 23,
-     *                                  'minuteslastmodificationdate' => 59,
-     *                                  'secondslastmodificationdate' => 59
-     *              ],
-     *              'excludedcategories' => [
-     *                                  '189000' => 'Excluded category 1',
-     *                                  '189001' => 'Excluded category 2',
-     *                                  '189002' => 'Excluded category 3',
-     *              ]
+     *          'creationdate' => [
+     *              'yearcreationdate' => 2010,
+     *              'monthcreationdate' => 12,
+     *              'daycreationdate' => 31,
+     *              'hourcreationdate' => 23,
+     *              'minutescreationdate' => 59,
+     *              'secondscreationdate => 59,
+     *          ],
+     *          'lastmodificationdate' => [
+     *              'yearlastmodificationdate' => 2012,
+     *              'monthlastmodificationdate' => 12,
+     *              'daylastmodificationdate' => 31,
+     *              'hourlastmodificationdate' => 23,
+     *              'minuteslastmodificationdate' => 59,
+     *              'secondslastmodificationdate' => 59
+     *          ],
+     *          'excludedcategories' => [
+     *              'Excluded category name 1',
+     *              'Excluded category name 2',
+     *              'Excluded category name 3'
+     *          ]
      *      );
      */
     public function get_course_deletion_criteria_settings(): array {
@@ -85,8 +85,8 @@ class report_manager {
 
         for ($i = 1; $i <= $numberofexcludedcategories; $i++) {
             $categorynumber = get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i);
-            $categorydata = $DB->get_record('course_categories', ['id' => $categorynumber], 'id, name');
-            array_push($excludedcategories, ['id' => $categorydata->id, 'name' => $categorydata->name]);
+            $categoryname = $DB->get_record('course_categories', ['id' => $categorynumber], 'name')->name;
+            array_push($excludedcategories, $categoryname);
         }
 
         $deletioncriteriasettings = [
@@ -99,17 +99,17 @@ class report_manager {
     }
 
     /**
-     * Get total number of enqueued courses (optionally by enqueue type).
+     * Get total number of enqueued courses (optionally by how they were enqueued).
      *
-     * @param bool $manuallyenqueued how courses were enqueued (true: manually, false: automatically, and null: all)
-     * @return int number of courses
+     * @param bool $manuallyqueued true: manually, false: automatically, and null: all
+     * @return int total number of enqueued courses
      */
-    public function get_total_enqueued_courses($manuallyenqueued = null): int {
+    public function get_total_enqueued_courses($manuallyqueued = null): int {
 
         global $DB;
 
-        if (!is_null($manuallyenqueued)) {
-            return $DB->count_records_select('local_delcoursesuv_todelete', 'manual = ?', [(int)$manuallyenqueued]);
+        if (!is_null($manuallyqueued)) {
+            return $DB->count_records_select('local_delcoursesuv_todelete', 'manuallyqueued = ?', [(int)$manuallyqueued]);
         }
 
         return $DB->count_records('local_delcoursesuv_todelete');
@@ -120,7 +120,7 @@ class report_manager {
      *
      * @param string $startdate
      * @param string $enddate
-     * @return int number of courses
+     * @return int total number of deleted courses
      */
     public function get_total_deleted_courses_during_time_period($startdate, $enddate): int {
 
@@ -130,42 +130,62 @@ class report_manager {
     }
 
     /**
-     * Get total enqueued courses grouped by faculty and in descending sorted.
+     * Get total number of enqueued courses grouped by root categories.
+     * - Only courses from "Cursos Presenciales" root category will be grouped by their subsequent subcategories (I.e. faculties).
+     * - The other courses will be grouped by their root category. Thus, their subcategories will be ignored.
      *
-     * @return array enqueued courses grouped by faculty
+     * @return array total enqueued courses grouped by root and faculty categories
      *  E.g.
-     *      array(
-     *              [
-     *                  'categoryid' => '1',
-     *                  'categoryname' => 'Category name 5',
-     *                  'totalcourses' => 6,
-     *              ],
-     *              [
-     *                  'categoryid' => '2',
-     *                  'categoryname' => 'Category name 2',
-     *                  'totalcourses' => 3,
-     *              ],
-     *              [
-     *                  'categoryid' => '3',
-     *                  'categoryname' => 'Category name 3',
-     *                  'totalcourses' => 1,
-     *              ]
-     *      );
+     *       array(
+     *           'Category name 1' => 6,
+     *           'Category name 2' => 3,
+     *           'Category name 3' => 10,
+     *       );
      */
-    public function get_total_enqueued_courses_grouped_by_faculty(): array {
+    public function get_total_enqueued_courses_grouped_by_root_categories(): array {
 
         global $DB;
 
-        $sqlquery = "SELECT cc.id categoryid, cc.name categoryname, COUNT(ldt.id) totalcourses
-                FROM {local_delcoursesuv_todelete} ldt
-                INNER JOIN {course} c on ldt.courseid = c.id
-                INNER JOIN {course_categories} cc on c.category = cc.id
-                GROUP BY cc.id, cc.name
-                ORDER BY COUNT(ldt.id) DESC";
+        $enqueuedcourses = $DB->get_records('local_delcoursesuv_todelete', null, '', 'courseid');
+        $cursospresencialesrootcategory = 6;
+        $result = [];
 
-        $result = $DB->get_records_sql($sqlquery);
-        $result = array_values($result);
+        foreach ($enqueuedcourses as $course) {
+            $coursecategoryid = $DB->get_record('course', array('id' => $course->courseid), 'category')->category;
+            // Course path e.g. "/6/30006/141" --> "/Cursos Presenciales/SALUD/PSIQUIATRIA".
+            $coursecategorypath = $DB->get_record('course_categories', array('id' => $coursecategoryid), 'path')->path;
+            $coursecategoriesbyids = explode('/', substr($coursecategorypath, 1));
+
+            if ($coursecategoriesbyids[0] == $cursospresencialesrootcategory) {
+                // If the course is in the Cursos Presenciales category then use its subcategory (I.e. faculty).
+                $result = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[1], $result);
+            } else {
+                // If not then use the root category and ignores the rest.
+                $result = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[0], $result);
+            }
+        }
 
         return $result;
+    }
+
+    /**
+     * Allows to increment the number of courses found in a particular category.
+     *
+     * @param string $coursecategoryid
+     * @param array $partialresult result that is being recomputed
+     * @return array partial result of enqueued courses grouped by root and faculty categories
+     */
+    private function increment_number_of_courses_in_a_category(string $coursecategoryid, array $partialresult): array {
+
+        global $DB;
+        $coursecategoryname = $DB->get_record('course_categories', array('id' => $coursecategoryid), 'name')->name;
+
+        if (!isset($partialresult[$coursecategoryname])) {
+            $partialresult[$coursecategoryname] = 1;
+            return $partialresult;
+        }
+
+        $partialresult[$coursecategoryname] += 1;
+        return $partialresult;
     }
 }

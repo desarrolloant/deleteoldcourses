@@ -59,11 +59,9 @@ class report_manager_test extends \advanced_testcase {
         $plugingenerator->update_setting('number_of_categories_to_exclude', $numberofcategoriestoexcluded);
 
         // Create course categories with their associated plugin settings.
-        $excludedcategoriesids = [];
         for ($i = 1; $i <= $numberofcategoriestoexcluded; $i++) {
-            $excludedcategory = $this->getDataGenerator()->create_category(array("name" => "Excluded category " . $i));
-            $plugingenerator->update_setting('excluded_course_categories_' . $i, $excludedcategory->id);
-            array_push($excludedcategoriesids, $excludedcategory->id);
+            $excludedcategoryid = $this->getDataGenerator()->create_category(array("name" => "Excluded category name " . $i))->id;
+            $plugingenerator->update_setting('excluded_course_categories_' . $i, $excludedcategoryid);
         }
 
         $expectedresult = [
@@ -84,22 +82,10 @@ class report_manager_test extends \advanced_testcase {
                 'secondslastmodificationdate' => 59
             ],
             'excludedcategories' => [
-                '0' => [
-                    'id' => $excludedcategoriesids[0],
-                    'name' => 'Excluded category 1'
-                ],
-                '1' => [
-                    'id' => $excludedcategoriesids[1],
-                    'name' => 'Excluded category 2'
-                ],
-                '2' => [
-                    'id' => $excludedcategoriesids[2],
-                    'name' => 'Excluded category 3'
-                 ],
-                '3' => [
-                    'id' => $excludedcategoriesids[3],
-                    'name' => 'Excluded category 4'
-                 ],
+                'Excluded category name 1',
+                'Excluded category name 2',
+                'Excluded category name 3',
+                'Excluded category name 4'
             ]
         ];
 
@@ -119,19 +105,19 @@ class report_manager_test extends \advanced_testcase {
         $this->setGuestUser();
 
         // Create 25 enqueued courses: 15 manually and 10 automatically.
-        $manual = 1;
+        $manuallyqueued = 1;
         for ($i = 0; $i < 25; $i++) {
 
             if ($i > 14) {
-                $manual = 0;
+                $manuallyqueued = 0;
             }
 
             $coursetoenqueue = (object) array(
-                'courseid'    => $i,
-                'userid'      => $USER->id,
-                'coursesize'  => 0,
-                'timecreated' => 0,
-                'manual'      => $manual
+                'courseid'       => $i,
+                'userid'         => $USER->id,
+                'coursesize'     => 0,
+                'timecreated'    => 0,
+                'manuallyqueued' => $manuallyqueued
             );
 
             $DB->insert_record('local_delcoursesuv_todelete', $coursetoenqueue);
@@ -139,15 +125,15 @@ class report_manager_test extends \advanced_testcase {
 
         $reportmanager = new report_manager();
         $allenqueuedcourses = $reportmanager->get_total_enqueued_courses();
-        $manuallyenqueuedcourses = $reportmanager->get_total_enqueued_courses(true);
+        $manuallyqueuedcourses = $reportmanager->get_total_enqueued_courses(true);
         $automaticallyenqueuedcourses = $reportmanager->get_total_enqueued_courses(false);
 
         $this->assertInstanceOf(report_manager::class, $reportmanager);
         $this->assertIsInt($allenqueuedcourses);
-        $this->assertIsInt($manuallyenqueuedcourses);
+        $this->assertIsInt($manuallyqueuedcourses);
         $this->assertIsInt($automaticallyenqueuedcourses);
         $this->assertEquals(25, $allenqueuedcourses);
-        $this->assertEquals(15, $manuallyenqueuedcourses);
+        $this->assertEquals(15, $manuallyqueuedcourses);
         $this->assertEquals(10, $automaticallyenqueuedcourses);
     }
 
@@ -174,7 +160,8 @@ class report_manager_test extends \advanced_testcase {
                 'userfirstname'          => 'Userfirstname ' . $i,
                 'userlastname'           => 'Userlastname ' . $i,
                 'useremail'              => 'Useremail ' . $i,
-                'timecreated'            => $time
+                'timecreated'            => $time,
+                'manuallyqueued'         => 0
             );
 
             $DB->insert_record('local_delcoursesuv_deleted', $deletedcourse);
@@ -191,47 +178,7 @@ class report_manager_test extends \advanced_testcase {
         $this->assertEquals(11, $result);
     }
 
-    public function test_get_total_enqueued_courses_grouped_by_faculty() {
-
-        global $DB, $USER;
-
-        $this->resetAfterTest(true);
-        $this->setAdminUser();
-
-        $numberofcategories = 10;
-        $coursecategories = [];
-
-        // Create course categories.
-        for ($i = 1; $i <= $numberofcategories; $i++) {
-            $newcategory = $this->getDataGenerator()->create_category(array("name" => "Category name " . $i));
-            array_push($coursecategories, $newcategory);
-        }
-
-        // Create 25 enqueued courses.
-        for ($i = 0; $i < 25; $i++) {
-
-            $course = $this->getDataGenerator()->create_course(
-                array("category" => $coursecategories[rand(0, $numberofcategories - 1)]->id)
-            );
-
-            $coursetoenqueue = (object) array(
-                'courseid'    => $course->id,
-                'userid'      => $USER->id,
-                'coursesize'  => rand(500, 2000),
-                'timecreated' => time(),
-                'manual'      => rand(0, 1)
-            );
-
-            $DB->insert_record('local_delcoursesuv_todelete', $coursetoenqueue);
-        }
-
-        // $expectedresult = [];
-
-        $reportmanager = new report_manager();
-        $result = $reportmanager->get_total_enqueued_courses_grouped_by_faculty();
-
-        $this->assertInstanceOf(report_manager::class, $reportmanager);
-        $this->assertIsArray($result);
-        // $this->assertEquals($expectedresult, $result);
+    public function test_get_total_enqueued_courses_grouped_by_root_categories() {
+        // TODO.
     }
 }
