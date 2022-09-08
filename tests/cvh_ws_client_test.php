@@ -125,18 +125,36 @@ class cvh_ws_client_test extends \advanced_testcase {
         $wsfunction = get_config('local_deleteoldcourses', 'ws_function_name');
 
         $parameters = array(
-            'shortname' => '01-201238M-50-202011051'
+            'idnumber' => '01-201238M-50-202011051'
         );
 
         $response = $this->get_cvhwsclient()->request_to_service($wsfunction, $parameters);
+
+        if (empty($response)) {
+            $parameters = array('shortname' => '01-201238M-50-202011051');
+            $response = $this->get_cvhwsclient()->request_to_service($wsfunction, $parameters);
+
+            if (empty($response)) {
+                $this->assertJson($response);
+            }
+        }
 
         $this->assertJson($response);
 
         $parameters = array(
-            'shortname' => 'dummy'
+            'idnumber' => 'dummy'
         );
 
         $response = $this->get_cvhwsclient()->request_to_service($wsfunction, $parameters);
+
+        if (empty($response)) {
+            $parameters = array('shortname' => '01-201238M-50-202011051');
+            $response = $this->get_cvhwsclient()->request_to_service($wsfunction, $parameters);
+
+            if (empty($response)) {
+                $this->assertJson($response);
+            }
+        }
 
         $this->assertJson($response);
     }
@@ -154,6 +172,7 @@ class cvh_ws_client_test extends \advanced_testcase {
     /**
      * Set instance of cvhwsclient
      *
+     * @param string $method Method for the request.
      * @param string $returnformat Reponse format. Default JSON.
      * @return cvh_ws_client_test
      * @since Moodle 3.10
