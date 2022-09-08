@@ -122,7 +122,7 @@ class report_manager {
      * @param int $enddate UNIX time format
      * @return int total number of deleted courses
      */
-    public function get_total_deleted_courses_during_time_period($startdate, $enddate): int {
+    public function get_total_deleted_courses_during_time_period(int $startdate, int $enddate): int {
 
         global $DB;
         return $DB->count_records_select("local_delcoursesuv_deleted",
@@ -153,7 +153,7 @@ class report_manager {
         global $DB;
 
         $enqueuedcourses = $DB->get_records('local_delcoursesuv_todelete', null, '', 'courseid');
-        $cursospresencialesrootcategoryid = $DB->get_record('course_category', array('idnumber' => 'regular_courses', 'id'))->id;
+        $cursospresencialesrootcategoryid = $DB->get_record('course_categories', array('idnumber' => 'regular_courses'), 'id')->id;
         $cursospresencialessubcategoriesresult = ['cursos_presenciales_subcategories' => []];
         $othercategoriesresult = ['other_categories' => []];
 
@@ -166,11 +166,11 @@ class report_manager {
 
             if ($coursecategoriesbyids[0] == $cursospresencialesrootcategoryid) {
                 // If the course is in the Cursos Presenciales root category then use its subcategory (I.e. faculty).
-                $cursospresencialessubcategoriesresult = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[1],
-                                                    $cursospresencialessubcategoriesresult['cursos_presenciales_subcategories']);
+                $cursospresencialessubcategoriesresult['cursos_presenciales_subcategories'] = $this->increment_number_of_courses_in_a_category(
+                                            $coursecategoriesbyids[1], $cursospresencialessubcategoriesresult['cursos_presenciales_subcategories']);
             } else {
                 // If not then use the root category and ignores the rest.
-                $othercategoriesresult = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[0],
+                $othercategoriesresult['other_categories'] = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[0],
                                                                                         $othercategoriesresult['other_categories']);
             }
         }

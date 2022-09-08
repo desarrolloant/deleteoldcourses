@@ -27,8 +27,6 @@
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die();
-
 class report_manager_test extends \advanced_testcase {
 
     public function test_get_course_deletion_criteria_settings() {
@@ -102,7 +100,6 @@ class report_manager_test extends \advanced_testcase {
         global $DB, $USER;
 
         $this->resetAfterTest(true);
-        $this->setGuestUser();
 
         // Create 25 enqueued courses: 15 manually and 10 automatically.
         $manuallyqueued = 1;
@@ -136,7 +133,6 @@ class report_manager_test extends \advanced_testcase {
         $this->assertEquals(15, $manuallyqueuedcourses);
         $this->assertEquals(10, $automaticallyenqueuedcourses);
     }
-
 
     public function test_get_total_deleted_courses_during_time_period() {
 
@@ -179,6 +175,87 @@ class report_manager_test extends \advanced_testcase {
     }
 
     public function test_get_total_enqueued_courses_grouped_by_root_categories() {
-        // TODO.
+
+        $this->resetAfterTest(true);
+
+        $cursospresencialesrootcategory = $this->getDataGenerator()->create_category(array("name" => "Cursos Presenciales",
+                                                                                            "idnumber" => 'regular_courses'));
+
+        $numberofcursospresencialessubcategories = 3;
+        $cursospresencialessubcategories = [];
+        // Create subsequent subcategories for Cursos Presenciales root category.
+        for ($i = 1; $i <= $numberofcursospresencialessubcategories; $i++) {
+            $newsubcategory = $this->getDataGenerator()->create_category(
+                                        array("name" => "Cursos Presenciales subcategory " . $i,
+                                                "parent" => $cursospresencialesrootcategory->id));
+            array_push($cursospresencialessubcategories, $newsubcategory);
+        }
+
+        $numberofotherrootcoursecategories = 3;
+        $otherrootcoursecategories = [];
+
+        // Create other course root subcategories.
+        for ($i = 1; $i <= $numberofotherrootcoursecategories; $i++) {
+            $newcategory = $this->getDataGenerator()->create_category(array("name" => "Other root category name " . $i));
+            array_push($otherrootcoursecategories, $newcategory);
+        }
+
+        // Create 1, 3, and 5 enqueued courses from subsequent subcategories of Cursos Presenciales root category.
+        $this->create_courses_with_category(1, $cursospresencialessubcategories[0]->id);
+        $this->create_courses_with_category(3, $cursospresencialessubcategories[1]->id);
+        $this->create_courses_with_category(5, $cursospresencialessubcategories[2]->id);
+
+        // Create 2, 4, and 6 courses from other course root categories.
+        $this->create_courses_with_category(2, $otherrootcoursecategories[0]->id);
+        $this->create_courses_with_category(4, $otherrootcoursecategories[1]->id);
+        $this->create_courses_with_category(6, $otherrootcoursecategories[2]->id);
+
+        $expectedresult = [
+            'cursos_presenciales_subcategories' => [
+                'Cursos Presenciales subcategory 1' => 1,
+                'Cursos Presenciales subcategory 2' => 3,
+                'Cursos Presenciales subcategory 3' => 5
+            ],
+            'other_categories' => [
+                'Other root category name 1' => 2,
+                'Other root category name 2' => 4,
+                'Other root category name 3' => 6
+            ]
+        ];
+
+        $reportmanager = new report_manager();
+        $result = $reportmanager->get_total_enqueued_courses_grouped_by_root_categories();
+
+        $this->assertInstanceOf(report_manager::class, $reportmanager);
+        $this->assertIsArray($result);
+        $this->assertEquals($expectedresult, $result);
+    }
+
+    /**
+     * Allows to create a desired number of courses in a particular course category.
+     *
+     * @param int $numberofcourses number of courses to create
+     * @param int $categoryid course category id
+     */
+    private function create_courses_with_category(int $numberofcourses, int $categoryid) {
+
+        global $USER, $DB;
+
+        for ($i = 0; $i < $numberofcourses; $i++) {
+
+            $course = $this->getDataGenerator()->create_course(
+                array("category" => $categoryid)
+            );
+
+            $coursetoenqueue = (object) array(
+                'courseid'    => $course->id,
+                'userid'      => $USER->id,
+                'coursesize'  => rand(500, 2000),
+                'timecreated' => time(),
+                'manual'      => rand(0, 1)
+            );
+
+            $DB->insert_record('local_delcoursesuv_todelete', $coursetoenqueue);
+        }
     }
 }
