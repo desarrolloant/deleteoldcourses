@@ -108,7 +108,7 @@ class report_manager {
 
         global $DB;
 
-        if (!is_null($manuallyqueued)) {
+        if (is_bool($manuallyqueued)) {
             return $DB->count_records_select('local_delcoursesuv_todelete', 'manuallyqueued = ?', [(int)$manuallyqueued]);
         }
 
@@ -118,8 +118,8 @@ class report_manager {
     /**
      * Get total number of deleted courses during a time period.
      *
-     * @param string $startdate
-     * @param string $enddate
+     * @param int $startdate UNIX time format
+     * @param int $enddate UNIX time format
      * @return int total number of deleted courses
      */
     public function get_total_deleted_courses_during_time_period($startdate, $enddate): int {
@@ -134,12 +134,18 @@ class report_manager {
      * - Only courses from "Cursos Presenciales" root category will be grouped by their subsequent subcategories (I.e. faculties).
      * - The other courses will be grouped by their root category. Thus, their subcategories will be ignored.
      *
-     * @return array total enqueued courses grouped by root and faculty categories
+     * @return array total enqueued courses grouped by subsequent subcategories of Cursos Presenciales root category and other root categories
      *  E.g.
      *       array(
-     *           'Category name 1' => 6,
-     *           'Category name 2' => 3,
-     *           'Category name 3' => 10,
+     *           'cursos_presenciales_subcategories' => [
+     *               'HUMANIDADES' => 3,
+     *               'SALUD' => 5,
+     *               'CIENCIAS' => 9
+     *           ],
+     *           'other_categories' => [
+     *              'Cursos de Extensión' => 10,
+     *              'Cursos Capacitación' => 5
+     *           ],
      *       );
      */
     public function get_total_enqueued_courses_grouped_by_root_categories(): array {
@@ -147,23 +153,29 @@ class report_manager {
         global $DB;
 
         $enqueuedcourses = $DB->get_records('local_delcoursesuv_todelete', null, '', 'courseid');
-        $cursospresencialesrootcategory = 6;
-        $result = [];
+        $cursospresencialesrootcategoryid = $DB->get_record('course_category', array('idnumber' => 'regular_courses', 'id'))->id;
+        $cursospresencialessubcategoriesresult = ['cursos_presenciales_subcategories' => []];
+        $othercategoriesresult = ['other_categories' => []];
 
         foreach ($enqueuedcourses as $course) {
             $coursecategoryid = $DB->get_record('course', array('id' => $course->courseid), 'category')->category;
             // Course path e.g. "/6/30006/141" --> "/Cursos Presenciales/SALUD/PSIQUIATRIA".
             $coursecategorypath = $DB->get_record('course_categories', array('id' => $coursecategoryid), 'path')->path;
+            // E.g. "/6/30006/141" --> [6, 30006, 141].
             $coursecategoriesbyids = explode('/', substr($coursecategorypath, 1));
 
-            if ($coursecategoriesbyids[0] == $cursospresencialesrootcategory) {
-                // If the course is in the Cursos Presenciales category then use its subcategory (I.e. faculty).
-                $result = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[1], $result);
+            if ($coursecategoriesbyids[0] == $cursospresencialesrootcategoryid) {
+                // If the course is in the Cursos Presenciales root category then use its subcategory (I.e. faculty).
+                $cursospresencialessubcategoriesresult = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[1],
+                                                    $cursospresencialessubcategoriesresult['cursos_presenciales_subcategories']);
             } else {
                 // If not then use the root category and ignores the rest.
-                $result = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[0], $result);
+                $othercategoriesresult = $this->increment_number_of_courses_in_a_category($coursecategoriesbyids[0],
+                                                                                        $othercategoriesresult['other_categories']);
             }
         }
+
+        $result = array_merge($cursospresencialessubcategoriesresult, $othercategoriesresult);
 
         return $result;
     }
@@ -171,11 +183,11 @@ class report_manager {
     /**
      * Allows to increment the number of courses found in a particular category.
      *
-     * @param string $coursecategoryid
+     * @param int $coursecategoryid
      * @param array $partialresult result that is being recomputed
      * @return array partial result of enqueued courses grouped by root and faculty categories
      */
-    private function increment_number_of_courses_in_a_category(string $coursecategoryid, array $partialresult): array {
+    private function increment_number_of_courses_in_a_category(int $coursecategoryid, array $partialresult): array {
 
         global $DB;
         $coursecategoryname = $DB->get_record('course_categories', array('id' => $coursecategoryid), 'name')->name;
