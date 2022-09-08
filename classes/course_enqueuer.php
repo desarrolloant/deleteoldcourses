@@ -163,7 +163,7 @@ class course_enqueuer {
             }
 
             // Check if the course have new modules.
-            $havenewmodules = $this->have_new_modules($course->id, $timecreatedcriteria);
+            $havenewmodules = $this->have_new_modules($course->id, $timemodificationcriteria);
 
             if ($havenewmodules) {
                 mtrace(get_string('course_excluded_by_new_modules', 'local_deleteoldcourses',
