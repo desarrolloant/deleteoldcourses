@@ -27,6 +27,7 @@
 namespace local_deleteoldcourses\task;
 
 use local_deleteoldcourses\course_enqueuer;
+use local_deleteoldcourses\datetime_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -69,8 +70,21 @@ class enqueue_courses_task extends \core\task\scheduled_task {
 
         mtrace("Update cron started at: " . date('r', $timenow) . "\n");
 
+        // Plugin settings.
+        $datetimemanager = new datetime_manager();
+        $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
+        $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
+        $limitquery = get_config('local_deleteoldcourses', 'limit_query');
+
+        $numbercategoriesexcluded = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
+        $categoriesexcluded = array();
+
+        for ($i = 1; $i < $numbercategoriesexcluded + 1; $i++) {
+            array_push($categoriesexcluded, get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i));
+        }
+
         $coursedispatcher = new course_enqueuer();
-        $coursedispatcher->get_courses_to_enqueue();
+        $coursedispatcher->get_courses_to_enqueue(0, $timecreatedcriteria, $timemodificationcriteria, $limitquery, $categoriesexcluded);
 
         // Enqueue courses completed.
         mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");

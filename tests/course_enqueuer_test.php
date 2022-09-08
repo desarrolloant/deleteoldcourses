@@ -107,6 +107,9 @@ class course_enqueuer_test extends \advanced_testcase {
     /** @var int Number of courses that will be deleted that have already been queued. Courses Type G. **/
     const NUMBER_OF_COURSES_TO_DELETE_QUEUED = 2;
 
+    /** @var int Limit query for the query enqueuer **/
+    const LIMIT_QUERY = 500;
+
     /**
      * Test get courses to delete
      *
@@ -116,13 +119,30 @@ class course_enqueuer_test extends \advanced_testcase {
      */
     public function test_get_courses_to_enqueue() {
 
+        global $DB;
+
         $this->resetAfterTest(true);
 
-        $courseenqueuer = new course_enqueuer();
-        $coursestodelete = $courseenqueuer->get_courses_to_enqueue();
+        // Plugin settings.
+        $datetimemanager = new datetime_manager();
+        $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
+        $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
+        $limitquery = get_config('local_deleteoldcourses', 'limit_query');
 
-        $this->assertIsArray($coursestodelete);
-        $this->assertSame(self::NUMBER_OF_COURSES_TO_DELETE, count($coursestodelete));
+        $numbercategoriesexcluded = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
+        $categoriesexcluded = array();
+
+        for ($i = 1; $i < $numbercategoriesexcluded + 1; $i++) {
+            array_push($categoriesexcluded, get_config('local_deleteoldcourses', 'excluded_course_categories_' . $i));
+        }
+
+        $courseenqueuer = new course_enqueuer();
+        $courseenqueuer->get_courses_to_enqueue(0, $timecreatedcriteria, $timemodificationcriteria,
+                                                $limitquery, $categoriesexcluded);
+
+        $numberofcoursestodelete = $DB->count_records_sql('SELECT COUNT(*) FROM {local_delcoursesuv_todelete}');
+
+        $this->assertSame(self::NUMBER_OF_COURSES_TO_DELETE + self::NUMBER_OF_COURSES_TO_DELETE_QUEUED, $numberofcoursestodelete);
     }
 
     /**
@@ -350,6 +370,9 @@ class course_enqueuer_test extends \advanced_testcase {
         // Create courses type G.
         $this->create_courses_to_delete_queued(self::NUMBER_OF_COURSES_TO_DELETE_QUEUED);
 
+        // Criteria: Categories to exclude.
+        $plugingenerator->update_setting('limity_query', self::LIMIT_QUERY);
+
         $plugingenerator->update_setting('ws_url',
                           'https://campusvirtualhistoria.univalle.edu.co/moodle');
         $plugingenerator->update_setting('ws_user_token',
@@ -398,6 +421,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA);
             $course->timemodified = rand(self::MINTIMESTAMP, self::LAST_MODIFICATION_TIME_CRITERIA);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
@@ -427,6 +451,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA);
             $course->timemodified = rand(self::MINTIMESTAMP, self::LAST_MODIFICATION_TIME_CRITERIA);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
@@ -459,6 +484,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA);
             $course->timemodified = rand(self::MINTIMESTAMP, self::LAST_MODIFICATION_TIME_CRITERIA);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
@@ -492,7 +518,7 @@ class course_enqueuer_test extends \advanced_testcase {
     private function create_courses_with_sections_added($numberofcourses): void {
         global $DB;
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < $numberofcourses; $i++) {
             $course = $this->getDataGenerator()->create_course(
                 array('shortname' => 'TestingCourse ' . $i,
                       'fullname' => 'Testing Course ' . $i,
@@ -501,6 +527,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA);
             $course->timemodified = rand(self::MINTIMESTAMP, self::LAST_MODIFICATION_TIME_CRITERIA);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $sections = $DB->get_records('course_sections', array('course' => $course->id));
@@ -530,6 +557,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA);
             $course->timemodified = rand(self::MINTIMESTAMP, self::LAST_MODIFICATION_TIME_CRITERIA);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
@@ -563,6 +591,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::MINTIMESTAMP, self::CREATION_TIME_CRITERIA);
             $course->timemodified = rand(self::MINTIMESTAMP, self::LAST_MODIFICATION_TIME_CRITERIA);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
@@ -592,6 +621,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::CREATION_TIME_CRITERIA, self::MAXTIMESTAMP);
             $course->timemodified = rand(self::MINTIMESTAMP, self::LAST_MODIFICATION_TIME_CRITERIA);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $coursesection = $DB->get_record('course_sections', array('course' => $course->id));
@@ -620,6 +650,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $course->timecreated = rand(self::CREATION_TIME_CRITERIA, self::MAXTIMESTAMP);
             $course->timemodified = rand(self::LAST_MODIFICATION_TIME_CRITERIA, self::MAXTIMESTAMP);
+            $course->idnumber = $course->shortname;
             $DB->update_record('course', $course);
 
             $coursesection = $DB->get_record('course_sections', array('course' => $course->id));

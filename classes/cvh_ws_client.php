@@ -153,7 +153,14 @@ class cvh_ws_client {
             $requesturl .= '&value=' . urlencode($parameter);
         }
 
-        $moodleresponse = file_get_contents($requesturl);
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $requesturl);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+
+        $moodleresponse = curl_exec($curl);
+
+        curl_exec($curl);
 
         if (!$moodleresponse) {
             throw new moodle_exception('request_error', 'local_deleteoldcourses');
