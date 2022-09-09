@@ -29,6 +29,11 @@ namespace local_deleteoldcourses;
 
 class report_manager_test extends \advanced_testcase {
 
+    /**
+     * Test the behaviour of get_course_deletion_criteria_settings method.
+     *
+     * @covers ::get_course_deletion_criteria_settings
+     */
     public function test_get_course_deletion_criteria_settings() {
 
         $this->resetAfterTest(true);
@@ -63,28 +68,10 @@ class report_manager_test extends \advanced_testcase {
         }
 
         $expectedresult = [
-            'creationdate' => [
-                'yearcreationdate' => 2010,
-                'monthcreationdate' => 12,
-                'daycreationdate' => 31,
-                'hourcreationdate' => 23,
-                'minutescreationdate' => 59,
-                'secondscreationdate' => 59
-            ],
-            'lastmodificationdate' => [
-                'yearlastmodificationdate' => 2012,
-                'monthlastmodificationdate' => 12,
-                'daylastmodificationdate' => 31,
-                'hourlastmodificationdate' => 23,
-                'minuteslastmodificationdate' => 59,
-                'secondslastmodificationdate' => 59
-            ],
-            'excludedcategories' => [
-                'Excluded category name 1',
-                'Excluded category name 2',
-                'Excluded category name 3',
-                'Excluded category name 4'
-            ]
+            'creationdate' => '31/12/2010 23:59:59',
+            'lastmodificationdate' => '31/12/2012 23:59:59',
+            'excludedcategories' => 'Excluded category name 1, Excluded category name 2, ' .
+                                    'Excluded category name 3, Excluded category name 4'
         ];
 
         $reportmanager = new report_manager();
@@ -95,6 +82,11 @@ class report_manager_test extends \advanced_testcase {
         $this->assertEquals($expectedresult, $result);
     }
 
+    /**
+     * Test the behaviour of get_total_enqueued_courses method.
+     *
+     * @covers ::get_total_enqueued_courses
+     */
     public function test_get_total_enqueued_courses() {
 
         global $DB, $USER;
@@ -134,6 +126,11 @@ class report_manager_test extends \advanced_testcase {
         $this->assertEquals(10, $automaticallyenqueuedcourses);
     }
 
+    /**
+     * Test the behaviour of get_total_deleted_courses_during_time_period method.
+     *
+     * @covers ::get_total_deleted_courses_during_time_period
+     */
     public function test_get_total_deleted_courses_during_time_period() {
 
         global $DB;
@@ -174,6 +171,11 @@ class report_manager_test extends \advanced_testcase {
         $this->assertEquals(11, $result);
     }
 
+    /**
+     * Test the behaviour of get_total_enqueued_courses_grouped_by_root_categories method.
+     *
+     * @covers ::get_total_enqueued_courses_grouped_by_root_categories
+     */
     public function test_get_total_enqueued_courses_grouped_by_root_categories() {
 
         $this->resetAfterTest(true);

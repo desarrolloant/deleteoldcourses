@@ -28,8 +28,6 @@ namespace local_deleteoldcourses;
 
 use moodle_exception;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Unit tests for cvh_ws_client class.
  *

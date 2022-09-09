@@ -27,8 +27,6 @@
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Unit tests for datetime_manager class.
  *
@@ -45,14 +43,16 @@ class datetime_manager_test extends \advanced_testcase {
     private datetime_manager $datetimemanager;
 
     /**
-     * Initialize $datetimemanager object before calling the test methods.
+     * Initialize $datetimemanager object before calling the testing methods.
      */
     protected function setUp(): void {
         $this->datetimemanager = new datetime_manager;
     }
 
     /**
-     * Test get_datetime function.
+     * Test the behaviour of get_datetime method.
+     *
+     * @covers ::get_datetime
      */
     public function test_get_datetime() {
 
@@ -94,7 +94,9 @@ class datetime_manager_test extends \advanced_testcase {
     }
 
     /**
-     * Test get_months_of_the_year function.
+     * Test the behaviour of get_months_of_the_years method.
+     *
+     * @covers ::get_months_of_the_years
      */
     public function test_get_months_of_the_years() {
         $monthsoftheyear = $this->datetimemanager->get_datetime('monthsoftheyear');
@@ -105,7 +107,9 @@ class datetime_manager_test extends \advanced_testcase {
     }
 
     /**
-     * Test date_config_to_timestamp function.
+     * Test the behaviour of date_config_to_timestamp method.
+     *
+     * @covers ::date_config_to_timestamp
      */
     public function test_date_config_to_timestamp() {
 

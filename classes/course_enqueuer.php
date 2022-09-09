@@ -117,7 +117,7 @@ class course_enqueuer {
 
         // Update courseidinit.
         if (empty($coursestocheck)) {
-            mtrace(get_string('number_courses_excluded_by_categories' , 'local_deleteoldcourses', $coursesexcludedbycategory));
+            mtrace("\n" . get_string('number_courses_excluded_by_categories' , 'local_deleteoldcourses', $coursesexcludedbycategory));
             mtrace(get_string('number_courses_excluded_by_new_sections', 'local_deleteoldcourses', $coursesexcludednewsections));
             mtrace(get_string('number_courses_excluded_by_new_participants',
                               'local_deleteoldcourses', $coursesexcludednewparticipants));

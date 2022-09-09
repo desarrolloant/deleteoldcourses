@@ -25,8 +25,6 @@
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Unit test for course_deleter class.
  *
@@ -54,7 +52,9 @@ class course_deleter_test extends \advanced_testcase {
     }
 
     /**
-     * Test delete_courses function.
+     * Test the behaviour of delete_courses method.
+     *
+     * @covers ::delete_courses
      */
     public function test_delete_courses() {
 
