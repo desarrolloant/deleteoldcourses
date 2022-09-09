@@ -27,8 +27,6 @@
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Unit tests for notifier class.
  *
@@ -45,7 +43,7 @@ class notifier_test extends \advanced_testcase {
     /**
      * Test for text generation for a notification.
      *
-     * @return void
+     * @covers ::generate_text_to_send
      */
     public function test_generate_text_to_send() {
 
@@ -74,7 +72,7 @@ class notifier_test extends \advanced_testcase {
     /**
      * Test case for sending notification.
      *
-     * @return void
+     * @covers ::send_notification
      */
     public function test_send_notification() {
 

@@ -27,8 +27,6 @@ namespace local_deleteoldcourses;
 
 use context_course;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Unit tests for utils class
  *

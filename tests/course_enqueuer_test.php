@@ -26,8 +26,6 @@
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die();
-
 use stdClass;
 use DateTime;
 
