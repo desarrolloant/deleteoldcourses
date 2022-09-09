@@ -181,3 +181,14 @@ $string['clientcvh_invalid_parameters'] = 'Cliente CVH: El segundo parámetro de
 $string['empty_ws_function_name'] = 'Cliente CVH: El nombre de la función está vacío.';
 $string['request_error'] = 'Cliente CVH: Error en la petición.';
 $string['request_method_invalid'] = 'Cliente CVH: Método de la petición invalido.';
+
+// Reports.
+$string['reports_dashboard_heading'] = 'Reports Dashboard';
+$string['deletion_criteria_desc'] = 'Current deletion criterias';
+$string['enqueued_courses_desc'] = 'Currently enqueued courses';
+$string['course_creation_date'] = 'Course creation date (DD/MM/YYYY HH:MM:SS)';
+$string['course_last_modification_date'] = 'Course last modification date (DD/MM/YYYY HH:MM:SS)';
+$string['excluded_categories'] = 'Excluded course categories';
+$string['manually_enqueued_courses'] = 'Manually enqueued courses';
+$string['automatically_enqueued_courses'] = 'Automatically enqueued courses';
+$string['all_enqueued_courses'] = 'All enqueued courses';

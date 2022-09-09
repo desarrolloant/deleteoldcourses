@@ -13,9 +13,33 @@
 #id_s_local_deleteoldcourses_minutes_last_modification_date,
 #id_s_local_deleteoldcourses_seconds_last_modification_date,
 #id_s_local_deleteoldcourses_number_of_categories_to_exclude {
-    width: 10em;
+  width: 10em;
 }
 
 #id_s_local_deleteoldcourses_ws_client_course_field {
     width: 20em;
+}
+
+/**
+* Reports style.
+*/
+
+.reports-table tr,
+.reports-table td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 270px;
+}
+
+.reports-table tr {
+  height: 60px;
+}
+
+.reports-table td {
+  padding: 5px;
+  border: 2px solid #dddddd;
+}
+
+.column {
+    padding: 5px;
 }

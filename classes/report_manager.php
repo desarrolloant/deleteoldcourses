@@ -35,50 +35,29 @@ class report_manager {
      * @return array course deletion criteria settings
      * E.g.
      *      Array(
-     *          'creationdate' => [
-     *              'yearcreationdate' => 2010,
-     *              'monthcreationdate' => 12,
-     *              'daycreationdate' => 31,
-     *              'hourcreationdate' => 23,
-     *              'minutescreationdate' => 59,
-     *              'secondscreationdate => 59,
-     *          ],
-     *          'lastmodificationdate' => [
-     *              'yearlastmodificationdate' => 2012,
-     *              'monthlastmodificationdate' => 12,
-     *              'daylastmodificationdate' => 31,
-     *              'hourlastmodificationdate' => 23,
-     *              'minuteslastmodificationdate' => 59,
-     *              'secondslastmodificationdate' => 59
-     *          ],
-     *          'excludedcategories' => [
-     *              'Excluded category name 1',
-     *              'Excluded category name 2',
-     *              'Excluded category name 3'
-     *          ]
+     *          'creationdate'         => '30/06/2020 23:59:59',
+     *          'lastmodificationdate' => '30/06/2021 23:59:59',
+     *          'excludedcategories'   => "Excluded category name 1, Excluded category name 2'
      *      );
      */
     public function get_course_deletion_criteria_settings(): array {
 
         global $DB;
 
-        $creationdate = [
-            'yearcreationdate'    => get_config('local_deleteoldcourses', 'year_creation_date'),
-            'monthcreationdate'   => get_config('local_deleteoldcourses', 'month_creation_date'),
-            'daycreationdate'     => get_config('local_deleteoldcourses', 'day_creation_date'),
-            'hourcreationdate'    => get_config('local_deleteoldcourses', 'hour_creation_date'),
-            'minutescreationdate' => get_config('local_deleteoldcourses', 'minutes_creation_date'),
-            'secondscreationdate' => get_config('local_deleteoldcourses', 'seconds_creation_date')
-        ];
+        // Date format: "DD/MM/YYYY HH:MM:SS".
+        $creationdate = get_config('local_deleteoldcourses', 'day_creation_date') . '/' .
+                        get_config('local_deleteoldcourses', 'month_creation_date') . '/' .
+                        get_config('local_deleteoldcourses', 'year_creation_date') . ' ' .
+                        get_config('local_deleteoldcourses', 'hour_creation_date') . ':' .
+                        get_config('local_deleteoldcourses', 'minutes_creation_date') . ':' .
+                        get_config('local_deleteoldcourses', 'seconds_creation_date');
 
-        $lastmodificationdate = [
-            'yearlastmodificationdate'    => get_config('local_deleteoldcourses', 'year_last_modification_date'),
-            'monthlastmodificationdate'   => get_config('local_deleteoldcourses', 'month_last_modification_date'),
-            'daylastmodificationdate'     => get_config('local_deleteoldcourses', 'day_last_modification_date'),
-            'hourlastmodificationdate'    => get_config('local_deleteoldcourses', 'hour_last_modification_date'),
-            'minuteslastmodificationdate' => get_config('local_deleteoldcourses', 'minutes_last_modification_date'),
-            'secondslastmodificationdate' => get_config('local_deleteoldcourses', 'seconds_last_modification_date')
-        ];
+        $lastmodificationdate = get_config('local_deleteoldcourses', 'day_last_modification_date') . '/' .
+                                get_config('local_deleteoldcourses', 'month_last_modification_date') . '/' .
+                                get_config('local_deleteoldcourses', 'year_last_modification_date') . ' ' .
+                                get_config('local_deleteoldcourses', 'hour_last_modification_date') . ':' .
+                                get_config('local_deleteoldcourses', 'minutes_last_modification_date') . ':' .
+                                get_config('local_deleteoldcourses', 'seconds_last_modification_date');
 
         $numberofexcludedcategories = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
         $excludedcategories = [];
@@ -88,6 +67,8 @@ class report_manager {
             $categoryname = $DB->get_record('course_categories', ['id' => $categorynumber], 'name')->name;
             array_push($excludedcategories, $categoryname);
         }
+
+        $excludedcategories = implode(", ", $excludedcategories);
 
         $deletioncriteriasettings = [
             'creationdate'         => $creationdate,
