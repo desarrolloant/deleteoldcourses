@@ -90,10 +90,10 @@ class report_manager {
         global $DB;
 
         if (is_bool($manuallyqueued)) {
-            return $DB->count_records_select('local_delcoursesuv_todelete', 'manuallyqueued = ?', [(int)$manuallyqueued]);
+            return number_format($DB->count_records_select('local_delcoursesuv_todelete', 'manuallyqueued = ?', [(int)$manuallyqueued]), 0, ',', '.');
         }
 
-        return $DB->count_records('local_delcoursesuv_todelete');
+        return number_format($DB->count_records('local_delcoursesuv_todelete'), 0, ',', '.');
     }
 
     /**
@@ -106,8 +106,8 @@ class report_manager {
     public function get_total_deleted_courses_during_time_period(int $startdate, int $enddate): int {
 
         global $DB;
-        return $DB->count_records_select("local_delcoursesuv_deleted",
-                                            'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]);
+        return number_format($DB->count_records_select("local_delcoursesuv_deleted",
+                                            'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]), 0, ',', '.');
     }
 
     /**
