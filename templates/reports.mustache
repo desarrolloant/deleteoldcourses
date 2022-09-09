@@ -20,43 +20,48 @@
     @template block_course_list_uv/course_list_uv
 }}
 
-<div id="dashboard">
-  <div id="dashboard-title">
-    <h2>{{#str}}reports_heading, local_deleteoldcourses{{/str}}</h2>
-  </div>
-  <div id="criteria-desc">
-    <p>{{#str}}criteria_description, local_deleteoldcourses{{/str}}</p>
-  </div>
-  <div class="criteria">
-    {{#dictionary}}
-      <table class="criteria-table">
-        <tr>
-          <td>{{#str}}criteria_creation_time, local_deleteoldcourses{{/str}}</td>
-          <td>{{criteria_creation_time}}</td>
-        </tr>
-        <tr>
-          <td>{{#str}}criteria_lastmodification_time, local_deleteoldcourses{{/str}}</td>
-          <td>{{criteria_lastmodification_time}}</td>
-        </tr>
-        <tr>
-          <td>{{#str}}criteria_lastmodification_user, local_deleteoldcourses{{/str}}</td>
-          <td>{{criteria_lastmodification_user}}</td>
-        </tr>
-      </table>
-      <table class="criteria-table">
-        <tr>
-          <td>{{#str}}courses_queued_by_professors, local_deleteoldcourses{{/str}}</td>
-          <td>{{courses_queued_by_professors}}</td>
-        </tr>
-        <tr>
-          <td>{{#str}}automatically_courses_queued, local_deleteoldcourses{{/str}}</td>
-          <td>{{automatically_courses_queued}}</td>
-        </tr>
-        <tr>
-          <td>{{#str}}total_courses_queued, local_deleteoldcourses{{/str}}</td>
-          <td>{{total_courses_queued}}</td>
-        </tr>
-      </table>
-    {{/dictionary}}
-  </div>
+<div>
+    <div>
+        <h2>{{#str}}reports_dashboard_heading, local_deleteoldcourses{{/str}}</h2>
+    </div>
+    <div class="row">
+        <div class="column">
+            <div>
+                <p><b>{{#str}}deletion_criteria_desc, local_deleteoldcourses{{/str}}</b></p>
+            </div>
+            <table class="reports-table">
+                <tr>
+                    <td><b>{{#str}}course_creation_date, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{course_creation_date}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}course_last_modification_date, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{course_last_modification_date}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}excluded_categories, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{excluded_categories}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="column">
+            <div>
+                <p><b>{{#str}}enqueued_courses_desc, local_deleteoldcourses{{/str}}</b></p>
+            </div>
+            <table class="reports-table">
+                <tr>
+                    <td><b>{{#str}}manually_enqueued_courses, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{manually_enqueued_courses}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}automatically_enqueued_courses, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{automatically_enqueued_courses}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}all_enqueued_courses, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{all_enqueued_courses}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>

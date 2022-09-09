@@ -23,23 +23,23 @@
 /**
 * Reports style.
 */
-.criteria {
-  display: flex;
-  justify-content: space-between;
-  width: 1200px;
-}
 
-.criteria-table tr,
-.criteria-table td {
+.reports-table tr,
+.reports-table td {
   border: 1px solid black;
   border-collapse: collapse;
   width: 270px;
 }
 
-.criteria-table tr {
+.reports-table tr {
   height: 60px;
 }
 
-.criteria-table td {
+.reports-table td {
   padding: 5px;
+  border: 2px solid #dddddd;
+}
+
+.column {
+    padding: 5px;
 }

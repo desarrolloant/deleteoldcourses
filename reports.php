@@ -36,9 +36,10 @@ $PAGE->set_url(new moodle_url('/local/deleteoldcourses/reports.php'));
 $PAGE->set_pagelayout('admin');
 $PAGE->set_title($SITE->fullname);
 $PAGE->set_heading(get_string('pluginname', 'local_deleteoldcourses'));
-$output = $PAGE->get_renderer('local_deleteoldcourses');
 
 require_capability('local/deleteoldcourses:viewreport', context_system::instance());
+
+$output = $PAGE->get_renderer('local_deleteoldcourses');
 
 echo $OUTPUT->header();
 echo $output->render_reports();

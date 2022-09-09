@@ -26,6 +26,7 @@ namespace local_deleteoldcourses\output;
 
 defined('MOODLE_INTERNAL') || die();
 
+use local_deleteoldcourses\report_manager;
 use plugin_renderer_base;
 use stdClass;
 
@@ -227,18 +228,18 @@ class renderer extends plugin_renderer_base {
      * @return string $template
      */
     public function render_reports() {
+
+        $reportmanager = new report_manager();
+        $coursedeletioncriterias = $reportmanager->get_course_deletion_criteria_settings();
+
         $data = new stdClass();
+        $data->course_creation_date = $coursedeletioncriterias['creationdate'];
+        $data->course_last_modification_date = $coursedeletioncriterias['lastmodificationdate'];
+        $data->excluded_categories = $coursedeletioncriterias['excludedcategories'];
+        $data->manually_enqueued_courses = $reportmanager->get_total_enqueued_courses(true);
+        $data->automatically_enqueued_courses = $reportmanager->get_total_enqueued_courses(false);
+        $data->all_enqueued_courses = $reportmanager->get_total_enqueued_courses();
 
-        $data->dictionary = array();
-        $obj = new stdClass();
-        $obj->criteria_creation_time = 123456;
-        $obj->criteria_lastmodification_time = 123456;
-        $obj->criteria_lastmodification_user = "Categoría 1, Categoría 2, Categoría 3, Categoría 4";
-        $obj->courses_queued_by_professors = 123;
-        $obj->automatically_courses_queued = 1234;
-        $obj->total_courses_queued = 12345;
-
-        array_push($data->dictionary, $obj);
         $template = $this->render_from_template('local_deleteoldcourses/reports', $data);
         return $template;
     }

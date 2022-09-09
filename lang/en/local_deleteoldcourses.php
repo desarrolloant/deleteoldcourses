@@ -188,11 +188,12 @@ $string['request_error'] = 'CVH Client: Request error.';
 $string['request_method_invalid'] = 'CVH Client: Request method invalid.';
 
 // Reports.
-$string['reports_heading'] = 'Dashboard';
-$string['criteria_description'] = 'Current elimination criteria';
-$string['criteria_creation_time'] = 'Criteria creation time';
-$string['criteria_lastmodification_time'] = 'Criteria last modification time';
-$string['criteria_lastmodification_user'] = 'Course category excluded';
-$string['courses_queued_by_professors'] = 'Courses queued by professors';
-$string['automatically_courses_queued'] = 'Courses queued automatically';
-$string['total_courses_queued'] = 'Total courses queued';
+$string['reports_dashboard_heading'] = 'Reports Dashboard';
+$string['deletion_criteria_desc'] = 'Current deletion criterias';
+$string['enqueued_courses_desc'] = 'Currently enqueued courses';
+$string['course_creation_date'] = 'Course creation date (DD/MM/YYYY HH:MM:SS)';
+$string['course_last_modification_date'] = 'Course last modification date (DD/MM/YYYY HH:MM:SS)';
+$string['excluded_categories'] = 'Excluded course categories';
+$string['manually_enqueued_courses'] = 'Manually enqueued courses';
+$string['automatically_enqueued_courses'] = 'Automatically enqueued courses';
+$string['all_enqueued_courses'] = 'All enqueued courses';
