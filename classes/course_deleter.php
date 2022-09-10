@@ -78,7 +78,6 @@ class course_deleter {
                         if (delete_course($coursetodel->courseid, false)) {
                             $this->store_deleted_course_data($coursetodel, $coursetodeldextradata, $userextradata);
                             $DB->delete_records('local_delcoursesuv_todelete', array('id' => $coursetodel->id));
-                            fix_course_sortorder();
                         }
                     }
                 } catch (\Throwable $e) {
@@ -87,6 +86,7 @@ class course_deleter {
             }
             $lock->release();
         }
+        fix_course_sortorder();
         $rstotalcoursestodel->close();
     }
 
