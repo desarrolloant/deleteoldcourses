@@ -74,7 +74,7 @@ class enqueue_courses_task extends \core\task\scheduled_task {
         $datetimemanager = new datetime_manager();
         $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
         $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
-        $limitquery = get_config('local_deleteoldcourses', 'limit_query');
+        $limitquerytoenqueuecourses = get_config('local_deleteoldcourses', 'limit_query_to_enqueue_courses');
 
         $numbercategoriesexcluded = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
         $categoriesexcluded = array();
@@ -84,7 +84,7 @@ class enqueue_courses_task extends \core\task\scheduled_task {
         }
 
         $coursedispatcher = new course_enqueuer();
-        $coursedispatcher->get_courses_to_enqueue(0, $timecreatedcriteria, $timemodificationcriteria, $limitquery, $categoriesexcluded);
+        $coursedispatcher->get_courses_to_enqueue(0, $timecreatedcriteria, $timemodificationcriteria, $limitquerytoenqueuecourses, $categoriesexcluded);
 
         // Enqueue courses completed.
         mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");

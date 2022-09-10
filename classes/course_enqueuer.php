@@ -52,7 +52,7 @@ class course_enqueuer {
     protected $timemodificationcriteria;
 
     /** @var int  Limit for query to get courses */
-    protected $limitquery;
+    protected $limitquerytoenqueuecourses;
 
     /** @var array  Course categories to exclude */
     protected $categoriestoexclude;
@@ -66,7 +66,7 @@ class course_enqueuer {
 
         $this->timecreationcriteria = $datemanager->date_config_to_timestamp('creation');
         $this->timemodificationcriteria = $datemanager->date_config_to_timestamp('last_modification');
-        $this->limitquery = get_config('local_deleteoldcourses', 'limit_query');
+        $this->limitquerytoenqueuecourses = get_config('local_deleteoldcourses', 'limit_query_to_enqueue_courses');
     }
 
     /**
@@ -75,7 +75,7 @@ class course_enqueuer {
      * @param  int   $courseidinit                   Course ID for init course to check query.
      * @param  int   $timecreatedcriteria            Timestamp for creation date criteria.
      * @param  int   $timemodificationcriteria       Timestamp for modification date criteria.
-     * @param  int   $limitquery                     Limit for SQL Query.
+     * @param  int   $limitquerytoenqueuecourses     Limit for SQL Query.
      * @param  array $categoriesexcluded             Array with course categories excluded.
      * @param  int   $coursesexcludedbycategory      Counter for courses excluded by course categories criteria.
      * @param  int   $coursesexcludednewsections     Counter for courses excluded by "new sections" criteria.
@@ -89,7 +89,7 @@ class course_enqueuer {
     public function get_courses_to_enqueue(int $courseidinit = 0,
                                            int $timecreatedcriteria,
                                            int $timemodificationcriteria,
-                                           int $limitquery,
+                                           int $limitquerytoenqueuecourses,
                                            array $categoriesexcluded,
                                            int &$coursesexcludedbycategory = 0,
                                            int &$coursesexcludednewsections = 0,
@@ -113,7 +113,7 @@ class course_enqueuer {
                     LIMIT ?";
 
         $coursestocheck = $DB->get_records_sql($sqlquery, array($timecreatedcriteria, $timemodificationcriteria,
-                                                                 $courseidinit, $limitquery));
+                                                                 $courseidinit, $limitquerytoenqueuecourses));
 
         // Update courseidinit.
         if (empty($coursestocheck)) {
@@ -199,7 +199,7 @@ class course_enqueuer {
         // Insert courses into deleteoldcourses table.
         $this->enqueue_courses_to_delete($coursestocheck, $USER->id, 0);
 
-        $this->get_courses_to_enqueue($courseidinit, $timecreatedcriteria, $timemodificationcriteria, $limitquery,
+        $this->get_courses_to_enqueue($courseidinit, $timecreatedcriteria, $timemodificationcriteria, $limitquerytoenqueuecourses,
                                       $categoriesexcluded, $coursesexcludedbycategory, $coursesexcludednewsections,
                                       $coursesexcludednewparticipants, $coursesexcludednewmodules, $coursesexcludedcvh);
     }
@@ -225,13 +225,13 @@ class course_enqueuer {
     }
 
     /**
-     * Get the value of limitquery.
+     * Get the value of limitquerytoenqueuecourses.
      *
-     * @return int $limitquery
+     * @return int $limitquerytoenqueuecourses
      * @since  Moodle 3.10
      */
-    public function get_limitquery() {
-        return $this->limitquery;
+    public function get_limit_query_to_enqueue_courses() {
+        return $this->limitquerytoenqueuecourses;
     }
 
     /**

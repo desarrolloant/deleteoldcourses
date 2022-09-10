@@ -25,8 +25,6 @@
 
 namespace local_deleteoldcourses;
 
-use context_course;
-
 /**
  * Unit tests for utils class
  *
@@ -70,7 +68,7 @@ class utils_test extends \advanced_testcase {
      */
     protected function create_stored_file($filecontent = 'content', $filename = 'testfile.txt', $filerecord = [], $course) {
         $filerecord = array_merge([
-                'contextid' => context_course::instance($course->id)->id,
+                'contextid' => \context_course::instance($course->id)->id,
                 'component' => 'assignfeedback_comments',
                 'filearea'  => 'feedback',
                 'itemid'    => 0,

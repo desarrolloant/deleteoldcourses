@@ -26,9 +26,6 @@
 
 namespace local_deleteoldcourses;
 
-use stdClass;
-use DateTime;
-
 /**
  * Course enqueuer tests
  *
@@ -106,7 +103,7 @@ class course_enqueuer_test extends \advanced_testcase {
     const NUMBER_OF_COURSES_TO_DELETE_QUEUED = 2;
 
     /** @var int Limit query for the query enqueuer **/
-    const LIMIT_QUERY = 500;
+    const LIMIT_QUERY_TO_ENQUEUE_COURSES = 500;
 
     /**
      * Test get courses to delete
@@ -125,7 +122,7 @@ class course_enqueuer_test extends \advanced_testcase {
         $datetimemanager = new datetime_manager();
         $timecreatedcriteria = $datetimemanager->date_config_to_timestamp('creation');
         $timemodificationcriteria = $datetimemanager->date_config_to_timestamp('last_modification');
-        $limitquery = get_config('local_deleteoldcourses', 'limit_query');
+        $limitquerytoenqueuecourses = get_config('local_deleteoldcourses', 'limit_query_to_enqueue_courses');
 
         $numbercategoriesexcluded = get_config('local_deleteoldcourses', 'number_of_categories_to_exclude');
         $categoriesexcluded = array();
@@ -136,7 +133,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
         $courseenqueuer = new course_enqueuer();
         $courseenqueuer->get_courses_to_enqueue(0, $timecreatedcriteria, $timemodificationcriteria,
-                                                $limitquery, $categoriesexcluded);
+                                                $limitquerytoenqueuecourses, $categoriesexcluded);
 
         $numberofcoursestodelete = $DB->count_records_sql('SELECT COUNT(*) FROM {local_delcoursesuv_todelete}');
 
@@ -369,7 +366,7 @@ class course_enqueuer_test extends \advanced_testcase {
         $this->create_courses_to_delete_queued(self::NUMBER_OF_COURSES_TO_DELETE_QUEUED);
 
         // Criteria: Categories to exclude.
-        $plugingenerator->update_setting('limity_query', self::LIMIT_QUERY);
+        $plugingenerator->update_setting('limity_query', self::LIMIT_QUERY_TO_ENQUEUE_COURSES);
 
         $plugingenerator->update_setting('ws_url',
                           'https://campusvirtualhistoria.univalle.edu.co/moodle');
@@ -472,7 +469,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
         for ($i = 0; $i < $numberofcourses; $i++) {
 
-            $date = new DateTime();
+            $date = new \DateTime();
 
             $course = $this->getDataGenerator()->create_course(
                 array('shortname' => self::COURSE_SHORTNAMES_IN_CVH_QUEUED[$i],
@@ -492,7 +489,7 @@ class course_enqueuer_test extends \advanced_testcase {
 
             $DB->update_record('course_sections', $coursesection);
 
-            $record = new stdClass();
+            $record = new \stdClass();
             $record->shortname = $course->shortname;
             $record->fullname = $course->fullname;
             $record->courseid = $course->id;

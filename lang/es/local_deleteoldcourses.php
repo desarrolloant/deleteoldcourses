@@ -111,8 +111,8 @@ $string['excluded_course_categories_desc'] = 'Seleccione las categorias de curso
 $string['advancedtab'] = 'Configuraciones avanzadas';
 $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la eliminación de cursos';
 $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
-$string['limit_query'] = 'Limite de la consulta';
-$string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
+$string['limit_query_to_enqueue_courses'] = 'Limite de la consulta';
+$string['limit_query_to_enqueue_courses_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
 $string['task_queue_size'] = 'Tamaño de la cola en la tarea';
 $string['task_queue_size_desc'] = 'Ejemplo: 500 cursos son eliminados por tarea, aunque hallan 2000 cursos en la cola.';
 
@@ -159,7 +159,7 @@ $string['seconds'] = 'Segundos';
 // Exceptions.
 $string['timecreated_criteria_is_empty'] = 'El criterio fecha de creación no puede estar vacio.';
 $string['timemodified_criteria_is_empty'] = 'El criterio fecha de modificación no puede estar vacio.';
-$string['limit_query_is_empty'] = 'El limite de la consulta no puede estar vacio.';
+$string['limit_query_to_enqueue_courses_is_empty'] = 'El limite de la consulta no puede estar vacio.';
 
 // Notifier.
 $string['message_to_send'] = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';

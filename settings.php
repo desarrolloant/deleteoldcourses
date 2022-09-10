@@ -203,10 +203,10 @@ if ($ADMIN->fulltree) {
         new lang_string('advanced_settings_heading_desc', 'local_deleteoldcourses')));
 
     $settingspage->add(new admin_setting_configtext(
-        'local_deleteoldcourses/limit_query',
-        new lang_string('limit_query', 'local_deleteoldcourses'),
-        new lang_string('limit_query_desc', 'local_deleteoldcourses'),
-        5000,
+        'local_deleteoldcourses/limit_query_to_enqueue_courses',
+        new lang_string('limit_query_to_enqueue_courses', 'local_deleteoldcourses'),
+        new lang_string('limit_query_to_enqueue_courses_desc', 'local_deleteoldcourses'),
+        500,
         PARAM_INT,
         5
     ));
