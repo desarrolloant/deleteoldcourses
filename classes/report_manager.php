@@ -83,17 +83,20 @@ class report_manager {
      * Get total number of enqueued courses (optionally by how they were enqueued).
      *
      * @param bool $manuallyqueued true: manually, false: automatically, and null: all
-     * @return int total number of enqueued courses
+     * @return string total number of enqueued courses
      */
-    public function get_total_enqueued_courses($manuallyqueued = null): int {
+    public function get_total_enqueued_courses($manuallyqueued = null): string {
 
         global $DB;
 
         if (is_bool($manuallyqueued)) {
-            return $DB->count_records_select('local_delcoursesuv_todelete', 'manuallyqueued = ?', [(int)$manuallyqueued]);
+            return number_format(
+                        $DB->count_records_select('local_delcoursesuv_todelete',
+                        'manuallyqueued = ?', [(int)$manuallyqueued]),
+                        0, ',', '.');
         }
 
-        return $DB->count_records('local_delcoursesuv_todelete');
+        return number_format($DB->count_records('local_delcoursesuv_todelete'), 0, ',', '.');
     }
 
     /**
@@ -101,13 +104,15 @@ class report_manager {
      *
      * @param int $startdate UNIX time format
      * @param int $enddate UNIX time format
-     * @return int total number of deleted courses
+     * @return string total number of deleted courses
      */
-    public function get_total_deleted_courses_during_time_period(int $startdate, int $enddate): int {
+    public function get_total_deleted_courses_during_time_period(int $startdate, int $enddate): string {
 
         global $DB;
-        return $DB->count_records_select("local_delcoursesuv_deleted",
-                                            'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]);
+        return number_format(
+                    $DB->count_records_select("local_delcoursesuv_deleted",
+                                            'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]),
+                    0, ',', '.');
     }
 
     /**
