@@ -119,8 +119,8 @@ $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modi
 $string['limit_query_to_enqueue_courses'] = 'Limit query to enqueue courses';
 $string['limit_query_to_enqueue_courses_desc'] = 'Cuando la tarea de encolar cursos a eliminar se ejecuta (la tabla de cursos se procesa completamente),
                                 este valor permite que lo realice por bloques de n cursos para no sobrecargar el procesamiento de los mismos.';
-$string['task_queue_size'] = 'Deletion task queue size';
-$string['task_queue_size_desc'] = 'Cuando la tarea de eliminar cursos encolados se ejecuta, este valor permite que lo realice por bloques
+$string['deletion_task_queue_size'] = 'Deletion task queue size';
+$string['deletion_task_queue_size_desc'] = 'Cuando la tarea de eliminar cursos encolados se ejecuta, este valor permite que lo realice por bloques
                                     de n cursos para no sobrecargar el procesamiento de los mismos.';
 
 // Client settings.

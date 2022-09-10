@@ -38,13 +38,13 @@ defined('MOODLE_INTERNAL') || die();
 class course_deleter {
 
     /** @var int setting to set how many courses to delete per task */
-    private $taskqueuesize;
+    private $deletiontaskqueuesize;
 
     /**
      * course_deleter class constructor.
      */
     public function __construct() {
-        $this->taskqueuesize = get_config('local_deleteoldcourses', 'task_queue_size');
+        $this->deletiontaskqueuesize = get_config('local_deleteoldcourses', 'deletion_task_queue_size');
     }
 
     /**
@@ -98,11 +98,11 @@ class course_deleter {
     private function get_courses_to_delete() {
         global $DB;
         $sqlparams = [];
-        $sqlparams['task_queue_size'] = $this->taskqueuesize;
+        $sqlparams['deletion_task_queue_size'] = $this->deletiontaskqueuesize;
         $sqlcoursestodel = "SELECT id, courseid, userid, coursesize, timecreated
                             FROM {local_delcoursesuv_todelete}
                             ORDER BY id ASC
-                            LIMIT :task_queue_size";
+                            LIMIT :deletion_task_queue_size";
 
         $rstotalcoursestodel = $DB->get_recordset_sql($sqlcoursestodel, $sqlparams);
         return $rstotalcoursestodel;

@@ -113,8 +113,8 @@ $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la elimin
 $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
 $string['limit_query_to_enqueue_courses'] = 'Limite de la consulta';
 $string['limit_query_to_enqueue_courses_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
-$string['task_queue_size'] = 'Tamaño de la cola en la tarea';
-$string['task_queue_size_desc'] = 'Ejemplo: 500 cursos son eliminados por tarea, aunque hallan 2000 cursos en la cola.';
+$string['deletion_task_queue_size'] = 'Tamaño de la cola en la tarea';
+$string['deletion_task_queue_size_desc'] = 'Ejemplo: 500 cursos son eliminados por tarea, aunque hallan 2000 cursos en la cola.';
 
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
