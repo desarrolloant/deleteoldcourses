@@ -118,9 +118,9 @@ class report_manager_test extends \advanced_testcase {
         $automaticallyenqueuedcourses = $reportmanager->get_total_enqueued_courses(false);
 
         $this->assertInstanceOf(report_manager::class, $reportmanager);
-        $this->assertIsInt($allenqueuedcourses);
-        $this->assertIsInt($manuallyqueuedcourses);
-        $this->assertIsInt($automaticallyenqueuedcourses);
+        $this->assertIsString($allenqueuedcourses);
+        $this->assertIsString($manuallyqueuedcourses);
+        $this->assertIsString($automaticallyenqueuedcourses);
         $this->assertEquals(25, $allenqueuedcourses);
         $this->assertEquals(15, $manuallyqueuedcourses);
         $this->assertEquals(10, $automaticallyenqueuedcourses);
@@ -167,7 +167,7 @@ class report_manager_test extends \advanced_testcase {
         $result = $reportmanager->get_total_deleted_courses_during_time_period($starttime, $enddate);
 
         $this->assertInstanceOf(report_manager::class, $reportmanager);
-        $this->assertIsInt($result);
+        $this->assertIsString($result);
         $this->assertEquals(11, $result);
     }
 
