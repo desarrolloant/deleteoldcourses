@@ -38,16 +38,16 @@ namespace local_deleteoldcourses;
 class course_deleter_test extends \advanced_testcase {
 
     private course_deleter $coursedeleter;
-    private int $taskqueuesize;
+    private int $deletiontaskqueuesize;
 
     /**
      * Initialize $coursedeleter object before calling the testing methods.
      */
     protected function setUp(): void {
         $this->setAdminUser();
-        $this->taskqueuesize = 10;
+        $this->deletiontaskqueuesize = 10;
         $plugingenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
-        $plugingenerator->update_setting('task_queue_size', $this->taskqueuesize);
+        $plugingenerator->update_setting('deletion_task_queue_size', $this->deletiontaskqueuesize);
         $this->coursedeleter = new course_deleter;
     }
 
@@ -65,7 +65,7 @@ class course_deleter_test extends \advanced_testcase {
         $originalcoursesbackupdata = [];
         $coursetoenqueuebackupdata = [];
 
-        // 25 possible enqueued courses to delete, but only 10 ($taskqueuesize) of them will be deleted.
+        // 25 possible enqueued courses to delete, but only 10 ($deletiontaskqueuesize) of them will be deleted.
         for ($i = 0; $i < 25; $i++) {
             $course = $this->getDataGenerator()->create_course();
             $coursetoenqueue = (object) array(
@@ -85,7 +85,7 @@ class course_deleter_test extends \advanced_testcase {
 
         // Number of deleted courses must be equal to the configured task queue size.
         $numberofdeletedcourses = $DB->count_records('local_delcoursesuv_deleted');
-        $this->assertSame($this->taskqueuesize, $numberofdeletedcourses);
+        $this->assertSame($this->deletiontaskqueuesize, $numberofdeletedcourses);
 
         // Number of remaining courses must be equal to the equeued courses.
         $totalcourses = $DB->count_records('course');

@@ -116,10 +116,12 @@ $string['excluded_course_categories_desc'] = 'Categorías que no se tendrán en 
 $string['advancedtab'] = 'Configuraciones avanzadas';
 $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la eliminación de cursos';
 $string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
-$string['limit_query'] = 'Limite de la consulta';
-$string['limit_query_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
-$string['task_queue_size'] = 'Task queue size';
-$string['task_queue_size_desc'] = 'Example: 500 courses are deleted per task, even though there are 2000 courses in the queue.';
+$string['limit_query_to_enqueue_courses'] = 'Limit query to enqueue courses';
+$string['limit_query_to_enqueue_courses_desc'] = 'Cuando la tarea de encolar cursos a eliminar se ejecuta (la tabla de cursos se procesa completamente),
+                                este valor permite que lo realice por bloques de n cursos para no sobrecargar el procesamiento de los mismos.';
+$string['deletion_task_queue_size'] = 'Deletion task queue size';
+$string['deletion_task_queue_size_desc'] = 'Cuando la tarea de eliminar cursos encolados se ejecuta, este valor permite que lo realice por bloques
+                                    de n cursos para no sobrecargar el procesamiento de los mismos.';
 
 // Client settings.
 $string['ws_client_settings_tab'] = 'Client';
@@ -164,7 +166,7 @@ $string['seconds'] = 'Seconds';
 // Exceptions.
 $string['timecreated_criteria_is_empty'] = 'Timecreated criteria cannot be empty';
 $string['timemodified_criteria_is_empty'] = 'Timecreated criteria cannot be empty';
-$string['limit_query_is_empty'] = 'Limit query criteria cannot be empty';
+$string['limit_query_to_enqueue_courses_is_empty'] = 'Limit query criteria cannot be empty';
 
 // Notifier.
 $string['message_to_send'] = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
