@@ -58,13 +58,13 @@ class notifier_test extends \advanced_testcase {
         $messagetosend = $notifier->generate_text_to_send();
         $this->assertIsString($messagetosend);
 
-        $expectedmessage = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
-        $expectedmessage .= 'Resumen de la ejecución: \n';
+        $expectedmessage = 'The delete courses UV plugin has detected that there are still pending courses to be deleted. \n';
+        $expectedmessage .= 'Summary: \n';
         $expectedmessage .= '<pre>';
-        $expectedmessage .= '- Cantidad de cursos borrados: 2';
-        $expectedmessage .= '- Cantidad de cursos pendientes: 3';
+        $expectedmessage .= '- Number of deleted courses: 2';
+        $expectedmessage .= '- Number of pending courses to delete: 3';
         $expectedmessage .= '</pre>';
-        $expectedmessage .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
+        $expectedmessage .= 'This message has been generated automatically, <b>please do not reply</b> to this message.';
 
         $this->assertSame($expectedmessage, $messagetosend);
     }
