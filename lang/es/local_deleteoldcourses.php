@@ -26,8 +26,8 @@ $string['pluginname'] = 'Eliminar Cursos Antiguos';
 $string['deleteoldcourses:viewreport'] = 'Vista de reportes para admin';
 $string['user_fullname'] = 'Nombre';
 $string['user_username'] = 'Cédula';
-$string['course_shortname'] = 'Nombre Corto';
-$string['course_fullname'] = 'Nombre Completo';
+$string['course_shortname'] = 'Nombre corto del curso';
+$string['course_fullname'] = 'Nombre completo del curso';
 $string['course_datecreation'] = 'Creado Hace';
 $string['table_option'] = 'Opción';
 $string['coursescount'] = 'Número de cursos: ';
@@ -39,7 +39,7 @@ $string['more_than_n_years_ago'] = 'Creados hace más de {$a} años';
 // Modal delete strings.
 $string['modal_delete_title'] = 'Eliminar el curso';
 $string['modal_delete_danger_body'] = '<strong>¡Atención!</strong> Este curso tiene otros profesores.';
-$string['modal_delete_accept'] = '¿Esta Seguro de añadir el curso a la lista de cursos a eliminar?<br> Recuerde que los cursos serán eliminados a las 00:00 horas del siguiente día.';
+$string['modal_delete_accept'] = '¿Esta Seguro de añadir el curso a la cola de cursos a eliminar?<br> Recuerde que los cursos serán eliminados a las 00:00 horas del siguiente día.';
 $string['modal_delete_no_teacher'] = 'No eres profesor de este curso.';
 $string['modal_delete_save_button'] = 'Si, eliminar';
 $string['modal_delete_cancel_button'] = 'No, cancelar';
@@ -49,7 +49,7 @@ $string['modal_delete_close_button'] = 'Cerrar';
 $string['old_courses_list_viewed_name'] = 'Listado de cursos viejos visto';
 $string['course_delete_options_viewed'] = 'Alerta para eliminar curso vista';
 $string['course_sent_delete'] = 'Curso enviado para ser eliminado';
-$string['course_remove_delete'] = 'Curso removido de la lista para eliminar';
+$string['course_remove_delete'] = 'Curso removido de la cola de eliminación';
 
 // Tasks.
 $string['task_delete_course'] = 'Tarea para eliminar cursos';
@@ -71,8 +71,8 @@ $string['sent_to_delete'] = 'Enviado para eliminar';
 $string['course_timedeleted'] = 'Fecha de eliminación';
 $string['more_than_1_month_ago'] = 'Eliminados hace menos de 1 mes';
 $string['more_than_n_months_ago'] = 'Eliminados hace menos de {$a} meses';
-$string['deleted_courses'] = 'Cursos Eliminados';
-$string['pending_courses'] = 'Cursos Pendientes';
+$string['deleted_courses'] = 'Cursos eliminados';
+$string['pending_courses'] = 'Cursos pendientes';
 
 // Alert in dashborad.
 $string['alert_delete_content'] = 'Si usted desea eliminar alguno de sus cursos, por favor diríjase a la sección';
@@ -82,59 +82,62 @@ $string['alert_delete_recent_courses_link'] = 'formulario';
 
 // Plugin settings.
 $string['manage'] = 'Eliminación de Cursos Antiguos';
-$string['courses'] = 'Eliminación de cursos antiguos';
-$string['criteriatab'] = 'Criterios';
-$string['criteriasettingsheading'] = 'Fechas para la eliminación de cursos';
-$string['criteriasettingsheading_desc'] = 'Fecha desde la cual se seleccionan los cursos a eliminar';
+$string['criteriatab'] = 'Criterios de eliminación';
 
-$string['courses_creation_date_criteria_heading'] = 'Criterio: fecha de inicio de los cursos';
-$string['courses_creation_date_criteria_heading_desc'] = 'Descripción del criterio fecha de inicio';
-$string['year_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el año 2005 en adelante.';
-$string['month_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el mes de Enero en adelante.';
-$string['day_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el día 1 del mes en adelante.';
-$string['hour_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde la hora 00 del día en adelante.';
-$string['minutes_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el minuto 00 de la hora en adelante.';
-$string['seconds_creation_date_desc'] = 'Ejemplo: se seleccionan cursos desde el segundo 00 del minuto en adelante.';
+$string['courses_creation_date_criteria_heading'] = 'Criterio: fecha de creación de los cursos';
+$string['courses_creation_date_criteria_heading_desc'] = 'Los cursos que van a ser encolados y posteriormente eliminados serán aquellos anteriores a una fecha de creación.';
+$string['year_creation_date_desc'] = 'Ejemplo: se seleccionan cursos creados antes del año 2010.';
+$string['month_creation_date_desc'] = 'Ejemplo: se seleccionan cursos creados antes del mes de Diciembre.';
+$string['day_creation_date_desc'] = 'Ejemplo: se seleccionan cursos creados antes del día 31 del mes.';
+$string['hour_creation_date_desc'] = 'Ejemplo: se seleccionan cursos creados antes de la hora 23 del día.';
+$string['minutes_creation_date_desc'] = 'Ejemplo: se seleccionan cursos creados antes del minuto 59 de la hora.';
+$string['seconds_creation_date_desc'] = 'Ejemplo: se seleccionan cursos creados antes del segundo 59 del minuto.';
 
 $string['courses_last_modification_date_criteria_heading'] = 'Criterio: fecha de última modificación de los cursos';
-$string['courses_last_modification_date_criteria_heading_desc'] = 'Descripción del criterio última fecha de modificación';
-$string['year_last_modification_date_desc'] = 'Ejemplo';
+$string['courses_last_modification_date_criteria_heading_desc'] = 'Adicional al anterior criterio, también se tiene en cuenta la última fecha de modificación del curso.';
+$string['year_last_modification_date_desc'] = 'Ejemplo: se seleccionan cursos no modificados antes del año 2009.';
+$string['month_last_modification_date_desc'] = 'Ejemplo: se seleccionan cursos no modificados antes del mes de Diciembre.';
+$string['day_last_modification_date_desc'] = 'Ejemplo: se seleccionan cursos no modificados antes del día 31 del mes.';
+$string['hour_last_modification_date_desc'] = 'Ejemplo: se seleccionan cursos no modificados antes de la hora 23 del día.';
+$string['minutes_last_modification_date_desc'] = 'Ejemplo: se seleccionan cursos no modificados antes del minuto 59 de la hora.';
+$string['seconds_last_modification_date_desc'] = 'Ejemplo: se seleccionan cursos no modificados antes del segundo 59 del minuto.';
 
-$string['course_categories_criteria_heading'] = 'Categorías de curso excluidas';
-$string['course_categories_criteria_heading_desc'] = 'Categorías que no se tendrán en cuenta en el proceso de eliminación automática de cursos.';
-$string['number_of_categories'] = 'Cantidad de categorías a excluir';
-$string['number_of_categories_desc'] = 'Seleccione la cantidad de categorías a excluir.';
-$string['excluded_course_categories'] = 'Categorías';
-$string['excluded_course_categories_desc'] = 'Seleccione las categorias de curso';
+$string['excluded_course_categories_criteria_heading'] = 'Criterio: categorías de cursos excluidas';
+$string['excluded_course_categories_criteria_heading_desc'] = 'Aquellos cursos que pertenezcan a las categorías de cursos seleccionadas no se tendrán en cuenta en el proceso de eliminación.';
+$string['number_of_categories_to_exclude'] = 'Cantidad de categorías de cursos a excluir';
+$string['number_of_categories_to_exclude_desc'] = 'Seleccione la cantidad de categorías de cursos a excluir y guarde los cambios para recargar la página con los nuevos campos para seleccionar.';
+$string['excluded_course_categories'] = 'Categoría de cursos excluida {$a}';
+$string['excluded_course_categories_desc'] = 'Seleccione una categoría de cursos a excluir.';
 
 // Advanced settings.
 $string['advancedtab'] = 'Configuraciones avanzadas';
 $string['advanced_settings_heading'] = 'Configuraciones avanzadas para la eliminación de cursos';
-$string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando esté seguro de lo que está haciendo';
-$string['limit_query_to_enqueue_courses'] = 'Limite de la consulta';
-$string['limit_query_to_enqueue_courses_desc'] = 'Ejemplo: Se consultan 5000 cursos para procesarlos y decidir si se añaden o no a la cola de eliminación.';
-$string['deletion_task_queue_size'] = 'Tamaño de la cola en la tarea';
-$string['deletion_task_queue_size_desc'] = 'Ejemplo: 500 cursos son eliminados por tarea, aunque hallan 2000 cursos en la cola.';
+$string['advanced_settings_heading_desc'] = 'Estas configuraciones se deben modificar siempre y cuando sepa lo que está haciendo.';
+$string['limit_query_to_enqueue_courses'] = 'Limitar la consulta SQL al encolar cursos';
+$string['limit_query_to_enqueue_courses_desc'] = 'Cuando la tarea de encolar cursos a eliminar se ejecuta, este valor permite que lo realice por bloques de n cursos para no
+                                                    sobrecargar el procesamiento de los mismos (Nota: la tabla de cursos se procesa por completo independientemente al valor configurado).';
+$string['deletion_task_queue_size'] = 'Tamaño de la cola en la tarea de eliminación';
+$string['deletion_task_queue_size_desc'] = 'Cuando la tarea de eliminar cursos encolados se ejecuta, este valor permite que lo realice por bloques
+                                            de n cursos para no sobrecargar el procesamiento de los mismos.';
 
 // Notification settings.
 $string['notification_settings_tab'] = 'Notificaciones';
 $string['notification_settings_heading'] = 'Configuraciones para notificaciones';
-$string['notification_settings_heading_desc'] = 'Configuraciones para notificaciones sobre eliminación de cursos.';
+$string['notification_settings_heading_desc'] = 'Añada los usuarios a quienes se enviarán notificaciones por correo electrónico sobre la eliminación de cursos.';
 $string['users_to_notify'] = 'Usuarios a notificar';
-$string['users_to_notify_desc'] = 'Ingrese, separados por comas, los nombres de usuario (username) de los usuarios a notificar.';
+$string['users_to_notify_desc'] = 'Ingrese, separados por comas, los nombres de usuario (username) a notificar.';
 
 // Client settings.
-$string['ws_client_settings_tab'] = 'Cliente';
-$string['ws_client_settings_heading'] = 'Cliente para servicio en Campus Virtual Historia';
-$string['ws_client_settings_heading_desc'] = 'Parámetros del cliente para el servicio en Campus Virtual Historia';
-$string['ws_url'] = 'URL del Campus Virtual Historia';
-$string['ws_url_desc'] = 'URL del Campus Virtual Historia';
-$string['ws_function_name'] = 'Nombre de la función';
-$string['ws_function_name_desc'] = 'Nombre de la función utilizada por el servicio';
+$string['ws_client_settings_tab'] = 'Cliente para servicio web';
+$string['ws_client_settings_heading'] = 'Cliente para el servicio web en Campus Virtual Historia';
+$string['ws_client_settings_heading_desc'] = 'Parámetros del cliente para el servicio web en Campus Virtual Historia.';
+$string['ws_url'] = 'URL de Campus Virtual Historia';
+$string['ws_url_desc'] = 'Ingrese la URL de Campus Virtual Historia.';
+$string['ws_function_name'] = 'Nombre de la función del servicio web';
+$string['ws_function_name_desc'] = 'Ingrese el nombre de la función utilizada por el servicio web.';
 $string['courseid'] = 'Identificador del curso';
-$string['course_shortname'] = 'Nombre corto del curso';
-$string['ws_user_token'] = 'Clave privada del usuario autorizado';
-$string['ws_user_token_desc'] = 'Se puede recuperar de la página de claves privadas del usuario';
+$string['ws_user_token'] = 'Clave privada del usuario autorizado (WS token)';
+$string['ws_user_token_desc'] = 'Este se puede obtener de la página de claves de seguridad del usuario: {$a}';
 
 // Date settings.
 $string['january'] = 'Enero';
@@ -157,38 +160,38 @@ $string['minutes'] = 'Minutos';
 $string['seconds'] = 'Segundos';
 
 // Exceptions.
-$string['timecreated_criteria_is_empty'] = 'El criterio fecha de creación no puede estar vacio.';
-$string['timemodified_criteria_is_empty'] = 'El criterio fecha de modificación no puede estar vacio.';
-$string['limit_query_to_enqueue_courses_is_empty'] = 'El limite de la consulta no puede estar vacio.';
+$string['timecreated_criterion_is_empty'] = 'El criterio fecha de creación no puede estar vacio.';
+$string['timemodified_criterion_is_empty'] = 'El criterio fecha de modificación no puede estar vacio.';
+$string['limit_query_to_enqueue_courses_is_empty'] = 'El criterio limite de la consulta SQL para encolar cursos no puede estar vacio.';
 
 // Notifier.
-$string['message_to_send'] = 'El módulo de eliminación de cursos ha detectado que aún quedan cursos pendientes por eliminar. \n';
+$string['message_to_send'] = 'El módulo de eliminación de cursos UV ha detectado que aún quedan cursos pendientes por eliminar. \n';
 $string['message_to_send'] .= 'Resumen de la ejecución: \n';
 $string['message_to_send'] .= '<pre>';
 $string['message_to_send'] .= '- Cantidad de cursos eliminados: {$a->deletedcourses}';
-$string['message_to_send'] .= '- Cantidad de cursos pendientes: {$a->pendingcourses}';
+$string['message_to_send'] .= '- Cantidad de cursos pendientes a eliminar: {$a->pendingcourses}';
 $string['message_to_send'] .= '</pre>';
 $string['message_to_send'] .= 'Este mensaje ha sido generado automáticamente, <b>por favor no responda</b> a este mensaje.';
 $string['notification_subject'] = 'Notificación Campus Virtual: Cursos pendientes por eliminar';
 
 // Moodle exceptions.
-$string['invalid_input_datetimetype'] = 'Entered input: {$a}. Valid inputs: monthsoftheyear, daysofthemonth, hoursinaday or minutesinanhour';
-$string['invalid_return_format'] = 'Cliente CVH: Formato de retorno invalido.';
+$string['invalid_input_datetimetype'] = 'Opción ingresada: {$a}. Opciones válidas: monthsoftheyear, daysofthemonth, hoursinaday o minutesinanhour';
+$string['invalid_return_format'] = 'Cliente CVH: formato de retorno invalido.';
 $string['empty_ws_url'] = 'Cliente CVH: URL al servicio vacía.';
-$string['empty_return_format'] = 'Cliente CVH: Formato de retorno vacío.';
-$string['empty_ws_user_token'] = 'Cliente CVH: Token de usuario vacío.';
-$string['clientcvh_invalid_parameters'] = 'Cliente CVH: El segundo parámetro del método request() debe ser un arreglo.';
-$string['empty_ws_function_name'] = 'Cliente CVH: El nombre de la función está vacío.';
-$string['request_error'] = 'Cliente CVH: Error en la petición.';
-$string['request_method_invalid'] = 'Cliente CVH: Método de la petición invalido.';
+$string['empty_return_format'] = 'Cliente CVH: formato de retorno vacío.';
+$string['empty_ws_user_token'] = 'Cliente CVH: llave privada del usuario vacío.';
+$string['clientcvh_invalid_parameters'] = 'Cliente CVH: el segundo parámetro del método request() debe ser un arreglo.';
+$string['empty_ws_function_name'] = 'Cliente CVH: el nombre de la función del servicio web está vacío.';
+$string['request_error'] = 'Cliente CVH: error en la petición.';
+$string['request_method_invalid'] = 'Cliente CVH: método de la petición invalido.';
 
 // Reports.
-$string['reports_dashboard_heading'] = 'Reports Dashboard';
-$string['deletion_criteria_desc'] = 'Current deletion criterias';
-$string['enqueued_courses_desc'] = 'Currently enqueued courses';
-$string['course_creation_date'] = 'Course creation date (DD/MM/YYYY HH:MM:SS)';
-$string['course_last_modification_date'] = 'Course last modification date (DD/MM/YYYY HH:MM:SS)';
-$string['excluded_categories'] = 'Excluded course categories';
-$string['manually_enqueued_courses'] = 'Manually enqueued courses';
-$string['automatically_enqueued_courses'] = 'Automatically enqueued courses';
-$string['all_enqueued_courses'] = 'All enqueued courses';
+$string['reports_dashboard_heading'] = 'Panel de reportes';
+$string['deletion_criteria_desc'] = 'Criterios actuales de eliminación de cursos';
+$string['enqueued_courses_desc'] = 'Cursos actualmente encolados para eliminar';
+$string['course_creation_date'] = 'Fecha de creación de cursos (DD/MM/AAAA HH:MM:SS)';
+$string['course_last_modification_date'] = 'Fecha de última modificación de cursos (DD/MM/AAAA HH:MM:SS)';
+$string['excluded_categories'] = 'Categorías de cursos excluidas';
+$string['manually_enqueued_courses'] = 'Cursos encolados manualmente';
+$string['automatically_enqueued_courses'] = 'Cursos encolados automaticamente';
+$string['all_enqueued_courses'] = 'Todos los cursos encolados';

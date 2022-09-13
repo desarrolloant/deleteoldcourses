@@ -62,11 +62,11 @@ class cvh_ws_client_test extends \advanced_testcase {
         $this->assertSame('json', $cvhwsclient->get_returnformat());
 
         $this->expectException(moodle_exception::class);
-        $this->expectExceptionMessage('CVH Client: Request method invalid.');
+        $this->expectExceptionMessage('CVH Client: invalid request method.');
         $this->set_cvhwsclient('dummy');
 
         $this->expectException(moodle_exception::class);
-        $this->expectExceptionMessage('CVH Client: Invalid return format.');
+        $this->expectExceptionMessage('CVH Client: invalid return format.');
         $this->set_cvhwsclient('get', 'dummy');
     }
 
@@ -83,7 +83,7 @@ class cvh_ws_client_test extends \advanced_testcase {
         $this->resetAfterTest(true);
 
         $this->expectException(moodle_exception::class);
-        $this->expectExceptionMessage('CVH Client: Request method invalid.');
+        $this->expectExceptionMessage('CVH Client: invalid request method.');
         $this->set_cvhwsclient('dummy');
     }
 
@@ -100,7 +100,7 @@ class cvh_ws_client_test extends \advanced_testcase {
         $this->resetAfterTest(true);
 
         $this->expectException(moodle_exception::class);
-        $this->expectExceptionMessage('CVH Client: Invalid return format.');
+        $this->expectExceptionMessage('CVH Client: invalid return format.');
         $this->set_cvhwsclient('get', 'dummy');
     }
 
