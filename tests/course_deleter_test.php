@@ -25,26 +25,36 @@
 
 namespace local_deleteoldcourses;
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Unit test for course_deleter class.
+ *
+ * @group      local_deleteoldcourses
+ * @package    local_deleteoldcourses
+ * @since      Moodle 3.10
+ * @author     Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class course_deleter_test extends \advanced_testcase {
 
     private course_deleter $coursedeleter;
-    private int $taskqueuesize;
+    private int $deletiontaskqueuesize;
 
     /**
      * Initialize $coursedeleter object before calling the testing methods.
      */
     protected function setUp(): void {
         $this->setAdminUser();
-        $this->taskqueuesize = 10;
+        $this->deletiontaskqueuesize = 10;
         $plugingenerator = $this->getDataGenerator()->get_plugin_generator('local_deleteoldcourses');
-        $plugingenerator->update_setting('task_queue_size', $this->taskqueuesize);
+        $plugingenerator->update_setting('deletion_task_queue_size', $this->deletiontaskqueuesize);
         $this->coursedeleter = new course_deleter;
     }
 
     /**
-     * Test delete_courses function.
+     * Test the behaviour of delete_courses method.
+     *
+     * @covers ::delete_courses
      */
     public function test_delete_courses() {
 
@@ -55,7 +65,7 @@ class course_deleter_test extends \advanced_testcase {
         $originalcoursesbackupdata = [];
         $coursetoenqueuebackupdata = [];
 
-        // 25 possible enqueued courses to delete, but only 10 ($taskqueuesize) of them will be deleted.
+        // 25 possible enqueued courses to delete, but only 10 ($deletiontaskqueuesize) of them will be deleted.
         for ($i = 0; $i < 25; $i++) {
             $course = $this->getDataGenerator()->create_course();
             $coursetoenqueue = (object) array(
@@ -75,7 +85,7 @@ class course_deleter_test extends \advanced_testcase {
 
         // Number of deleted courses must be equal to the configured task queue size.
         $numberofdeletedcourses = $DB->count_records('local_delcoursesuv_deleted');
-        $this->assertSame($this->taskqueuesize, $numberofdeletedcourses);
+        $this->assertSame($this->deletiontaskqueuesize, $numberofdeletedcourses);
 
         // Number of remaining courses must be equal to the equeued courses.
         $totalcourses = $DB->count_records('course');
@@ -88,7 +98,8 @@ class course_deleter_test extends \advanced_testcase {
             $deletedcourse = $DB->get_record('local_delcoursesuv_deleted', ['courseid' => $originalcoursesbackupdata[$i]->id],
                                         'courseshortname, coursefullname, coursetimecreated, coursesize, coursetimesenttodelete,
                                         username, userfirstname, userlastname, useremail');
-            $userdata = $DB->get_record('user', ['id' => $coursetoenqueuebackupdata[$i]->userid], 'username, firstname, lastname, email');
+            $userdata = $DB->get_record('user', ['id' => $coursetoenqueuebackupdata[$i]->userid],
+                                        'username, firstname, lastname, email');
 
             $this->assertSame($deletedcourse->courseshortname, $originalcoursesbackupdata[$i]->shortname);
             $this->assertSame($deletedcourse->coursefullname, $originalcoursesbackupdata[$i]->fullname);

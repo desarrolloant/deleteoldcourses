@@ -1,0 +1,67 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @author Brayan Sanchez Leon <brayan.sanchez.leon@correounivalle.edu.co>
+    @author Iader E. Garcia Gomez <iadergg@gmail.com>
+    @template block_course_list_uv/course_list_uv
+}}
+
+<div>
+    <div>
+        <h2>{{#str}}reports_dashboard_heading, local_deleteoldcourses{{/str}}</h2>
+    </div>
+    <div class="row">
+        <div class="column">
+            <div>
+                <p><b>{{#str}}deletion_criteria_desc, local_deleteoldcourses{{/str}}</b></p>
+            </div>
+            <table class="reports-table">
+                <tr>
+                    <td><b>{{#str}}course_creation_date, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{course_creation_date}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}course_last_modification_date, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{course_last_modification_date}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}excluded_categories, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{excluded_categories}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="column">
+            <div>
+                <p><b>{{#str}}enqueued_courses_desc, local_deleteoldcourses{{/str}}</b></p>
+            </div>
+            <table class="reports-table">
+                <tr>
+                    <td><b>{{#str}}manually_enqueued_courses, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{manually_enqueued_courses}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}automatically_enqueued_courses, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{automatically_enqueued_courses}}</td>
+                </tr>
+                <tr>
+                    <td><b>{{#str}}all_enqueued_courses, local_deleteoldcourses{{/str}}</b></td>
+                    <td>{{all_enqueued_courses}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

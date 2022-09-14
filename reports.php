@@ -15,14 +15,32 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Extra install steps.
+ * Report page for administrators.
  *
  * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @copyright  2022 Brayan Sanchez <brayan.sanchez.leon@correounivalle.edu.co>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function xmldb_local_deleteoldcourses_install() {
-    global $CFG;
+require_once(__DIR__ . '/../../config.php');
 
+require_login();
+
+if (isguestuser()) {
+    throw new moodle_exception('noguest');
 }
+
+$context = context_system::instance();
+$PAGE->set_context($context);
+$PAGE->set_url(new moodle_url('/local/deleteoldcourses/reports.php'));
+$PAGE->set_pagelayout('admin');
+$PAGE->set_title($SITE->fullname);
+$PAGE->set_heading(get_string('pluginname', 'local_deleteoldcourses'));
+
+require_capability('local/deleteoldcourses:viewreport', context_system::instance());
+
+$output = $PAGE->get_renderer('local_deleteoldcourses');
+
+echo $OUTPUT->header();
+echo $output->render_reports();
+echo $OUTPUT->footer();

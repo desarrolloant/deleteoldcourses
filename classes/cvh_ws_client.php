@@ -144,16 +144,23 @@ class cvh_ws_client {
 
         $requesturl = $this->wsurl .
                       self::PATH_TO_SERVICES .
-                      '?wstoken=' . $this->wsusertoken .
-                      '&wsfunction=' . $function .
-                      '&moodlewsrestformat=' . $this->returnformat;
+                      '?wstoken=' . urlencode($this->wsusertoken) .
+                      '&wsfunction=' . urlencode($function) .
+                      '&moodlewsrestformat=' . urlencode($this->returnformat);
 
         foreach ($parameters as $key => $parameter) {
-            $requesturl .= '&field=' . $key;
-            $requesturl .= '&value=' . $parameter;
+            $requesturl .= '&field=' . urlencode($key);
+            $requesturl .= '&value=' . urlencode($parameter);
         }
 
-        $moodleresponse = file_get_contents($requesturl);
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $requesturl);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+
+        $moodleresponse = curl_exec($curl);
+
+        curl_exec($curl);
 
         if (!$moodleresponse) {
             throw new moodle_exception('request_error', 'local_deleteoldcourses');

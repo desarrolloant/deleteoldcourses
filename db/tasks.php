@@ -29,17 +29,17 @@ $tasks = array(
     array(
         'classname' => 'local_deleteoldcourses\task\delete_courses_task',
         'blocking' => 0,
-        'minute' => '10',
-        'hour' => '0',
+        'minute' => '0',
+        'hour' => '3',
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'
     ),
     array(
         'classname' => 'local_deleteoldcourses\task\enqueue_courses_task',
-        'blocking' => 1,
+        'blocking' => 0,
         'minute' => '0',
-        'hour' => '0',
+        'hour' => '2',
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'

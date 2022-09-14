@@ -40,7 +40,7 @@ $settings = new theme_boost_admin_settingspage_tabs('managelocaldeleteoldcourses
 if ($ADMIN->fulltree) {
 
     // First settings tab.
-    $settingspage = new admin_settingpage('deletioncriterias', new lang_string('criteriatab', 'local_deleteoldcourses'));
+    $settingspage = new admin_settingpage('deletioncriteria', new lang_string('criteriatab', 'local_deleteoldcourses'));
 
     $datetimemanager = new \local_deleteoldcourses\datetime_manager;
 
@@ -50,7 +50,7 @@ if ($ADMIN->fulltree) {
     $hoursinaday = $datetimemanager->get_datetime('hoursinaday');
     $minutesinanhour = $datetimemanager->get_datetime('minutesinanhour'); // Also used in secondsstartdate (seconds in a minute).
 
-    // Criteria to courses creation date.
+    // Courses creation date criteria.
     $settingspage->add(new admin_setting_heading(
         'local_deleteoldcourses/courses_creation_date_criteria_heading',
         new lang_string('courses_creation_date_criteria_heading', 'local_deleteoldcourses'),
@@ -104,7 +104,7 @@ if ($ADMIN->fulltree) {
         $minutesinanhour
     ));
 
-    // Criteria to courses modify date.
+    // Courses last modification date criteria.
     $settingspage->add(new admin_setting_heading(
         'local_deleteoldcourses/courses_last_modification_date_criteria_heading',
         new lang_string('courses_last_modification_date_criteria_heading', 'local_deleteoldcourses'),
@@ -158,11 +158,11 @@ if ($ADMIN->fulltree) {
         $minutesinanhour
     ));
 
-    // Criteria excluded course categories.
+    // Excluded course categories criteria.
     $settingspage->add(new admin_setting_heading(
-        'local_deleteoldcourses/course_categories_criteria_heading',
-        new lang_string('course_categories_criteria_heading', 'local_deleteoldcourses'),
-        new lang_string('course_categories_criteria_heading_desc', 'local_deleteoldcourses')));
+        'local_deleteoldcourses/excluded_course_categories_criteria_heading',
+        new lang_string('excluded_course_categories_criteria_heading', 'local_deleteoldcourses'),
+        new lang_string('excluded_course_categories_criteria_heading_desc', 'local_deleteoldcourses')));
 
     $options = array();
 
@@ -184,7 +184,7 @@ if ($ADMIN->fulltree) {
 
         $settingspage->add(new admin_settings_coursecat_select(
             'local_deleteoldcourses/excluded_course_categories_' . $i,
-            new lang_string('excluded_course_categories', 'local_deleteoldcourses'),
+            new lang_string('excluded_course_categories', 'local_deleteoldcourses', $i),
             new lang_string('excluded_course_categories_desc', 'local_deleteoldcourses'),
             6
         ));
@@ -203,18 +203,18 @@ if ($ADMIN->fulltree) {
         new lang_string('advanced_settings_heading_desc', 'local_deleteoldcourses')));
 
     $settingspage->add(new admin_setting_configtext(
-        'local_deleteoldcourses/limit_query',
-        new lang_string('limit_query', 'local_deleteoldcourses'),
-        new lang_string('limit_query_desc', 'local_deleteoldcourses'),
-        5000,
+        'local_deleteoldcourses/limit_query_to_enqueue_courses',
+        new lang_string('limit_query_to_enqueue_courses', 'local_deleteoldcourses'),
+        new lang_string('limit_query_to_enqueue_courses_desc', 'local_deleteoldcourses'),
+        500,
         PARAM_INT,
         5
     ));
 
     $settingspage->add(new admin_setting_configtext(
-        'local_deleteoldcourses/task_queue_size',
-        new lang_string('task_queue_size', 'local_deleteoldcourses'),
-        new lang_string('task_queue_size_desc', 'local_deleteoldcourses'),
+        'local_deleteoldcourses/deletion_task_queue_size',
+        new lang_string('deletion_task_queue_size', 'local_deleteoldcourses'),
+        new lang_string('deletion_task_queue_size_desc', 'local_deleteoldcourses'),
         500,
         PARAM_INT,
         5
@@ -261,11 +261,12 @@ if ($ADMIN->fulltree) {
                         PARAM_TEXT,
                         60
                     ));
-
+    $manageusertokensurl = '<a href="' . $CFG->wwwroot . '/user/managetoken.php"
+                            target="_blank">' . $CFG->wwwroot . '/user/managetoken.php</a>';
     $settingspage->add(new admin_setting_configpasswordunmask(
                         'local_deleteoldcourses/ws_user_token',
                         new lang_string('ws_user_token', 'local_deleteoldcourses'),
-                        new lang_string('ws_user_token_desc', 'local_deleteoldcourses'),
+                        new lang_string('ws_user_token_desc', 'local_deleteoldcourses', $manageusertokensurl),
                         ''
                     ));
 
