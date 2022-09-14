@@ -22,6 +22,8 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_deleteoldcourses\utils;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/local/deleteoldcourses/lib.php');
@@ -196,6 +198,15 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
 
         // Deleteoldcourses savepoint reached.
         upgrade_plugin_savepoint(true, 2022090101, 'local', 'deleteoldcourses');
+    }
+
+    if ($oldversion < 2022091400) {
+        $utils = new utils();
+
+        $utils->migrate_records();
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022091400, 'local', 'deleteoldcourses');
     }
 
     return true;

@@ -70,4 +70,72 @@ class utils {
 
         return intval($result);
     }
+
+    /**
+     * Migrate records
+     *
+     * @return void
+     */
+    public function migrate_records() {
+
+        global $DB;
+
+        // Migrate deleteoldcourses_deleted table.
+        $numberofrecords = $DB->count_records('deleteoldcourses_deleted');
+
+        for ($i = 0; $i <= $numberofrecords / 1000; $i++) {
+            $records = $DB->get_records('deleteoldcourses_deleted', null, 'id ASC', '*', $i * 1000, 1000);
+
+            foreach ($records as $record) {
+
+                $newrecord = new \stdClass();
+                $newrecord->courseid = $record->courseid;
+                $newrecord->courseshortname = $record->shortname;
+                $newrecord->coursefullname = $record->fullname;
+                $newrecord->coursesize = $record->size;
+                $newrecord->coursetimecreated = $record->coursecreatedat;
+                $newrecord->coursetimesenttodelete = $record->timesenttodelete;
+                $newrecord->userid = $record->userid;
+                $newrecord->username = '';
+                $newrecord->userfirstname = '';
+                $newrecord->userlastname = '';
+                $newrecord->useremail = '';
+                $newrecord->timecreated = $record->timecreated;
+                $newrecord->manuallyqueued = 1;
+
+                $userrecord = $DB->get_record('user', array('id' => $record->userid));
+
+                if ($userrecord) {
+                    $newrecord->username = $userrecord->username;
+                    $newrecord->userfirstname = $userrecord->firstname;
+                    $newrecord->userlastname = $userrecord->lastname;
+                    $newrecord->useremail = $userrecord->email;
+                }
+
+                if ($record->userid == '128') {
+                    $newrecord->manuallyqueued = 0;
+                }
+
+                $DB->insert_record('local_delcoursesuv_deleted', $newrecord);
+            }
+        }
+
+        // Migrate deleteoldcourses table.
+        $records = $DB->get_records('deleteoldcourses');
+
+        foreach ($records as $record) {
+            $newrecord = new \stdClass();
+            $newrecord->courseid = $record->courseid;
+            $newrecord->userid = $record->userid;
+            $newrecord->coursesize = $record->size;
+            $newrecord->timecreated = $record->timecreated;
+            $newrecord->manuallyqueued = 1;
+
+            if ($record->userid == '128') {
+                $newrecord->manuallyqueued = 0;
+            }
+
+            $DB->insert_record('local_delcoursesuv_todelete', $newrecord);
+        }
+    }
 }

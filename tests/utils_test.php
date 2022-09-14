@@ -50,11 +50,107 @@ class utils_test extends \advanced_testcase {
         $course1 = $this->getDataGenerator()->create_course();
         $file1 = $this->create_stored_file('content', 'testfile.txt', [], $course1);
 
-        $coursedispatcher = new utils();
-        $coursesize = $coursedispatcher->calculate_course_size($course1->id);
+        $utils = new utils();
+        $coursesize = $utils->calculate_course_size($course1->id);
 
         $this->assertIsInt($coursesize);
         $this->assertSame(7, $coursesize);
+    }
+
+    /**
+     * Test migrate records
+     *
+     * @since  Moodle 3.10
+     * @author  Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
+     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @covers ::migrate_records
+     */
+    public function test_migrate_records() {
+        global $DB;
+
+        $this->resetAfterTest(false);
+
+        // Migrate deleteoldcourses_deleted table.
+        $user = $this->getDataGenerator()->create_user();
+
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 1';
+        $record->fullname = 'COURSE FULLNAME 1';
+        $record->courseid = '1';
+        $record->userid = $user->id;
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timesenttodelete = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses_deleted', $record);
+
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 2';
+        $record->fullname = 'COURSE FULLNAME 2';
+        $record->courseid = '2';
+        $record->userid = 123;
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timesenttodelete = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses_deleted', $record);
+
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 3';
+        $record->fullname = 'COURSE FULLNAME 3';
+        $record->courseid = '3';
+        $record->userid = 128;
+        $record->size = '';
+        $record->coursecreatedat = '';
+        $record->timesenttodelete = '';
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses_deleted', $record);
+
+        // Migrate deleteoldcourses table.
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 1';
+        $record->fullname = 'COURSE FULLNAME 1';
+        $record->courseid = '1';
+        $record->userid = $user->id;
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses', $record);
+
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 2';
+        $record->fullname = 'COURSE FULLNAME 2';
+        $record->courseid = '2';
+        $record->userid = '128';
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses', $record);
+
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 3';
+        $record->fullname = 'COURSE FULLNAME 3';
+        $record->courseid = '3';
+        $record->userid = 0;
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses', $record);
+
+
+        $utils = new utils();
+        $utils->migrate_records();
+
+        $numberofrecords = $DB->count_records('local_delcoursesuv_deleted');
+
+        $this->assertSame(3, $numberofrecords);
+
     }
 
     /**
