@@ -204,6 +204,9 @@ function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
         $utils = new utils();
 
         $utils->migrate_records();
+
+        // Deleteoldcourses savepoint reached.
+        upgrade_plugin_savepoint(true, 2022091400, 'local', 'deleteoldcourses');
     }
 
     return true;
