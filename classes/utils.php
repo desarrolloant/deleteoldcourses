@@ -80,6 +80,7 @@ class utils {
 
         global $DB;
 
+        // Migrate deleteoldcourses_deleted table.
         $numberofrecords = $DB->count_records('deleteoldcourses_deleted');
 
         for ($i = 0; $i <= $numberofrecords / 1000; $i++) {
@@ -117,6 +118,24 @@ class utils {
 
                 $DB->insert_record('local_delcoursesuv_deleted', $newrecord);
             }
+        }
+
+        // Migrate deleteoldcourses table.
+        $records = $DB->get_records('deleteoldcourses');
+
+        foreach ($records as $record) {
+            $newrecord = new \stdClass();
+            $newrecord->courseid = $record->courseid;
+            $newrecord->userid = $record->userid;
+            $newrecord->coursesize = $record->size;
+            $newrecord->timecreated = $record->timecreated;
+            $newrecord->manuallyqueued = 1;
+
+            if ($record->userid == '128') {
+                $newrecord->manuallyqueued = 0;
+            }
+
+            $DB->insert_record('local_delcoursesuv_todelete', $newrecord);
         }
     }
 }

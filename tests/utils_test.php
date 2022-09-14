@@ -70,6 +70,7 @@ class utils_test extends \advanced_testcase {
 
         $this->resetAfterTest(false);
 
+        // Migrate deleteoldcourses_deleted table.
         $user = $this->getDataGenerator()->create_user();
 
         $record = new \stdClass();
@@ -107,6 +108,41 @@ class utils_test extends \advanced_testcase {
         $record->timecreated = time();
 
         $DB->insert_record('deleteoldcourses_deleted', $record);
+
+        // Migrate deleteoldcourses table.
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 1';
+        $record->fullname = 'COURSE FULLNAME 1';
+        $record->courseid = '1';
+        $record->userid = $user->id;
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses', $record);
+
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 2';
+        $record->fullname = 'COURSE FULLNAME 2';
+        $record->courseid = '2';
+        $record->userid = '128';
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses', $record);
+
+        $record = new \stdClass();
+        $record->shortname = 'COURSE SHORTNAME 3';
+        $record->fullname = 'COURSE FULLNAME 3';
+        $record->courseid = '3';
+        $record->userid = 0;
+        $record->size = '10';
+        $record->coursecreatedat = 123456789;
+        $record->timecreated = time();
+
+        $DB->insert_record('deleteoldcourses', $record);
+
 
         $utils = new utils();
         $utils->migrate_records();
