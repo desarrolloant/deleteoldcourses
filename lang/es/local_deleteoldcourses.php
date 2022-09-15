@@ -23,7 +23,7 @@
  */
 
 $string['pluginname'] = 'Eliminar Cursos Antiguos';
-$string['deleteoldcourses:viewreport'] = 'Vista de reportes para admin';
+$string['deleteoldcourses:viewreports'] = 'Vista de reportes para administrador';
 $string['user_fullname'] = 'Nombre';
 $string['user_username'] = 'Cédula';
 $string['course_shortname'] = 'Nombre corto del curso';

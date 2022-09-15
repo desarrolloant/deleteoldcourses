@@ -32,7 +32,7 @@ if (isguestuser()) {
     throw new moodle_exception('noguest');
 }
 
-require_capability('local/deleteoldcourses:viewreport', context_system::instance());
+require_capability('local/deleteoldcourses:viewreports', context_system::instance());
 
 define('DEFAULT_PAGE_SIZE', 100);
 define('SHOW_ALL_PAGE_SIZE', 5000);
