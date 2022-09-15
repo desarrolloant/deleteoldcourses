@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-    'local/deleteoldcourses:viewreport' => array(
+    'local/deleteoldcourses:viewreports' => array(
         'riskbitmask' => RISK_DATALOSS,
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,

@@ -23,7 +23,7 @@
  */
 
 $string['pluginname'] = 'Delete Old Courses';
-$string['deleteoldcourses:viewreport'] = 'Admin view reports';
+$string['deleteoldcourses:viewreports'] = 'Admin view reports';
 $string['user_fullname'] = 'Name';
 $string['user_username'] = 'Card ID';
 $string['course_shortname'] = 'Course shortname';
