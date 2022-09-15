@@ -238,7 +238,8 @@ class renderer extends plugin_renderer_base {
         $data->excluded_categories = $coursedeletioncriterias['excludedcategories'];
         $data->manually_enqueued_courses = $reportmanager->get_total_enqueued_courses(true);
         $data->automatically_enqueued_courses = $reportmanager->get_total_enqueued_courses(false);
-        $data->all_enqueued_courses = $reportmanager->get_total_enqueued_courses();
+        $data->total_enqueued_courses = $reportmanager->get_total_enqueued_courses();
+        $data->total_deleted_courses = $reportmanager->get_total_deleted_courses_during_time_period();
 
         $template = $this->render_from_template('local_deleteoldcourses/reports', $data);
         return $template;
