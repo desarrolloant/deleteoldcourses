@@ -100,19 +100,23 @@ class report_manager {
     }
 
     /**
-     * Get total number of deleted courses during a time period.
+     * Get total number of deleted courses during a time period (all by default).
      *
      * @param int $startdate UNIX time format
      * @param int $enddate UNIX time format
      * @return string total number of deleted courses
      */
-    public function get_total_deleted_courses_during_time_period(int $startdate, int $enddate): string {
+    public function get_total_deleted_courses_during_time_period(int $startdate = 0, int $enddate = 0): string {
 
         global $DB;
+        if ($startdate == 0 && $enddate == 0) {
+            return number_format($DB->count_records("local_delcoursesuv_deleted"), 0, ',', '.');
+        }
+
         return number_format(
-                    $DB->count_records_select("local_delcoursesuv_deleted",
-                                            'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]),
-                    0, ',', '.');
+            $DB->count_records_select("local_delcoursesuv_deleted",
+                                    'timecreated >= ? AND timecreated <= ?', [$startdate, $enddate]),
+            0, ',', '.');
     }
 
     /**

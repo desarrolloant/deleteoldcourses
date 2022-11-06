@@ -61,7 +61,7 @@ function local_deleteoldcourses_extend_navigation(global_navigation $navigation)
     $showalert = false;
     $total = 0;
 
-    if (has_capability('local/deleteoldcourses:viewreport', context_system::instance())) {
+    if (has_capability('local/deleteoldcourses:viewreports', context_system::instance())) {
         $action = new moodle_url('/local/deleteoldcourses/report.php', array());
         $shownode = true;
     } else {

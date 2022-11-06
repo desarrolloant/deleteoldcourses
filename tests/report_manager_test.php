@@ -163,6 +163,11 @@ class report_manager_test extends \advanced_testcase {
 
         $reportmanager = new report_manager();
 
+        // All deleted courses (no input for time period).
+        $result = $reportmanager->get_total_deleted_courses_during_time_period();
+        $this->assertEquals(25, $result);
+
+        // Only deleted courses during defined time period.
         $enddate = $starttime + 6000;
         $result = $reportmanager->get_total_deleted_courses_during_time_period($starttime, $enddate);
 

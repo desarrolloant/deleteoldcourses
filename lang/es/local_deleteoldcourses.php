@@ -23,7 +23,7 @@
  */
 
 $string['pluginname'] = 'Eliminar Cursos Antiguos';
-$string['deleteoldcourses:viewreport'] = 'Vista de reportes para admin';
+$string['deleteoldcourses:viewreports'] = 'Vista de reportes para administrador';
 $string['user_fullname'] = 'Nombre';
 $string['user_username'] = 'Cédula';
 $string['course_shortname'] = 'Nombre corto del curso';
@@ -188,10 +188,12 @@ $string['request_method_invalid'] = 'Cliente CVH: método de la petición invali
 // Reports.
 $string['reports_dashboard_heading'] = 'Panel de reportes';
 $string['deletion_criteria_desc'] = 'Criterios actuales de eliminación de cursos';
-$string['enqueued_courses_desc'] = 'Cursos actualmente encolados para eliminar';
 $string['course_creation_date'] = 'Fecha de creación de cursos (DD/MM/AAAA HH:MM:SS)';
 $string['course_last_modification_date'] = 'Fecha de última modificación de cursos (DD/MM/AAAA HH:MM:SS)';
 $string['excluded_categories'] = 'Categorías de cursos excluidas';
+$string['enqueued_courses_desc'] = 'Cursos actualmente encolados para eliminar';
 $string['manually_enqueued_courses'] = 'Cursos encolados manualmente';
 $string['automatically_enqueued_courses'] = 'Cursos encolados automaticamente';
-$string['all_enqueued_courses'] = 'Todos los cursos encolados';
+$string['total_enqueued_courses'] = 'Todos los cursos encolados';
+$string['deleted_courses_desc'] = 'Cursos actualmente eliminados';
+$string['total_deleted_courses'] = 'Todos los cursos eliminados';

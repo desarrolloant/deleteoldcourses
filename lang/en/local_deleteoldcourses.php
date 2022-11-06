@@ -23,7 +23,7 @@
  */
 
 $string['pluginname'] = 'Delete Old Courses';
-$string['deleteoldcourses:viewreport'] = 'Admin view reports';
+$string['deleteoldcourses:viewreports'] = 'Admin view reports';
 $string['user_fullname'] = 'Name';
 $string['user_username'] = 'Card ID';
 $string['course_shortname'] = 'Course shortname';
@@ -188,10 +188,12 @@ $string['request_method_invalid'] = 'CVH Client: invalid request method.';
 // Reports.
 $string['reports_dashboard_heading'] = 'Reports dashboard';
 $string['deletion_criteria_desc'] = 'Current course deletion criteria';
-$string['enqueued_courses_desc'] = 'Currently enqueued courses to delete';
 $string['course_creation_date'] = 'Course creation date (DD/MM/YYYY HH:MM:SS)';
 $string['course_last_modification_date'] = 'Course last modification date (DD/MM/YYYY HH:MM:SS)';
 $string['excluded_categories'] = 'Excluded course categories';
+$string['enqueued_courses_desc'] = 'Currently enqueued courses to delete';
 $string['manually_enqueued_courses'] = 'Manually enqueued courses';
 $string['automatically_enqueued_courses'] = 'Automatically enqueued courses';
-$string['all_enqueued_courses'] = 'All enqueued courses';
+$string['total_enqueued_courses'] = 'Total enqueued courses';
+$string['deleted_courses_desc'] = 'Currently deleted courses';
+$string['total_deleted_courses'] = 'Total deleted courses';

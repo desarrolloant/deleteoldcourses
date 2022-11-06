@@ -143,7 +143,6 @@ class utils_test extends \advanced_testcase {
 
         $DB->insert_record('deleteoldcourses', $record);
 
-
         $utils = new utils();
         $utils->migrate_records();
 
