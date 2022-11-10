@@ -26,8 +26,6 @@ use local_deleteoldcourses\utils;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/local/deleteoldcourses/lib.php');
-
 /**
  * Function to upgrade the plugin.
  *

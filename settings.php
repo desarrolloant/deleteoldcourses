@@ -27,8 +27,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
-
 $ADMIN->add('localplugins',
         new admin_category('localdeleteoldcoursessettings',
         new lang_string('pluginname', 'local_deleteoldcourses')));

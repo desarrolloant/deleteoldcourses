@@ -29,8 +29,6 @@ namespace local_deleteoldcourses;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/local/deleteoldcourses/locallib.php');
-
 use stdClass;
 use DateTime;
 

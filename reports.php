@@ -19,10 +19,13 @@
  *
  * @package    local_deleteoldcourses
  * @copyright  2022 Brayan Sanchez <brayan.sanchez.leon@correounivalle.edu.co>
+ * @copyright  2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(__DIR__ . '/../../config.php');
+
+use local_deleteoldcourses\report_manager;
 
 require_login();
 
@@ -31,17 +34,27 @@ if (isguestuser()) {
 }
 
 $context = context_system::instance();
+$PAGE->set_context($context);
 
 require_capability('local/deleteoldcourses:viewreports', $context);
 
-$PAGE->set_context($context);
 $PAGE->set_url(new moodle_url('/local/deleteoldcourses/reports.php'));
 $PAGE->set_pagelayout('admin');
 $PAGE->set_title($SITE->fullname);
 $PAGE->set_heading(get_string('pluginname', 'local_deleteoldcourses'));
 
-$output = $PAGE->get_renderer('local_deleteoldcourses');
+$reportmanager = new report_manager();
+$coursedeletioncriterias = $reportmanager->get_course_deletion_criteria_settings();
+
+$data = new stdClass();
+$data->course_creation_date = $coursedeletioncriterias['creationdate'];
+$data->course_last_modification_date = $coursedeletioncriterias['lastmodificationdate'];
+$data->excluded_categories = $coursedeletioncriterias['excludedcategories'];
+$data->manually_enqueued_courses = $reportmanager->get_total_enqueued_courses(true);
+$data->automatically_enqueued_courses = $reportmanager->get_total_enqueued_courses(false);
+$data->total_enqueued_courses = $reportmanager->get_total_enqueued_courses();
+$data->total_deleted_courses = $reportmanager->get_total_deleted_courses_during_time_period();
 
 echo $OUTPUT->header();
-echo $output->render_reports();
+echo $OUTPUT->render_from_template('local_deleteoldcourses/reports', $data);
 echo $OUTPUT->footer();
