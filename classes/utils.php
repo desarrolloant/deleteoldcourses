@@ -17,11 +17,10 @@
 /**
  * Utils class.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -31,22 +30,20 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Utils class.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class utils {
 
     /**
      * Get courses to delete according to elimination criteria.
      *
-     * @param  int $courseid ID of the course to calculate size
-     * @return array $courses
-     * @author Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @since  Moodle 3.10
+     * @param   int $courseid ID of the course to calculate size
+     * @return  array $courses
+     * @author  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function calculate_course_size($courseid) {
         global $DB;
@@ -72,9 +69,7 @@ class utils {
     }
 
     /**
-     * Migrate records
-     *
-     * @return void
+     * Migrate records.
      */
     public function migrate_records() {
 

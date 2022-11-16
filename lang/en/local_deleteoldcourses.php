@@ -17,9 +17,10 @@
 /**
  * Plugin strings, language 'en'.
  *
- * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['pluginname'] = 'Delete Old Courses';
@@ -130,7 +131,7 @@ $string['users_to_notify_desc'] = 'Add, separated by commas, the usernames (user
 // Client settings.
 $string['ws_client_settings_tab'] = 'Client for web service';
 $string['ws_client_settings_heading'] = 'Client for Campus Virtual Historia web service';
-$string['ws_client_settings_heading_desc'] = 'Client parameters for Campus Virtual Historia web service';
+$string['ws_client_settings_heading_desc'] = 'Client parameters for Campus Virtual Historia web service. These settings avoid the deletion of courses that are not backed up yet in Campus Virtual Historia.';
 $string['ws_url'] = 'URL to Campus Virtual Historia';
 $string['ws_url_desc'] = 'Add the URL to Campus Virtual Historia.';
 $string['ws_function_name'] = 'Web service function name';

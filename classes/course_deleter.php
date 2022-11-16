@@ -17,10 +17,10 @@
 /**
  * Course deleter class.
  *
- * @package    local_deleteoldcourses
- * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -30,10 +30,10 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Course deleter class.
  *
- * @package    local_deleteoldcourses
- * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_deleter {
 
@@ -50,7 +50,7 @@ class course_deleter {
     /**
      * Delete enqueued courses.
      *
-     * @throws \Throwable if the course cannot be deleted
+     * @throws  \Throwable if the course cannot be deleted
      */
     public function delete_courses() {
         global $DB;
@@ -93,7 +93,7 @@ class course_deleter {
     /**
      * Get courses to delete.
      *
-     * @return moodle_recordset a moodle_recordset instance with all courses to delete
+     * @return  moodle_recordset a moodle_recordset instance with all courses to delete
      */
     private function get_courses_to_delete() {
         global $DB;
@@ -111,9 +111,9 @@ class course_deleter {
     /**
      * Store historical data of a deleted course.
      *
-     * @param object $coursetodel 'courseid', 'coursesize', 'timecreated', and 'userid'
-     * @param object $coursetodeldextradata 'shortname', 'fullname', and 'timecreated'
-     * @param object $userextradata 'username', 'firstname', 'lastname', and 'email'
+     * @param   object $coursetodel 'courseid', 'coursesize', 'timecreated', and 'userid'
+     * @param   object $coursetodeldextradata 'shortname', 'fullname', and 'timecreated'
+     * @param   object $userextradata 'username', 'firstname', 'lastname', and 'email'
      */
     private function store_deleted_course_data($coursetodel, $coursetodeldextradata, $userextradata) {
         global $DB;

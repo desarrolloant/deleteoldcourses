@@ -17,9 +17,10 @@
 /**
  * Plugin upgrade code.
  *
- * @package    local_deleteoldcourses
- * @copyright  2022 Juan Felipe Orozco Escobar <juan.oroczo.escobar@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use local_deleteoldcourses\utils;
@@ -29,8 +30,8 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Function to upgrade the plugin.
  *
- * @param int $oldversion the version it is upgrading from
- * @return bool result
+ * @param   int $oldversion the version it is upgrading from
+ * @return  bool result
  */
 function xmldb_local_deleteoldcourses_upgrade($oldversion=0) {
     global $DB;

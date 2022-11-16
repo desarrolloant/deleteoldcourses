@@ -17,11 +17,12 @@
 /**
  * Unit tests for course_enqueuer class.
  *
- * @package    local_deleteoldcourses
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @author     Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @author      2022 Juan Felipe Orozco <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -29,34 +30,32 @@ namespace local_deleteoldcourses;
 /**
  * Course enqueuer tests
  *
- * @group local_deleteoldcourses
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_enqueuer_test extends \advanced_testcase {
 
-    /** @var int Number of category to exclude in these tests. */
+    /** @var int Number of category to exclude in these tests */
     const NUMBER_OF_CATEGORIES_TO_EXCLUDE = 4;
 
-    /** @var int Number of courses to create in course categories excluded. */
+    /** @var int Number of courses to create in course categories excluded */
     const NUMBER_OF_COURSES_IN_CATEGORIES_TO_EXCLUDE = 25;
 
-    /** @var int Creation time criteria. Thursday, December 30th 2010 23:59:59 GMT-05:00.*/
+    /** @var int Creation time criteria. Thursday, December 30th 2010 23:59:59 GMT-05:00 */
     const CREATION_TIME_CRITERIA = 1293771599;
 
-    /** @var int Last modification time criteria. Monday, December 31th 2012 23:59:59 GMT-05:00.*/
+    /** @var int Last modification time criteria. Monday, December 31th 2012 23:59:59 GMT-05:00 */
     const LAST_MODIFICATION_TIME_CRITERIA = 1357016399;
 
-    /** @var int Minumt timestamp. Saturday, 1 january 2005 0:00:00 GMT-05:00.*/
+    /** @var int Minumt timestamp. Saturday, 1 january 2005 0:00:00 GMT-05:00 */
     const MINTIMESTAMP = 1104555600;
 
-    /** @var int Last modification time criteria. Saturday, 31 december 2050 23:59:59 GMT-05:00.*/
+    /** @var int Last modification time criteria. Saturday, 31 december 2050 23:59:59 GMT-05:00 */
     const MAXTIMESTAMP = 2556161999;
 
-    /** @var array Array with course shortnames that exist in Campus Virtual Historia.*/
+    /** @var array Array with course shortnames that exist in Campus Virtual Historia */
     const COURSE_SHORTNAMES_IN_CVH = array(
         '00-740142M-01-201910071',
         '01-201238M-50-202011051',
@@ -75,42 +74,41 @@ class course_enqueuer_test extends \advanced_testcase {
         '01-503032M-50-202011051'
     );
 
-    /** @var array Array with course shortnames that exist in Campus Virtual Historia and have already been queued.*/
+    /** @var array Array with course shortnames that exist in Campus Virtual Historia and have already been queued */
     const COURSE_SHORTNAMES_IN_CVH_QUEUED = array(
         '00-750098M-01-201702041',
         'PRUEBAS_NOTIFICACIONES'
     );
 
-    /** @var int Number of courses that will be deleted. Courses Type A.*/
+    /** @var int Number of courses that will be deleted. Courses Type A */
     const NUMBER_OF_COURSES_TO_DELETE = 15;
 
-    /** @var int Number of courses with sections added after the last modification criteria. Courses Type B.*/
+    /** @var int Number of courses with sections added after the last modification criteria. Courses Type B */
     const NUMBER_OF_COURSES_WITH_SECTIONS_ADDED = 20;
 
-    /** @var int Number of courses with participants enroll or unenroll after the last modification criteria. Courses Type C.*/
+    /** @var int Number of courses with participants enroll or unenroll after the last modification criteria. Courses Type C */
     const NUMBER_OF_COURSES_WITH_PARTICIPANTS_ADDED = 20;
 
-    /** @var int Number of courses with modules (activities or resources) added after the last modification criteria. Courses Type D.*/
+    /** @var int Number of courses with modules (activities or resources) added after the last modification criteria. Courses Type D */
     const NUMBER_OF_COURSES_WITH_MODULES_ADDED = 10;
 
-    /** @var int Number of courses with creation date greater than the creation criteria. Courses Type E.*/
+    /** @var int Number of courses with creation date greater than the creation criteria. Courses Type E */
     const NUMBER_OF_COURSES_WITH_CREATION_DATE_GREATER = 20;
 
-    /** @var int Number of courses with creation date greater than the creation criteriaand last modification date greater tha the criteria. Courses Type F. **/
+    /** @var int Number of courses with creation date greater than the creation criteriaand last modification date greater tha the criteria. Courses Type F */
     const NUMBER_OF_COURSES_WITH_LAST_MODIFICATION_DATE_GREATER = 40;
 
-    /** @var int Number of courses that will be deleted that have already been queued. Courses Type G. **/
+    /** @var int Number of courses that will be deleted that have already been queued. Courses Type G */
     const NUMBER_OF_COURSES_TO_DELETE_QUEUED = 2;
 
-    /** @var int Limit query for the query enqueuer **/
+    /** @var int Limit query for the query enqueuer */
     const LIMIT_QUERY_TO_ENQUEUE_COURSES = 500;
 
     /**
-     * Test get courses to delete
+     * Test get courses to delete.
      *
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::get_courses_to_enqueue
+     * @covers  ::get_courses_to_enqueue
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_get_courses_to_enqueue() {
 
@@ -141,11 +139,10 @@ class course_enqueuer_test extends \advanced_testcase {
     }
 
     /**
-     * Test have new sections method
+     * Test have new sections method.
      *
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::have_new_sections
+     * @covers  ::have_new_sections
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_have_new_sections() {
 
@@ -173,11 +170,10 @@ class course_enqueuer_test extends \advanced_testcase {
     }
 
     /**
-     * Test have new participants
+     * Test have new participants.
      *
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::have_new_participants
+     * @covers  ::have_new_participants
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_have_new_participants() {
 
@@ -208,11 +204,10 @@ class course_enqueuer_test extends \advanced_testcase {
     }
 
     /**
-     * Test have new activity or resource modules
+     * Test have new activity or resource modules.
      *
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::have_new_modules
+     * @covers  ::have_new_modules
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_have_new_modules() {
         $this->resetAfterTest(true);
@@ -241,11 +236,10 @@ class course_enqueuer_test extends \advanced_testcase {
     }
 
     /**
-     * Test check excluded course categories
+     * Test check excluded course categories.
      *
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::check_excluded_course_categories
+     * @covers  ::check_excluded_course_categories
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_check_excluded_course_categories() {
 
@@ -267,11 +261,10 @@ class course_enqueuer_test extends \advanced_testcase {
     }
 
     /**
-     * Test enqueue courses to delete
+     * Test enqueue courses to delete.
      *
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::enqueue_courses_to_delete
+     * @covers  ::enqueue_courses_to_delete
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_enqueue_courses_to_delete() {
 
@@ -312,9 +305,6 @@ class course_enqueuer_test extends \advanced_testcase {
      *  - Create courses with creation date greater than the creation criteria. Courses Type E.
      *  - Create courses with creation date greater than the creation criteria
      *    and last modification date greater tha the criteria. Courses Type F.
-     *
-     * @return void
-     * @since Moodle 3.10
      */
     protected function setUp(): void {
 
@@ -376,12 +366,11 @@ class course_enqueuer_test extends \advanced_testcase {
     }
 
     /**
-     * Create course categories to exclude
+     * Create course categories to exclude.
      *
-     * @param component_generator_base $plugingenerator
-     * @return array
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @param   component_generator_base $plugingenerator
+     * @return  array
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_course_categories_to_exclude($plugingenerator): array {
 
@@ -397,11 +386,9 @@ class course_enqueuer_test extends \advanced_testcase {
     }
 
     /**
-     * Create course categories to exclude
+     * Create course categories to exclude.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_in_categories_excluded(int $numberofcourses, array $coursecategoriesexcluded): void {
 
@@ -429,9 +416,7 @@ class course_enqueuer_test extends \advanced_testcase {
     /**
      * Create courses that will be deleted. Courses Type A.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_to_delete($numberofcourses): void {
 
@@ -459,9 +444,7 @@ class course_enqueuer_test extends \advanced_testcase {
     /**
      * Create courses that will be deleted that have already been queued. Courses Type G.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_to_delete_queued($numberofcourses): void {
 
@@ -506,9 +489,7 @@ class course_enqueuer_test extends \advanced_testcase {
     /**
      * Create courses with sections added after the last modification criteria. Courses Type B.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_with_sections_added($numberofcourses): void {
         global $DB;
@@ -537,9 +518,7 @@ class course_enqueuer_test extends \advanced_testcase {
     /**
      * Create courses with participants enroll or unenroll after the last modification criteria. Courses Type C.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_with_partipants_added($numberofcourses): void {
         global $DB;
@@ -571,9 +550,7 @@ class course_enqueuer_test extends \advanced_testcase {
     /**
      * Create courses with modules (activities or resources) added after the last modification criteria. Courses Type D.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_with_modules_added($numberofcourses): void {
         global $DB;
@@ -601,9 +578,7 @@ class course_enqueuer_test extends \advanced_testcase {
     /**
      * Create courses with creation date is greater than the creation criteria. Courses Type E.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_with_creation_date_greater($numberofcourses): void {
         global $DB;
@@ -630,9 +605,7 @@ class course_enqueuer_test extends \advanced_testcase {
      * Create courses with creation date is greater than the creation criteria and the
      * last modification date is greater than the last modification criteria. Courses Type F.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     private function create_courses_with_last_modification_greater($numberofcourses): void {
         global $DB;

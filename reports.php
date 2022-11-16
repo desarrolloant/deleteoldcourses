@@ -17,10 +17,10 @@
 /**
  * Report page for administrators.
  *
- * @package    local_deleteoldcourses
- * @copyright  2022 Brayan Sanchez <brayan.sanchez.leon@correounivalle.edu.co>
- * @copyright  2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Brayan Sanchez <brayan.sanchez.leon@correounivalle.edu.co>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(__DIR__ . '/../../config.php');
@@ -46,15 +46,15 @@ $PAGE->set_heading(get_string('pluginname', 'local_deleteoldcourses'));
 $reportmanager = new report_manager();
 $coursedeletioncriterias = $reportmanager->get_course_deletion_criteria_settings();
 
-$data = new stdClass();
-$data->course_creation_date = $coursedeletioncriterias['creationdate'];
-$data->course_last_modification_date = $coursedeletioncriterias['lastmodificationdate'];
-$data->excluded_categories = $coursedeletioncriterias['excludedcategories'];
-$data->manually_enqueued_courses = $reportmanager->get_total_enqueued_courses(true);
-$data->automatically_enqueued_courses = $reportmanager->get_total_enqueued_courses(false);
-$data->total_enqueued_courses = $reportmanager->get_total_enqueued_courses();
-$data->total_deleted_courses = $reportmanager->get_total_deleted_courses_during_time_period();
+$templatecontext = new stdClass();
+$templatecontext->course_creation_date = $coursedeletioncriterias['creationdate'];
+$templatecontext->course_last_modification_date = $coursedeletioncriterias['lastmodificationdate'];
+$templatecontext->excluded_categories = $coursedeletioncriterias['excludedcategories'];
+$templatecontext->manually_enqueued_courses = $reportmanager->get_total_enqueued_courses(true);
+$templatecontext->automatically_enqueued_courses = $reportmanager->get_total_enqueued_courses(false);
+$templatecontext->total_enqueued_courses = $reportmanager->get_total_enqueued_courses();
+$templatecontext->total_deleted_courses = $reportmanager->get_total_deleted_courses_during_time_period();
 
 echo $OUTPUT->header();
-echo $OUTPUT->render_from_template('local_deleteoldcourses/reports', $data);
+echo $OUTPUT->render_from_template('local_deleteoldcourses/reports', $templatecontext);
 echo $OUTPUT->footer();

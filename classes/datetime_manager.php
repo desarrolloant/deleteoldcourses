@@ -17,11 +17,10 @@
 /**
  * Provides the datetime_manager class.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -34,11 +33,10 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Date and time manager class for the plugin Delete old courses.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class datetime_manager {
 
@@ -63,8 +61,7 @@ class datetime_manager {
     /**
      * Set the value of datetimezone.
      *
-     * @return self
-     * @since  Moodle 3.10
+     * @return  self
      */
     private function set_datetimezone() {
         $this->datetimezone = new DateTimeZone('America/Bogota');
@@ -74,8 +71,7 @@ class datetime_manager {
     /**
      * Get the value of datetimezone.
      *
-     * @return dateTimeZone datetimezone
-     * @since  Moodle 3.10
+     * @return  dateTimeZone datetimezone
      */
     public function get_datetimezone() {
         return $this->datetimezone;
@@ -118,8 +114,8 @@ class datetime_manager {
     /**
      * Polymorphic function that creates date and time arrays given a datetime type string.
      *
-     * @param string $datetimetype 'years', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
-     * @throws moodle_exception
+     * @param   string $datetimetype 'years', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
+     * @throws  moodle_exception
      */
     private function set_datetime(string $datetimetype) {
 
@@ -163,9 +159,9 @@ class datetime_manager {
     /**
      * Get date and time arrays given a datetime type string.
      *
-     * @param string $datetimetype 'years', 'monthsoftheyear', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
-     * @return array datetime array
-     * @throws moodle_exception
+     * @param   string $datetimetype 'years', 'monthsoftheyear', 'daysofthemonth', 'hoursinaday' or 'minutesinanhour'
+     * @return  array datetime array
+     * @throws  moodle_exception
      */
     public function get_datetime(string $datetimetype) {
         if ($datetimetype == 'years') {
@@ -188,9 +184,8 @@ class datetime_manager {
      *
      * @param   string $datesetting 'creation' or 'last_modification'
      * @return  int    $timestamp
-     * @since   Moodle 3.10
-     * @author  Iader E. García Gómez <iadergg@gmail.com>
-     * @author  Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
+     * @author  2022 Iader E. García Gómez <iadergg@gmail.com>
+     * @author  2022 Juan Felipe Orozco <juanfe.ores@gmail.com>
      */
     public function date_config_to_timestamp($datesetting) {
 

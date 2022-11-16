@@ -15,13 +15,12 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Implement Campus Virtual Historia Web Service Client
+ * Implement Campus Virtual Historia Web Service Client.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -31,36 +30,35 @@ use moodle_exception;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Campus Virtual Historia Web Service Client
+ * Campus Virtual Historia Web Service Client.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  */
 class cvh_ws_client {
 
     /**
      * The constant that defines the JSON return format.
-     * @access public
+     * @access  public
      */
     const RETURN_JSON = 'json';
 
     /**
      * The constant that defines the request method using GET.
-     * @access public
+     * @access  public
      */
     const METHOD_GET = 'get';
 
     /**
      * The constant that defines the request method using POST.
-     * @access public
+     * @access  public
      */
     const METHOD_POST = 'post';
 
     /**
      * The constant that defines the path to services in Moodle.
-     * @access public
+     * @access  public
      */
     const PATH_TO_SERVICES = '/webservice/rest/server.php';
 
@@ -74,10 +72,10 @@ class cvh_ws_client {
     private $returnformat;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $method Method used in the request.
-     * @param string $returntoformat Response format. Default JSON.
+     * @param   string $method Method used in the request.
+     * @param   string $returntoformat Response format. Default JSON.
      */
     public function __construct($method = self::METHOD_GET, $returnformat = self::RETURN_JSON) {
         $this->wsurl = get_config('local_deleteoldcourses', 'ws_url');
@@ -99,8 +97,7 @@ class cvh_ws_client {
     /**
      * Get the value of return format.
      *
-     * @return string $returnformat
-     * @since  Moodle 3.10
+     * @return  string $returnformat
      */
     public function get_returnformat() {
         return $this->returnformat;
@@ -109,14 +106,14 @@ class cvh_ws_client {
     /**
      * Make the request to service
      *
-     * @param string $function Function name that will be used by the service.
-     * @param array $parameters Parameters array. field => value.
+     * @param   string $function Function name that will be used by the service.
+     * @param   array $parameters Parameters array. field => value.
      *                          Example:
      *                                  [
      *                                    'shortname' => '01-201238M-50-202011051'
      *                                  ]
-     * @param $method Request method
-     * @return string $result
+     * @param   $method Request method
+     * @return  string $result
      */
     public function request_to_service($function = '', $parameters = null, $method = self::METHOD_GET) {
 

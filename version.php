@@ -17,11 +17,11 @@
 /**
  * Version information.
  *
- * @package    local_deleteoldcourses>
- * @copyright  2020 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @author     2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co
- * @author     2022 Iader E. Garcia Gomez <iadergg@gmail.com>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses>
+ * @author      2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co
+ * @author      2022 Iader E. Garcia Gomez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();

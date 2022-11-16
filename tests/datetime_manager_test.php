@@ -17,12 +17,12 @@
 /**
  * Unit tests for datetime_manager class.
  *
- * @package    local_deleteoldcourses
- * @category   phpunit
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @author     Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @author      2022 Juan Felipe Orozco <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -30,13 +30,12 @@ namespace local_deleteoldcourses;
 /**
  * Unit tests for datetime_manager class.
  *
- * @group      local_deleteoldcourses
- * @package    local_deleteoldcourses
- * @category   phpunit
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @author     Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @author      2022 Juan Felipe Orozco <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class datetime_manager_test extends \advanced_testcase {
 
@@ -52,7 +51,7 @@ class datetime_manager_test extends \advanced_testcase {
     /**
      * Test the behaviour of get_datetime method.
      *
-     * @covers ::get_datetime
+     * @covers  ::get_datetime
      */
     public function test_get_datetime() {
 
@@ -96,7 +95,7 @@ class datetime_manager_test extends \advanced_testcase {
     /**
      * Test the behaviour of get_months_of_the_years method.
      *
-     * @covers ::get_months_of_the_years
+     * @covers  ::get_months_of_the_years
      */
     public function test_get_months_of_the_years() {
         $monthsoftheyear = $this->datetimemanager->get_datetime('monthsoftheyear');
@@ -109,7 +108,7 @@ class datetime_manager_test extends \advanced_testcase {
     /**
      * Test the behaviour of date_config_to_timestamp method.
      *
-     * @covers ::date_config_to_timestamp
+     * @covers  ::date_config_to_timestamp
      */
     public function test_date_config_to_timestamp() {
 
@@ -143,7 +142,7 @@ class datetime_manager_test extends \advanced_testcase {
     /**
      * Assert that a key is equal to its value in an array.
      *
-     * @param array $array
+     * @param   array $array
      */
     private function is_key_equal_to_value(array $array) {
         foreach ($array as $key => $value) {

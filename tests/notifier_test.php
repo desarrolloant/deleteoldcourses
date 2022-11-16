@@ -17,12 +17,12 @@
 /**
  * Unit tests for notifier class (email notifications).
  *
- * @package    local_deleteoldcourses
- * @category   phpunit
- * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -30,20 +30,19 @@ namespace local_deleteoldcourses;
 /**
  * Unit tests for notifier class.
  *
- * @group      local_deleteoldcourses
- * @package    local_deleteoldcourses
- * @category   phpunit
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @author     Juan Felipe Orozco <juan.orozco.escobar@correounivalle.edu.co>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @author      2022 Juan Felipe Orozco <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class notifier_test extends \advanced_testcase {
 
     /**
      * Test for text generation for a notification.
      *
-     * @covers ::generate_text_to_send
+     * @covers  ::generate_text_to_send
      */
     public function test_generate_text_to_send() {
 
@@ -72,7 +71,7 @@ class notifier_test extends \advanced_testcase {
     /**
      * Test case for sending notification.
      *
-     * @covers ::send_notification
+     * @covers  ::send_notification
      */
     public function test_send_notification() {
 

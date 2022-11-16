@@ -1,44 +1,42 @@
-Delete old courses
-==============
+# Moodle plugin: local_delcoursesuv #
 
-This local deleteoldcourses allows teachers to delete old courses.
+## Motivation for this plugin
+Delete Courses UV is a customized Moodle plugin that allows to automatically delete a large number of courses in the platform.
 
-Requirements
-------------
-- Moodle 3.6.6 (build 2018120306.03 or later)
+There are two Moodle tasks to perform this:
+- The first task allows to enqueue courses to be deleted based on some criterias that are defined in the plugin configuration
+- The second task performs the deletion of courses that were enqueued by the first task
 
-Installation
-------------
-Copy the deleteoldcourses folder into your /local directory.
+Enqueued courses are sent to the <i>local_delcoursesuv_todelete</i> database table. Once deleted, they are removed from that table and sent to <i>local_delcoursesuv_deleted</i> database table to store historical data about the deletion.
 
-Usage
------
-Admin ->   To use Delete Old Courses go to "Site administration" -> "Courses" -> "Delete Old Courses".
-Teacher -> Access for the link in Boost left sidebar o my dashboard alert
+This plugin is supported by the plugin https://github.com/desarrolloant/back2restuv, because the latter is the one that backs up and restores courses to the Campus Virtual Historia server, so the already backed up courses can be deleted from the production server.
 
-Configuration
--------------
-The local deleteoldcourses no options but does require, as mentioned above, that cron be running.
+## Installation
+Run the following commands under Moodle root directory:
+1. Clone this repository to <i>/path/to/moodle/local/delcoursesuv</i>:
+```
+git clone https://github.com/desarrolloant/moodle-local_delcoursesuv.git local/delcoursesuv
+```
+2. Upgrade the Moodle site using Moodle CLI:
+```
+php admin/cli/upgrade
+```
 
-Test
-------------
-php admin/tool/task/cli/schedule_task.php --execute='\local_deleteoldcourses\task\delete_courses_task' > /Users/diego/www/moodledata37/temp/backup/deleteoldcourses.log
+## Configuration
+As admin you have to configure the following settings in <i>path/to/moodle/admin/settings.php?section=managelocaldelcoursesuv</i> (you can find more details about each setting in there):
+- Deletion criterias:
+  - Course creation date
+  - Course last modification date
+  - Number of course categories to exclude and which of them
+- Advanced settings
+  - Limit SQL query to enqueue courses
+  - Deletion task queue size
+- Notification
+  - Users to notify about the deletion process
+- Client for web service:
+  - URL to Campus Virtual Historia
+  - Web service authorized user token
+  - Web service function name
 
-Author
-------
-Diego Fdo Ruiz (diego.fernando.ruiz@correounivalle.edu.co)
-
-Check 
--------
-Quantity of courses constant
-Date
-Break at out 1 - 5
-Send mail to Claudia, Iader, Diego - verify email function
-
-Update april 2021
-=================
-locallib.php -> New criteria to choose courses April 22, 2021
-- Change select courses queryset to delete
-- Select courses with lastmodification < Campus Historia and created < 2018
-- 
-
+## Copyright
+Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>

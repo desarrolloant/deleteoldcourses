@@ -17,10 +17,11 @@
 /**
  * Unit tests for utils class.
  *
- * @package    local_deleteoldcourses
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -28,21 +29,18 @@ namespace local_deleteoldcourses;
 /**
  * Unit tests for utils class
  *
- * @group      local_deleteoldcourses
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class utils_test extends \advanced_testcase {
 
     /**
-     * Test get courses to delete
+     * Test get courses to delete.
      *
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::calculate_course_size
+     * @covers  ::calculate_course_size
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_calculate_course_size() {
         $this->resetAfterTest(false);
@@ -58,12 +56,11 @@ class utils_test extends \advanced_testcase {
     }
 
     /**
-     * Test migrate records
+     * Test migrate records.
      *
-     * @since  Moodle 3.10
-     * @author  Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::migrate_records
+     * @covers  ::migrate_records
+     * @author  2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_migrate_records() {
         global $DB;
