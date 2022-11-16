@@ -17,12 +17,12 @@
 /**
  * Unit tests for report_manager class.
  *
- * @package    local_deleteoldcourses
- * @category   PHPUnit
- * @author     Camilo J. Mezú Mina <camilo.mezu@correounivalle.edu.co>
- * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @author      2022 Camilo J. Mezú Mina <camilo.mezu@correounivalle.edu.co>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -32,7 +32,7 @@ class report_manager_test extends \advanced_testcase {
     /**
      * Test the behaviour of get_course_deletion_criteria_settings method.
      *
-     * @covers ::get_course_deletion_criteria_settings
+     * @covers  ::get_course_deletion_criteria_settings
      */
     public function test_get_course_deletion_criteria_settings() {
 
@@ -85,7 +85,7 @@ class report_manager_test extends \advanced_testcase {
     /**
      * Test the behaviour of get_total_enqueued_courses method.
      *
-     * @covers ::get_total_enqueued_courses
+     * @covers  ::get_total_enqueued_courses
      */
     public function test_get_total_enqueued_courses() {
 
@@ -129,7 +129,7 @@ class report_manager_test extends \advanced_testcase {
     /**
      * Test the behaviour of get_total_deleted_courses_during_time_period method.
      *
-     * @covers ::get_total_deleted_courses_during_time_period
+     * @covers  ::get_total_deleted_courses_during_time_period
      */
     public function test_get_total_deleted_courses_during_time_period() {
 
@@ -179,7 +179,7 @@ class report_manager_test extends \advanced_testcase {
     /**
      * Test the behaviour of get_total_enqueued_courses_grouped_by_root_categories method.
      *
-     * @covers ::get_total_enqueued_courses_grouped_by_root_categories
+     * @covers  ::get_total_enqueued_courses_grouped_by_root_categories
      */
     public function test_get_total_enqueued_courses_grouped_by_root_categories() {
 
@@ -241,8 +241,8 @@ class report_manager_test extends \advanced_testcase {
     /**
      * Allows to create a desired number of courses in a particular course category.
      *
-     * @param int $numberofcourses number of courses to create
-     * @param int $categoryid course category id
+     * @param   int $numberofcourses number of courses to create
+     * @param   int $categoryid course category id
      */
     private function create_courses_with_category(int $numberofcourses, int $categoryid) {
 

@@ -17,10 +17,10 @@
 /**
  * Delete courses task.
  *
- * @package    local_deleteoldcourses
- * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses\task;
@@ -32,17 +32,17 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Delete courses task.
  *
- * @package    local_deleteoldcourses
- * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class delete_courses_task extends \core\task\scheduled_task {
 
     /**
      * Return the name of the component.
      *
-     * @return string The name of the component.
+     * @return  string The name of the component.
      */
     public function get_component() {
         return 'local_deleteoldcourses';
@@ -51,7 +51,7 @@ class delete_courses_task extends \core\task\scheduled_task {
     /**
      * Return the task's name as shown in admin screens.
      *
-     * @return string
+     * @return  string
      */
     public function get_name() {
         return get_string('delete_courses_task', 'local_deleteoldcourses');

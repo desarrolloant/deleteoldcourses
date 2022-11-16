@@ -17,12 +17,11 @@
 /**
  * Notifier class.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -50,7 +49,7 @@ class notifier {
     /**
      * Generate text for notify users.
      *
-     * @return string $texttosend
+     * @return  string $texttosend
      */
     public function generate_text_to_send() {
 
@@ -69,7 +68,7 @@ class notifier {
     /**
      * Send notify to users.
      *
-     * @return bool $notificationsent
+     * @return  bool $notificationsent
      */
     public function send_notification() {
 

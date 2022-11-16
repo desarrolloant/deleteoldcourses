@@ -12,12 +12,33 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 }}
 {{!
-    @author Brayan Sanchez Leon <brayan.sanchez.leon@correounivalle.edu.co>
-    @author Iader E. Garcia Gomez <iadergg@gmail.com>
-    @template block_course_list_uv/course_list_uv
+    @template   local_deleteoldcourses/reports
+    @author     2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+
+    The purpose of this template is to render reports about the configuration, enqueeing, and deletion of courses.
+
+    Context variables required for this template:
+    * course_creation_date                  Course creation criteria to enqueue
+    * course_last_modification_date         Course last modification criteria to enqueue
+    * excluded_categories                   Excluded categories to avoid enqueueing
+    * manually_enqueued_courses             Total number of courses that were manually enqueued (functionality removed since Moodle 4.x)
+    * automatically_enqueued_courses        Total number of courses that were automatically enqueued
+    * total_enqueued_courses                Total number of enqueued courses
+    * total_deleted_courses                 Total number of deleted courses
+
+    Example context (json):
+    {
+        "course_creation_date": '31/12/2010 23:59:59',
+        "course_last_modification_date": '31/12/2009 23:59:59',
+        "excluded_categories": 'Cursos Presenciales',
+        "manually_enqueued_courses": '10',
+        "automatically_enqueued_courses": '25',
+        "total_enqueued_courses": '35',
+        "total_deleted_courses": '454'
+    }
 }}
 
 <div>

@@ -17,11 +17,11 @@
 /**
  * Unit tests for cvh_ws_client class.
  *
- * @package    local_deleteoldcourses
- * @category   phpunit
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -31,12 +31,11 @@ use moodle_exception;
 /**
  * Unit tests for cvh_ws_client class.
  *
- * @group      local_deleteoldcourses
- * @package    local_deleteoldcourses
- * @category   phpunit
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @category    PHPUnit
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class cvh_ws_client_test extends \advanced_testcase {
 
@@ -46,10 +45,8 @@ class cvh_ws_client_test extends \advanced_testcase {
     /**
      * Test CVH WS Client class instantiation.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::construct
+     * @covers  ::construct
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_cvh_wsclient_default(): void {
 
@@ -73,10 +70,8 @@ class cvh_ws_client_test extends \advanced_testcase {
     /**
      * Test CVH Client class instantiation with 1 parameter.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::construct
+     * @covers  ::construct
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_cvh_wsclient_one_parameter(): void {
 
@@ -90,10 +85,8 @@ class cvh_ws_client_test extends \advanced_testcase {
     /**
      * Test CVH Client class instantiation with 2 parameter.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::construct
+     * @covers  ::construct
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_cvh_wsclient_two_parameters(): void {
 
@@ -107,10 +100,8 @@ class cvh_ws_client_test extends \advanced_testcase {
     /**
      * Test request to service function.
      *
-     * @return void
-     * @since Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @covers ::request_to_service
+     * @covers  ::request_to_service
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function test_request_to_service(): void {
 
@@ -158,22 +149,20 @@ class cvh_ws_client_test extends \advanced_testcase {
     }
 
     /**
-     * Get cvhwsclient instance
+     * Get cvhwsclient instance.
      *
-     * @return cvh_ws_client
-     * @since Moodle 3.10
+     * @return  cvh_ws_client
      */
     public function get_cvhwsclient(): cvh_ws_client {
         return $this->cvhwsclient;
     }
 
     /**
-     * Set instance of cvhwsclient
+     * Set instance of cvhwsclient.
      *
-     * @param string $method Method for the request.
-     * @param string $returnformat Reponse format. Default JSON.
-     * @return cvh_ws_client_test
-     * @since Moodle 3.10
+     * @param   string $method Method for the request.
+     * @param   string $returnformat Reponse format. Default JSON.
+     * @return  cvh_ws_client_test
      */
     public function set_cvhwsclient($method = null, $returnformat = null): cvh_ws_client_test {
 
@@ -192,9 +181,6 @@ class cvh_ws_client_test extends \advanced_testcase {
 
     /**
      * Set up the test environment.
-     *
-     * @return void
-     * @since Moodle 3.10
      */
     protected function setUp(): void {
 

@@ -17,12 +17,11 @@
 /**
  * Course enqueuer class.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -35,11 +34,10 @@ use DateTime;
 /**
  * Course enqueuer class for Delete old courses.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Juan Felipe Orozco Escobar <juan.orozco.escobar@correounivalle.edu.co>
- * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @author      2022 Iader E. García Gómez <iadergg@gmail.com>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
  */
 class course_enqueuer {
 
@@ -70,19 +68,17 @@ class course_enqueuer {
     /**
      * Get courses to enqueue according to elimination criteria.
      *
-     * @param  int   $courseidinit                   Course ID for init course to check query.
-     * @param  int   $timecreatedcriteria            Timestamp for creation date criteria.
-     * @param  int   $timemodificationcriteria       Timestamp for modification date criteria.
-     * @param  int   $limitquerytoenqueuecourses     Limit for SQL Query.
-     * @param  array $categoriesexcluded             Array with course categories excluded.
-     * @param  int   $coursesexcludedbycategory      Counter for courses excluded by course categories criteria.
-     * @param  int   $coursesexcludednewsections     Counter for courses excluded by "new sections" criteria.
-     * @param  int   $coursesexcludednewparticipants Counter for courses excluded by "new participants" criteria.
-     * @param  int   $coursesexcludednewmodules      Counter for courses excluded by "new modules" criteria.
-     * @param  int   $coursesexcludedcvh             Counter for courses excluded by "exists in CVH" criteria.
-     * @return void
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
-     * @since  Moodle 3.10
+     * @param   int   $courseidinit                   Course ID for init course to check query.
+     * @param   int   $timecreatedcriteria            Timestamp for creation date criteria.
+     * @param   int   $timemodificationcriteria       Timestamp for modification date criteria.
+     * @param   int   $limitquerytoenqueuecourses     Limit for SQL Query.
+     * @param   array $categoriesexcluded             Array with course categories excluded.
+     * @param   int   $coursesexcludedbycategory      Counter for courses excluded by course categories criteria.
+     * @param   int   $coursesexcludednewsections     Counter for courses excluded by "new sections" criteria.
+     * @param   int   $coursesexcludednewparticipants Counter for courses excluded by "new participants" criteria.
+     * @param   int   $coursesexcludednewmodules      Counter for courses excluded by "new modules" criteria.
+     * @param   int   $coursesexcludedcvh             Counter for courses excluded by "exists in CVH" criteria.
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function get_courses_to_enqueue(int $courseidinit = 0,
                                            int $timecreatedcriteria,
@@ -205,8 +201,7 @@ class course_enqueuer {
     /**
      * Get the value of timecreationcriteria.
      *
-     * @return int $timecreationcriteria
-     * @since  Moodle 3.10
+     * @return  int $timecreationcriteria
      */
     public function get_timecreation_criteria():int {
         return $this->timecreationcriteria;
@@ -215,8 +210,7 @@ class course_enqueuer {
     /**
      * Get the value of timemodifiedcriteria.
      *
-     * @return int $timemodificationcriteria
-     * @since  Moodle 3.10
+     * @return  int $timemodificationcriteria
      */
     public function get_timemodification_criteria():int {
         return $this->timemodificationcriteria;
@@ -225,8 +219,7 @@ class course_enqueuer {
     /**
      * Get the value of limitquerytoenqueuecourses.
      *
-     * @return int $limitquerytoenqueuecourses
-     * @since  Moodle 3.10
+     * @return  int $limitquerytoenqueuecourses
      */
     public function get_limit_query_to_enqueue_courses() {
         return $this->limitquerytoenqueuecourses;
@@ -235,8 +228,7 @@ class course_enqueuer {
     /**
      * Get the value of categoriestoexclude.
      *
-     * @return array Array with categories to exclude.
-     * @since  Moodle 3.10
+     * @return  array Array with categories to exclude.
      */
     public function get_categories_to_exclude():array {
         return $this->categoriestoexclude;
@@ -244,9 +236,6 @@ class course_enqueuer {
 
     /**
      * set_categoriestoexclude
-     *
-     * @return void
-     * @since  Moodle 3.10
      */
     public function set_categoriestoexclude():void {
 
@@ -263,11 +252,10 @@ class course_enqueuer {
     /**
      * Returns true if the course have new sections after a modification date.
      *
-     * @param  int  $courseid
-     * @param  int  $timemodified
-     * @return bool $havenewsections
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @param   int  $courseid
+     * @param   int  $timemodified
+     * @return  bool $havenewsections
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function have_new_sections(int $courseid, int $timemodified):bool {
         global $DB;
@@ -289,11 +277,10 @@ class course_enqueuer {
     /**
      * Returns true if the course have new students enrolled after a modification date.
      *
-     * @param  int  $courseid
-     * @param  int  $timemodified
-     * @return bool $havenewparticipants
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @param   int  $courseid
+     * @param   int  $timemodified
+     * @return  bool $havenewparticipants
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function have_new_participants(int $courseid, int $timemodified):bool {
         global $DB;
@@ -316,11 +303,10 @@ class course_enqueuer {
     /**
      * Returns true if the course have new activity or resource modules after a modification date.
      *
-     * @param  int  $courseid
-     * @param  int  $timemodified
-     * @return bool $havenewmodules
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @param   int  $courseid
+     * @param   int  $timemodified
+     * @return  bool $havenewmodules
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function have_new_modules(int $courseid, int $timemodified):bool {
         global $DB;
@@ -342,11 +328,10 @@ class course_enqueuer {
     /**
      * Returns true if a course belongs to an exlcuded category.
      *
-     * @param  int  $courseid Course ID to check
-     * @param  array  $coursecategoriesexcluded Course categories excluded array
-     * @return bool $belongtocategory
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @param   int  $courseid Course ID to check
+     * @param   array  $coursecategoriesexcluded Course categories excluded array
+     * @return  bool $belongtocategory
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function check_excluded_course_categories(int $courseid, array $coursecategoriesexcluded):bool {
         global $DB;
@@ -364,13 +349,11 @@ class course_enqueuer {
     /**
      * Function that insert the courses to delete in courses_to_delete table.
      *
-     * @param  array $courses Array containing the courses to delete.
-     * @param  int $userid ID of the user who queued the course.
-     * @param  bool $manuallyqueued Indicates if the register was made manually or automatically.
+     * @param   array $courses Array containing the courses to delete.
+     * @param   int $userid ID of the user who queued the course.
+     * @param   bool $manuallyqueued Indicates if the register was made manually or automatically.
      *                              0 for automatically enqueue or 1 for manual enqueue.
-     * @return void
-     * @since  Moodle 3.10
-     * @author Iader E. Garcia Gomez <iadergg@gmail.com>
+     * @author  2022 Iader E. Garcia Gomez <iadergg@gmail.com>
      */
     public function enqueue_courses_to_delete($courses, $userid, $manuallyqueued = 1):void {
         global $DB;

@@ -17,9 +17,10 @@
 /**
  * Plugin strings, language 'es'.
  *
- * @package    local_deleteoldcourses
- * @copyright  2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2020 Diego Fdo Ruiz <diego.fernando.ruiz@correounivalle.edu.co>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['pluginname'] = 'Eliminar Cursos Antiguos';
@@ -130,7 +131,7 @@ $string['users_to_notify_desc'] = 'Ingrese, separados por comas, los nombres de 
 // Client settings.
 $string['ws_client_settings_tab'] = 'Cliente para servicio web';
 $string['ws_client_settings_heading'] = 'Cliente para el servicio web en Campus Virtual Historia';
-$string['ws_client_settings_heading_desc'] = 'Parámetros del cliente para el servicio web en Campus Virtual Historia.';
+$string['ws_client_settings_heading_desc'] = 'Parámetros del cliente para el servicio web en Campus Virtual Historia. Estas configuraciones evitan la eliminación de cursos que aún no están respaldados en Campus Virtual Historia.';
 $string['ws_url'] = 'URL de Campus Virtual Historia';
 $string['ws_url_desc'] = 'Ingrese la URL de Campus Virtual Historia.';
 $string['ws_function_name'] = 'Nombre de la función del servicio web';

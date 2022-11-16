@@ -17,12 +17,11 @@
 /**
  * Report manager class.
  *
- * @package    local_deleteoldcourses
- * @since      Moodle 3.10
- * @author     Camilo J. Mezú Mina <camilo.mezu@correounivalle.edu.co>
- * @author     Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
- * @copyright  2022 Área de Nuevas Tecnologías - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
- * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_deleteoldcourses
+ * @author      2022 Juan Felipe Orozco Escobar <juanfe.ores@gmail.com>
+ * @author      2022 Camilo J. Mezú Mina <camilo.mezu@correounivalle.edu.co>
+ * @copyright   2022 Área de Nuevas Tecnologías - DINTEV - Universidad del Valle <desarrollo.ant@correounivalle.edu.co>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_deleteoldcourses;
@@ -30,9 +29,12 @@ namespace local_deleteoldcourses;
 class report_manager {
 
     /**
-     * Get current course deletion criteria settings: course creation date, course last modification date, and excluded categories.
+     * Get current course deletion criteria settings:
+     *  - course creation date
+     *  - course last modification date
+     *  - excluded categories
      *
-     * @return array course deletion criteria settings
+     * @return  array course deletion criteria settings
      * E.g.
      *      Array(
      *          'creationdate'         => '30/06/2020 23:59:59',
@@ -82,8 +84,8 @@ class report_manager {
     /**
      * Get total number of enqueued courses (optionally by how they were enqueued).
      *
-     * @param bool $manuallyqueued true: manually, false: automatically, and null: all
-     * @return string total number of enqueued courses
+     * @param   bool $manuallyqueued true: manually, false: automatically, and null: all
+     * @return  string total number of enqueued courses
      */
     public function get_total_enqueued_courses($manuallyqueued = null): string {
 
@@ -102,9 +104,9 @@ class report_manager {
     /**
      * Get total number of deleted courses during a time period (all by default).
      *
-     * @param int $startdate UNIX time format
-     * @param int $enddate UNIX time format
-     * @return string total number of deleted courses
+     * @param   int $startdate UNIX time format
+     * @param   int $enddate UNIX time format
+     * @return  string total number of deleted courses
      */
     public function get_total_deleted_courses_during_time_period(int $startdate = 0, int $enddate = 0): string {
 
@@ -124,7 +126,8 @@ class report_manager {
      * - Only courses from "Cursos Presenciales" root category will be grouped by their subsequent subcategories (I.e. faculties).
      * - The other courses will be grouped by their root category. Thus, their subcategories will be ignored.
      *
-     * @return array total enqueued courses grouped by subsequent subcategories of Cursos Presenciales root category and other root categories
+     * @return  array total enqueued courses grouped by subsequent subcategories
+     *                of Cursos Presenciales root category and other root categories
      *  E.g.
      *       array(
      *           'cursos_presenciales_subcategories' => [
@@ -173,9 +176,9 @@ class report_manager {
     /**
      * Allows to increment the number of courses found in a particular category.
      *
-     * @param int $coursecategoryid
-     * @param array $partialresult result that is being recomputed
-     * @return array partial result of enqueued courses grouped by root and faculty categories
+     * @param   int $coursecategoryid
+     * @param   array $partialresult result that is being recomputed
+     * @return  array partial result of enqueued courses grouped by root and faculty categories
      */
     private function increment_number_of_courses_in_a_category(int $coursecategoryid, array $partialresult): array {
 
