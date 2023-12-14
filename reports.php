@@ -78,6 +78,14 @@ foreach ($courses as $course) {
     );
 }
 
+// Generate CSV data
+$csv_data = "Course Name,Course Shortname,Course ID,Course Size,Course Time Created,Course Added to Queue\n";
+foreach ($courses as $course) {
+    $csv_data .= "{$course->fullname},{$course->shortname},{$course->id},{$course->coursesize},{$course->timecreated_course},{$course->time_added_to_delete}\n";
+}
+
+// Pass CSV data to template
+$data->csv_data = $csv_data;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_deleteoldcourses/reports', $data);

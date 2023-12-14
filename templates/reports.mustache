@@ -75,6 +75,25 @@
             </table>
         </div>
     </div>
+
+    <div class="download-button">
+        <button onclick="downloadCSV()" download="courses.csv">
+            Download CSV
+        </button>
+        <textarea id="csv-data" style="display: none;">{{csv_data}}</textarea>
+    </div>
+
+        <script>
+        // JavaScript function to trigger CSV download
+        function downloadCSV() {
+            var csvData = document.getElementById('csv-data').value;
+            var blob = new Blob([csvData], { type: 'text/csv' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'courses.csv';
+            link.click();
+        }
+        </script>
     <div class="row">
         <div class="column">
             <table  class="reports-table">
